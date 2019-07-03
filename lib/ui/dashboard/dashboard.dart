@@ -1,5 +1,5 @@
-import 'package:class_app/ui/admin/AdminScreen.dart';
-import 'package:class_app/ui/dashboard/classes.dart';
+import 'package:class_app/ui/admin/admin_screen.dart';
+import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/today.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Widget category(title, color, icon) {
+  Widget category(title, color, icon, {Function() onTap}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
@@ -45,7 +45,7 @@ class _DashboardState extends State<Dashboard> {
             borderRadius: BorderRadius.all(Radius.circular(8.0))),
         child: ClipRect(
           child: InkWell(
-            onTap: () {},
+            onTap: onTap,
             child: Container(
 //                              height: 70,
               child: Column(
@@ -270,13 +270,28 @@ class _DashboardState extends State<Dashboard> {
             ),
             delegate: SliverChildListDelegate(<Widget>[
               category(
-                  "Classes", Colors.red, FontAwesomeIcons.chalkboardTeacher),
-              category("Fixed Class", Colors.red, Icons.library_books),
-              category("Assignment", Colors.red, FontAwesomeIcons.twitch),
+                  "Classes", Colors.red, FontAwesomeIcons.chalkboardTeacher,
+                onTap: (){
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Lectures()));
+                }
+              ),
+              category("Fixed Class", Colors.red, Icons.library_books,
+                  onTap: (){}
+              ),
+              category("Assignment", Colors.red, FontAwesomeIcons.twitch,
+                  onTap: (){}
+              ),
               category(
-                  "CA", Theme.of(context).primaryColor, FontAwesomeIcons.tasks),
-              category("Exam", Colors.red, FontAwesomeIcons.clipboardList),
-              category("Class excos", Colors.red, FontAwesomeIcons.users),
+                  "Test", Theme.of(context).primaryColor, FontAwesomeIcons.tasks,
+                  onTap: (){}
+              ),
+              category("Exam", Colors.red, FontAwesomeIcons.clipboardList,
+                  onTap: (){}
+              ),
+              category("Class excos", Colors.red, FontAwesomeIcons.users,
+                  onTap: (){}
+              ),
             ]),
           ),
         ),

@@ -1,5 +1,5 @@
 import 'package:class_app/ui/around_me/around_me.dart';
-import 'package:class_app/ui/dashboard/classes.dart';
+import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/dashboard.dart';
 import 'package:class_app/ui/announcement/announcement.dart';
 import 'package:class_app/ui/more/more.dart';

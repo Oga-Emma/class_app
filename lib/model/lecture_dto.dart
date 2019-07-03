@@ -1,10 +1,11 @@
-class LectureDTO{
+import 'date_event.dart';
+
+class LectureDTO implements DateEvent{
   String courseId;
   String day;
   String startTime;
   String endTime;
   String venue;
-  var timeInMilliseconds;
 
   LectureDTO.fromJson(Map<String, dynamic> data)
       :
@@ -23,5 +24,8 @@ class LectureDTO{
       "venue": venue,
     };
 }
+
+  @override
+  DateTime timeStamp;
 
 }

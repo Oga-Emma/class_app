@@ -1,3 +1,4 @@
+import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class LectureListItem extends StatelessWidget {
           Column(
             children: <Widget>[
               Text(
-                "08:00 AM",
+                "08:00",
                 style: Theme.of(context)
                     .textTheme
                     .subhead
@@ -20,7 +21,7 @@ class LectureListItem extends StatelessWidget {
                     fontSize: 12.0),
               ),
               Text(
-                "10:00 AM",
+                "10:00",
                 style: Theme.of(context)
                     .textTheme
                     .subhead
@@ -55,61 +56,61 @@ class LectureListItem extends StatelessWidget {
           Expanded(
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 16.0),
-                child: Material(
-                  elevation: 2.0,
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(16.0)),
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: ColorUtils.accentColor.withOpacity(0.2)),
+                  borderRadius: BorderRadius.circular(16.0)
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Row(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              "COS 205",
-                              style: Theme.of(context).textTheme.title,
-                            ),
-                          ],
+                        Text(
+                          "COS 205",
+                          style: Theme.of(context).textTheme.title.copyWith(
+                              color: ColorUtils.primaryColor),
+                        ),
+                      ],
+                    ),
+                    gap,
+                    Expanded(
+                      child: Text(
+                        "Introduction to Computer Science",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .body2
+                            .copyWith(
+                            color: Colors.black
+                                .withOpacity(0.5)),
+                      ),
+                    ),
+                    gap,
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.near_me,
+                          size: 18,
+                          color: Theme.of(context).accentColor,
                         ),
                         gap,
                         Expanded(
                           child: Text(
-                            "Introduction to Computer Science",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                            "Room 412, Abuja Building, Room 412, Abuja Building, Room 412, Abuja Building",
                             style: Theme.of(context)
                                 .textTheme
-                                .body2
-                                .copyWith(
-                                color: Colors.black
-                                    .withOpacity(0.5)),
+                                .caption,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                           ),
-                        ),
-                        gap,
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.near_me,
-                              size: 18,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            gap,
-                            Expanded(
-                              child: Text(
-                                "Room 412, Abuja Building, Room 412, Abuja Building, Room 412, Abuja Building",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            )
-                          ],
                         )
                       ],
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                    ),
-                  ),
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                 ),
               ))
         ],

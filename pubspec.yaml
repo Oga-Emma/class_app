@@ -22,6 +22,17 @@ dependencies:
   fancy_bottom_navigation: ^0.3.2
   font_awesome_flutter: ^8.4.0
   material_design_icons_flutter: ^3.1.3493
+  datetime_picker_formfield: ^0.1.8
+
+  uuid: ^2.0.2
+  flutter_spinkit: ^3.1.0
+  url_launcher: ^5.0.3
+  cached_network_image: ^1.0.0
+  cloud_firestore: ^0.12.6
+  fluttertoast: ^3.1.0
+  image_picker: ^0.6.0+3
+  provider: ^3.0.0+1
+
 
 dev_dependencies:
   flutter_test:

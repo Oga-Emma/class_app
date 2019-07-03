@@ -17,7 +17,7 @@ class Classes extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       str,
-                      style: TextStyle(fontSize: 16, color: primaryColor),
+                      style: TextStyle(fontSize: 16, color: ColorUtils.primaryColor),
                     ),
                   ),).toList(),
                 ))),
