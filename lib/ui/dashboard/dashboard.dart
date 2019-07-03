@@ -1,8 +1,10 @@
+import 'package:class_app/ui/admin/AdminScreen.dart';
 import 'package:class_app/ui/dashboard/classes.dart';
 import 'package:class_app/ui/dashboard/today.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class Dashboard extends StatefulWidget {
   @override
@@ -14,7 +16,10 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text("Dashboard", textAlign: TextAlign.center),
+          title: GestureDetector(onHorizontalDragEnd: (details){
+//            print("Drag happened");
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
+          }, child: Text("Dashboard", textAlign: TextAlign.center)),
           elevation: 0.0),
       body: Container(
           color: Colors.grey[200],
@@ -264,13 +269,13 @@ class _DashboardState extends State<Dashboard> {
               childAspectRatio: 6 / 5,
             ),
             delegate: SliverChildListDelegate(<Widget>[
-              category("Exam", Colors.red, FontAwesomeIcons.clipboardList),
               category(
                   "Classes", Colors.red, FontAwesomeIcons.chalkboardTeacher),
+              category("Fixed Class", Colors.red, Icons.library_books),
               category("Assignment", Colors.red, FontAwesomeIcons.twitch),
               category(
                   "CA", Theme.of(context).primaryColor, FontAwesomeIcons.tasks),
-              category("Courses", Colors.red, Icons.library_books),
+              category("Exam", Colors.red, FontAwesomeIcons.clipboardList),
               category("Class excos", Colors.red, FontAwesomeIcons.users),
             ]),
           ),

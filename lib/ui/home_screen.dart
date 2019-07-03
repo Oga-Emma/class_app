@@ -5,8 +5,6 @@ import 'package:class_app/ui/announcement/announcement.dart';
 import 'package:class_app/ui/more/more.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
-
-import 'dashboard/admin/AdminScreen.dart';
 import 'dashboard/today.dart';
 
 class HomeScreen extends StatefulWidget {
