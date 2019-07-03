@@ -17,12 +17,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
   final _widgetOptions = [
-    Announcement(),
+//    Announcement(),
     Today(),
     Dashboard(),
 //    Classes(),
     /*More()*/
-    AroundMe(),
+//    AroundMe(),
 //    Announcement(),
 //    AdminScreen()
   ];

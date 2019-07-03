@@ -1,5 +1,4 @@
-import 'package:class_app/ui/utils/dimen.dart';
-import 'package:class_app/ui/widgets/defaultAppBar.dart';
+import 'package:class_app/ui/utils/decoration_utils.dart';
 import 'package:flutter/material.dart';
 
 class Today extends StatefulWidget {
@@ -11,127 +10,159 @@ class _TodayState extends State<Today> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar('Today', elevation: 0.0),
+      appBar: AppBar(
+          title: Text("Today", textAlign: TextAlign.center),
+          elevation: 0.0),
       body: Container(
-        color: Colors.grey.withOpacity(0.3),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-                child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-              child: ListView.builder(
-                  itemCount: 15,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: 150.0,
-                      child: Container(
-                        margin: EdgeInsets.all(8.0),
-                        child: Material(
-                          elevation: 2.0,
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Column(
-                              children: <Widget>[
-                                Row(
+          color: Colors.grey[200],
+          child: Column(
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  Container(
+                      height: 55,
+                      color: Theme.of(context).scaffoldBackgroundColor),
+                  Container(height: 30, color: Theme.of(context).primaryColor),
+                  Container(
+                    height: 55,
+                    margin: EdgeInsets.symmetric(horizontal: 14.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          offset: Offset(1, 5),
+                          color: Colors.grey,
+                          blurRadius: 20,
+                          spreadRadius: 1)
+                    ], color: Colors.white, borderRadius: borderRadius),
+                    child: /*ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: getButtons(),
+                      )*/
+
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      // This next line does the trick.
+                      children: getButtons(),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 16.0),
+                          child: Material(
+                              elevation: 0.5,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: borderRadius),
+                              child: Container(
+                                padding: const EdgeInsets.all(16.0),
+                                height: 150,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    Icon(Icons.indeterminate_check_box,
-                                        size: 16.0, color: Colors.green),
-                                    gap,
-                                    Text(
-                                      "LECTURE",
-                                      style:
-                                          Theme.of(context).textTheme.caption,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: borderRadius),
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("EXAMS",
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Colors.white)),
                                     ),
-                                    Expanded(child: SizedBox()),
-                                    Icon(Icons.access_time,
-                                        size: 16.0,
-                                        color: Theme.of(context).accentColor),
-                                    gap,
-                                    Text(
-                                      "12:00 PM",
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                  ],
-                                ),
-                                gap,
-                                Text(
-                                  "COS 205",
-                                  style: Theme.of(context).textTheme.title,
-                                ),
-                                gap,
-                                Expanded(
-                                  child: Text(
-                                    "Assignment due for submission",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .body2
-                                        .copyWith(
-                                            color:
-                                                Colors.black.withOpacity(0.5)),
-                                  ),
-                                ),
-                                gap,
-                                Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.near_me,
-                                      size: 18,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    gap,
+                                    SizedBox(height: 10),
                                     Expanded(
                                       child: Text(
-                                        "Room 412, Abuja Building, Room 412, Abuja Building, Room 412, Abuja Building",
-                                        style:
-                                            Theme.of(context).textTheme.caption,
+                                        'Update on CS8214 - Postponed to next week due to unforseen circumstances.',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle,
+                                        maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                            child: Text(
+                                              '10:40 AM',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption,
+                                            )),
+                                        Icon(
+                                          Icons.message,
+                                          size: 20,
+                                          color: Colors.grey,
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          '10',
+                                          style: TextStyle(),
+                                        ),
+                                      ],
                                     )
                                   ],
-                                )
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-            ))
-          ],
-        ),
-      ),
+                                ),
+                              )),
+                        );
+                      }))
+            ],
+          )),
     );
   }
 
-  getDay(String dayOfWeek, String date, {bool selected = false}) {
+  List<String> categories = [
+    'Classes',
+    'Others'
+  ];
+  int selected = 0;
+
+  List<Widget> getButtons() {
+    List<Widget> list = [];
+    for (var i = 0; i < categories.length; i++) {
+      if (i == selected) {
+        list.add(getButton(i, categories[i], true));
+      } else {
+        list.add(getButton(i, categories[i], false));
+      }
+    }
+    /*var list = categories.map((title) => getButton(title, false)).toList();
+    list[selected] = getButton(categories[selected], true);*/
+    return list;
+  }
+
+  Widget getButton(int index, title, bool clicked) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-      margin: EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-          color: selected ? Theme.of(context).primaryColor : null,
-          borderRadius: BorderRadius.all(Radius.circular(8.0))),
-      child: Column(
-        children: <Widget>[
-          Text(
-            dayOfWeek,
-            style: Theme.of(context).textTheme.caption.copyWith(
-                  color: selected ? Colors.white : null,
-                ),
+      padding: EdgeInsets.all(8.0),
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              selected = index;
+            });
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(title, style: Theme.of(context).textTheme.subtitle),
+              SizedBox(height: 5.0),
+              Container(
+                color: clicked ? Colors.black45 : Colors.transparent,
+                height: 2,
+                width: 20,
+              )
+            ],
           ),
-          Text(
-            date,
-            style: Theme.of(context).textTheme.subhead.copyWith(
-                  color: selected ? Colors.white : null,
-                ),
-          ),
-        ],
+        ),
       ),
     );
   }
