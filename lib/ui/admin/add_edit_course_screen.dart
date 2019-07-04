@@ -1,23 +1,39 @@
+import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/fixed_dropdown.dart';
 import 'package:class_app/ui/utils/sButton.dart';
 import 'package:class_app/ui/utils/sTextField.dart';
+import 'package:class_app/ui/utils/ui_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class AddEditCourse extends StatefulWidget {
+  AddEditCourse({this.course});
+  CourseDTO course;
   @override
   _AddEditCourseState createState() => _AddEditCourseState();
 }
 
-class _AddEditCourseState extends State<AddEditCourse> {
+class _AddEditCourseState extends State<AddEditCourse> with UISnackBarProvider {
 
   var _formKey = GlobalKey<FormState>();
-  var _courseType = "COMPULSORY";
-  bool courseTypeError;
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  var _courseType;
+  bool courseTypeError = false;
+
+  @override
+  void initState() {
+    if(widget.course == null){
+      widget.course = CourseDTO();
+      widget.course.id = Uuid().v1();
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Course Details", textAlign: TextAlign.center)),
       body: Form(
@@ -29,7 +45,9 @@ class _AddEditCourseState extends State<AddEditCourse> {
             children: <Widget>[
               STextField(
                 label: "Course Code",
-onSaved: (value){},
+onSaved: (value){
+                  widget.course.code = value;
+},
                 validator: (value){
                   if(value.isEmpty){
                     return "Please enter course code";
@@ -42,10 +60,25 @@ onSaved: (value){},
               gap,
               STextField(
                 label: "Course Title",
-                onSaved: (value){},
+                onSaved: (value){
+                  widget.course.title = value;},
                 validator: (value){
                   if(value.isEmpty){
                     return "Please enter course title";
+                  }
+                  return null;
+                },
+//              hint: "Course Code",
+              ), gap,
+              gap,
+              STextField(
+                label: "Unit Load",
+                textInputType: TextInputType.number,
+                onSaved: (value){
+                  widget.course.unitLoad = value;},
+                validator: (value){
+                  if(value.isEmpty){
+                    return "Please enter unit load";
                   }
                   return null;
                 },
@@ -64,7 +97,7 @@ onSaved: (value){},
                       padding: EdgeInsets.only(left: 12.0, right: 12.0),
 //                            width: double.infinity,
                       child: FixedDropdownButton<String>(
-                        hint: Text('Select the event type'),
+                        hint: Text('Select the course type'),
                         value: _courseType,
                         items: ["COMPULSORY", "OPTIONAL"].map((String value) {
                           return DropdownMenuItem<String>(
@@ -101,17 +134,30 @@ onSaved: (value){},
               ),
               gap,
               gap,
-              SButton(labelText: "Save Changes", onTap: (){
-//                print("Button tapped");
-                if(_formKey.currentState.validate()){
-                  _formKey.currentState.save();
-                }
-
-              },),
+              SButton(labelText: "Save Changes", onTap: saveChanges,),
             ],
           ),
         ),
       ),
     );
   }
+
+  saveChanges() {
+    if(_courseType == null || _courseType.isEmpty){
+      showInSnackBar("Please select course type");
+      setState(() {
+        courseTypeError = true;
+      });
+    }else{
+      widget.course.type = _courseType;
+    }
+    if(!_formKey.currentState.validate()){
+    }else {
+      _formKey.currentState.save();
+      print(widget.course.toMap());
+    }
+  }
+
+  @override
+  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 }

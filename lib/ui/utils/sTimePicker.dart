@@ -56,7 +56,7 @@ String initialValue;
 //              labelText: 'Date/Time',
 //              hasFloatingPlaceholder: false),
       onChanged: (dt) {
-
+        onSaved("${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}");
       },
     );
   }

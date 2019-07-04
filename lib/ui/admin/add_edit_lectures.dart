@@ -1,6 +1,9 @@
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/sButton.dart';
 import 'package:class_app/ui/utils/sTextField.dart';
+import 'package:class_app/ui/utils/sTimePicker.dart';
+import 'package:class_app/ui/utils/validators.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 
 class AddEditLectures extends StatefulWidget {
@@ -11,6 +14,14 @@ class AddEditLectures extends StatefulWidget {
 class _AddEditLecturesState extends State<AddEditLectures> {
 
   var _formKey = GlobalKey<FormState>();
+  var startTime = TextEditingController();
+  var endTime = TextEditingController();
+  @override
+  void dispose() {
+    startTime.dispose();
+    endTime.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,37 +47,36 @@ class _AddEditLecturesState extends State<AddEditLectures> {
               ),
               gap,
               gap,
-              /*Row(
+              Row(
                 children: <Widget>[
                   Expanded(
-                    child: getTimePicker(
-                      controller: weekdayOpen,
-                      label: "Open",
+                    child: STimePicker(
+                      InputType.time,
+                      controller: startTime,
+                      label: "Start time",
                       onSaved: (value) {
-                        user.weekendsOpen = value;
+//                        print(value);
                       },
                       textInputType: TextInputType.text,
-//                              validator: Validators.validateString(),
-//                              initialValue: user.address,
+                      validator: Validators.validateString(),
                     ),
                   ),
                   SizedBox(width: 16.0),
                   Expanded(
-                    child: getTimePicker(
-                      controller: weekdayClose,
-                      label: "Close",
+                    child: STimePicker(
+                      InputType.time,
+                      controller: endTime,
+                      label: "End time",
                       onSaved: (value) {
-                        user.weekdaysClose = value;
                       },
                       textInputType: TextInputType.text,
-//                              validator: Validators.validateString(),
-//                              initialValue: user.address,
+                              validator: Validators.validateString(),
                     ),
                   ),
                 ],
               ),
               gap,
-              gap,*/
+              gap,
               STextField(
                 label: "Venue",
                 onSaved: (value){},
