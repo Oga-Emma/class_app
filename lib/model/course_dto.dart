@@ -17,6 +17,19 @@ class CourseDTO{
     title = "";
     department = "";
     faculty = "";
+    deleted = false;
+    lecturers = [];
+  }
+
+  CourseDTO.withId(String id): super(){
+    this.id =  id;
+    code = "";
+    type = "";
+    unitLoad = "";
+    title = "";
+    department = "";
+    faculty = "";
+    deleted = false;
     lecturers = [];
   }
 

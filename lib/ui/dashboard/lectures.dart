@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:class_app/ui/list_items/lecture_list_item.dart';
+import 'package:class_app/ui/shared/LectureListBuilder.dart';
+import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/widgets/defaultAppBar.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +13,8 @@ class Lectures extends StatefulWidget {
 }
 
 class _LecturesState extends State<Lectures> {
+
+  PageController controller = PageController();
   int selectedDate;
   DateTime date = DateTime.now();
   List<DaysAndDates> daysAndDates = [];
@@ -63,39 +69,97 @@ class _LecturesState extends State<Lectures> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: DefaultAppBar('Classes', elevation: 0.0),
-      body: Container(
-        color: Colors.grey.withOpacity(0.3),
-        child: Column(
-          children: <Widget>[
-            Material(
-              elevation: 4.0,
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: daysAndDates.map(
-                          (dayTime) => getDay(dayTime.dayOfWeek, dayTime.day,
-                              dayTime.date,
-                          selected: dayTime.dayOfWeek == selectedDate
-                          )).toList()
-                ),
-              ),
-            ),
-            Expanded(
-                child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-              child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return LectureListItem();
-                  }),
-            ))
-          ],
+    return DefaultTabController(
+      initialIndex: selectedDate-1,
+      length: 6,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Lectures"),
+          bottom: PreferredSize(
+              preferredSize: Size.fromHeight(40),//Size.fromHeight(kToolbarHeight),
+              child: new Container(
+                color: Colors.white,
+                  height: 46.0,
+                  child: TabBar(
+                    unselectedLabelColor: Colors.white,
+                    /*indicator: BoxDecoration(
+                        color: ColorUtils.accentColor,
+                        borderRadius: BorderRadius.circular(16)
+
+                    ),*/
+                    isScrollable: true,
+                    tabs: ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat"].map((str) => Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        str, style: TextStyle(fontSize: 15.0, color: ColorUtils.primaryColor),
+                      ),
+                    ),).toList(),
+                  ),)),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: TabBarView(
+            children: [
+              LectureListBuilder(day: 1),
+              LectureListBuilder(day: 2),
+              LectureListBuilder(day: 3),
+              LectureListBuilder(day: 4),
+              LectureListBuilder(day: 5),
+              LectureListBuilder(day: 6),
+            ],
+          ),
         ),
       ),
     );
+
+//    return Scaffold(
+//      appBar: DefaultAppBar('Classes', elevation: 0.0),
+//      body: Container(
+//        color: Colors.grey.withOpacity(0.3),
+//        child: Column(
+//          children: <Widget>[
+//            Material(
+//              elevation: 4.0,
+//              child: Container(
+//                child: Row(
+//                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                  children: daysAndDates.map(
+//                          (dayTime) => getDay(dayTime.dayOfWeek, dayTime.day,
+//                              dayTime.date,
+//                          selected: dayTime.dayOfWeek == selectedDate
+//                          )).toList()
+//                ),
+//              ),
+//            ),
+//            Expanded(
+//                child: Padding(
+//              padding:
+//                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+//              child: PageView.builder(
+//                controller: controller,
+//                onPageChanged: (position){
+//                  setState(() {
+//                    selectedDate = position + 1;
+//                  });
+//                },
+//                itemBuilder: (context, position) {
+//
+//                 /* if(selectedDate - 1 != position) {
+//                    Future.delayed(Duration.zero, () {
+//                      setState(() {
+//                        selectedDate = position + 1;
+//                      });
+//                    });
+//                  }*/
+//                  return LectureListBuilder(day: position + 1);
+//                },
+//                itemCount: 6, // Can be null
+//              )
+//            ))
+//          ],
+//        ),
+//      ),
+//    );
   }
 
   Widget getDay(int dayOfWeek, String dayText, int date, {bool selected = false}) {
@@ -104,6 +168,7 @@ class _LecturesState extends State<Lectures> {
         setState(() {
           selectedDate = dayOfWeek;
         });
+        controller.animateToPage(selectedDate - 1, duration: Duration(milliseconds: 200), curve: Curves.easeIn);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),

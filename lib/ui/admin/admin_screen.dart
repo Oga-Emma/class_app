@@ -1,11 +1,15 @@
+import 'package:class_app/model/course_dto.dart';
+import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/ui/utils/sButton.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import 'add_edit_event_screen.dart';
 import 'add_edit_exco_screen.dart';
 import 'add_edit_lectures.dart';
 import 'classes.dart';
 import 'add_edit_course_screen.dart';
+import 'courses.dart';
 
 class AdminScreen extends StatelessWidget {
   @override
@@ -19,6 +23,7 @@ class AdminScreen extends StatelessWidget {
                 child: Text("Admin", textAlign: TextAlign.center)),
             elevation: 0.0,
             bottom: TabBar(
+              isScrollable: true,
               tabs: [
                 Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -57,7 +62,7 @@ class AdminScreen extends StatelessWidget {
                 Expanded(child: Classes()),
                 SButton(labelText: "ADD LECTURE", onTap: (){
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => AddEditLectures())
+                      MaterialPageRoute(builder: (context) => AddEditLectures(LectureDTO.withId(Uuid().v1())))
                   );
                 }),
               ],
@@ -74,10 +79,10 @@ class AdminScreen extends StatelessWidget {
             ),
             Column(
               children: <Widget>[
-                Expanded(child: Classes()),
+                Expanded(child: Courses()),
                 SButton(labelText: "ADD COURSE", onTap: (){
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => AddEditCourse())
+                      MaterialPageRoute(builder: (context) => AddEditCourse(course: CourseDTO.withId(Uuid().v1())))
                   );
                 }),
               ],

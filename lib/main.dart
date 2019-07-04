@@ -1,3 +1,4 @@
+import 'package:class_app/ui/dashboard/dashboard.dart';
 import 'package:class_app/ui/home_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         primaryColor: ColorUtils.primaryColor,
         accentColor: ColorUtils.accentColor
       ),
-      home: HomeScreen(),
+      home: Dashboard(),
 //      MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

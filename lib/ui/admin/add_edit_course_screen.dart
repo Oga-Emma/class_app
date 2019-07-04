@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:class_app/model/course_dto.dart';
+import 'package:class_app/service/course_dao.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/fixed_dropdown.dart';
 import 'package:class_app/ui/utils/sButton.dart';
@@ -8,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class AddEditCourse extends StatefulWidget {
-  AddEditCourse({this.course});
-  CourseDTO course;
+  AddEditCourse({@required this.course});
+  final CourseDTO course;
   @override
   _AddEditCourseState createState() => _AddEditCourseState();
 }
@@ -23,10 +26,6 @@ class _AddEditCourseState extends State<AddEditCourse> with UISnackBarProvider {
 
   @override
   void initState() {
-    if(widget.course == null){
-      widget.course = CourseDTO();
-      widget.course.id = Uuid().v1();
-    }
     super.initState();
   }
 
@@ -46,7 +45,7 @@ class _AddEditCourseState extends State<AddEditCourse> with UISnackBarProvider {
               STextField(
                 label: "Course Code",
 onSaved: (value){
-                  widget.course.code = value;
+                  widget.course.code = value.toUpperCase();
 },
                 validator: (value){
                   if(value.isEmpty){
@@ -61,7 +60,7 @@ onSaved: (value){
               STextField(
                 label: "Course Title",
                 onSaved: (value){
-                  widget.course.title = value;},
+                  widget.course.title = value.toUpperCase();},
                 validator: (value){
                   if(value.isEmpty){
                     return "Please enter course title";
@@ -75,7 +74,7 @@ onSaved: (value){
                 label: "Unit Load",
                 textInputType: TextInputType.number,
                 onSaved: (value){
-                  widget.course.unitLoad = value;},
+                  widget.course.unitLoad = value.toUpperCase();},
                 validator: (value){
                   if(value.isEmpty){
                     return "Please enter unit load";
@@ -99,7 +98,7 @@ onSaved: (value){
                       child: FixedDropdownButton<String>(
                         hint: Text('Select the course type'),
                         value: _courseType,
-                        items: ["COMPULSORY", "OPTIONAL"].map((String value) {
+                        items: ["COMPULSORY", "GENERAL STUDIES", "ELECTIVE"].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: SizedBox(child: Text(value)),
@@ -149,12 +148,25 @@ onSaved: (value){
         courseTypeError = true;
       });
     }else{
-      widget.course.type = _courseType;
+      widget.course.type = _courseType.toUpperCase();
     }
-    if(!_formKey.currentState.validate()){
-    }else {
+    if(_formKey.currentState.validate()){
       _formKey.currentState.save();
-      print(widget.course.toMap());
+      showLoadingSnackBar();
+
+      CourseDAO.saveCourse(widget.course, (success){
+        if(success){
+          showInSnackBar("Changes saved");
+          Future.delayed(Duration(seconds: 2), () => Navigator.pop(context));
+
+        }else{
+          showInSnackBar("Error saving changes, please check your network and try again");
+        }
+      });
+
+//      print(widget.course.toMap());
+    }else{
+      showInSnackBar("Please review the errors in red");
     }
   }
 

@@ -23,7 +23,7 @@ Widget raisedButtonWrapper({String labelText, Function onPressed}) {
   );
 }
 
-Widget loading() {
+Widget Loading() {
   return Center(child: LoadingSpinner());
 }
 

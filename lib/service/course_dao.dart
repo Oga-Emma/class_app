@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:class_app/model/course_dto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CourseDAO {
-  void saveCourse(CourseDTO course, Function(bool success) callback) {
+  static void saveCourse(CourseDTO course, Function(bool success) callback) {
     var firestore = Firestore.instance;
     firestore
         .collection("courses")
@@ -15,8 +17,14 @@ class CourseDAO {
       callback(false);
     });
   }
+  static Future<QuerySnapshot> getCourse(String courseCode) {
+    var firestore = Firestore.instance;
+    return firestore
+        .collection("courses")
+    .where("code", isEqualTo: courseCode).limit(1).getDocuments();
+  }
 
-  void deleteCourse(
+  static void deleteCourse(
       CourseDTO course, bool delete, Function(bool success) callback) {
     course.deleted = delete;
     var firestore = Firestore.instance;
@@ -33,8 +41,7 @@ class CourseDAO {
     });
   }
 
-  Stream<QuerySnapshot> fetchAllCourses(
-      CourseDTO course, Function(bool success) callback) {
+  static Stream<QuerySnapshot> fetchAllCourses() {
     var firestore = Firestore.instance;
     return firestore.collection("courses").snapshots();
   }

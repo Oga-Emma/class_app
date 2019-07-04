@@ -12,7 +12,7 @@ class AddEditEvent extends StatefulWidget {
 
 class _AddEditEventState extends State<AddEditEvent> {
   var eventTypeError = false;
-  var _eventType = EventType.SUBMISSION;
+  var _eventType = EventType.ASSIGNEMTCA;
 
   var _formKey = GlobalKey<FormState>();
 

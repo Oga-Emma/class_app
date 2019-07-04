@@ -14,12 +14,12 @@ class EventDTO implements DateEvent{
 }
 
 class EventType{
-static const SUBMISSION = "SUBMISSION";
+static const ASSIGNEMTCA = "ASSIGNEMT & CA";
 static const CLASS = "CLASS";
 static const TEST = "TEST";
 static const EXAM = "EXAM";
 static const OTHERS = "OTHERS";
 }
 
-var eventList = [EventType.SUBMISSION, EventType.CLASS,
-  EventType.TEST, EventType.EXAM, EventType.OTHERS];
+var eventList = [EventType.ASSIGNEMTCA, EventType.CLASS,
+  EventType.TEST, EventType.EXAM];
