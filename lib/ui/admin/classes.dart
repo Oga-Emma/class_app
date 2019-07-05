@@ -27,12 +27,12 @@ class Classes extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: TabBarView(
             children: [
-              LectureListBuilder(day: 1),
-              LectureListBuilder(day: 2),
-              LectureListBuilder(day: 3),
-              LectureListBuilder(day: 4),
-              LectureListBuilder(day: 5),
-              LectureListBuilder(day: 6),
+              LectureListBuilder(day: 1, isAdmin: true),
+              LectureListBuilder(day: 2, isAdmin: true),
+              LectureListBuilder(day: 3, isAdmin: true),
+              LectureListBuilder(day: 4, isAdmin: true),
+              LectureListBuilder(day: 5, isAdmin: true),
+              LectureListBuilder(day: 6, isAdmin: true),
             ],
           ),
         ),

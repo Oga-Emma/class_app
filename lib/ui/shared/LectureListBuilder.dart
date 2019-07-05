@@ -1,13 +1,15 @@
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/lecture_dao.dart';
+import 'package:class_app/ui/list_items/lecture_admin_list_item.dart';
 import 'package:class_app/ui/list_items/lecture_list_item.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class LectureListBuilder extends StatelessWidget {
-  LectureListBuilder({@required this.day});
+  LectureListBuilder({@required this.day, this.isAdmin = false});
 
+  final bool isAdmin;
   final int day;
   final List<LectureDTO> classes = [];
   @override
@@ -29,7 +31,7 @@ class LectureListBuilder extends StatelessWidget {
             return ListView.builder(
                 itemCount: classes.length,
                 itemBuilder: (context, index){
-              return LectureListItem(classes[index]);
+              return isAdmin ? LectureAdminListItem(classes[index]) : LectureListItem(classes[index]);
             });
           }
 

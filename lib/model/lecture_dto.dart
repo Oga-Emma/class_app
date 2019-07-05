@@ -44,6 +44,6 @@ class LectureDTO implements DateEvent{
 }
 
   @override
-  DateTime timeStamp;
+  int timeStamp;
 
 }

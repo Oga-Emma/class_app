@@ -58,8 +58,8 @@ class _AddEditExcoState extends State<AddEditExco> {
                   ),
                 ),
               ),
-              gapX2,
-              gapX2,
+              gap2x,
+              gap2x,
               Stack(
                 children: <Widget>[
                   Container(height: 60),
@@ -106,7 +106,7 @@ class _AddEditExcoState extends State<AddEditExco> {
                               style: TextStyle(fontSize: 12.0)))),
                 ],
               ),
-              gapX2,
+              gap2x,
               STextField(
                 label: "FULL NAME",
                 onSaved: (value) {},
@@ -118,7 +118,7 @@ class _AddEditExcoState extends State<AddEditExco> {
                 },
 //              hint: "Course Code",
               ),
-              gapX2,
+              gap2x,
               Stack(
                 children: <Widget>[
                   Container(height: 60),
@@ -165,7 +165,7 @@ class _AddEditExcoState extends State<AddEditExco> {
                               style: TextStyle(fontSize: 12.0)))),
                 ],
               ),
-              gapX2,
+              gap2x,
               STextField(
                 label: "PHONE NUMBER",
                 onSaved: (value) {},
@@ -177,7 +177,7 @@ class _AddEditExcoState extends State<AddEditExco> {
                 },
 //              hint: "Course Code",
               ),
-              gapX2,
+              gap2x,
               STextField(
                 label: "POST",
                 onSaved: (value) {},
@@ -189,7 +189,7 @@ class _AddEditExcoState extends State<AddEditExco> {
                 },
 //              hint: "Course Code",
               ),
-              gapX2,
+              gap2x,
               SButton(
                 labelText: "SAVE CHANGES",
                 onTap: () {

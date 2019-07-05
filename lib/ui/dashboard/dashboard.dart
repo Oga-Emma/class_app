@@ -1,10 +1,24 @@
+import 'dart:async';
+
+import 'package:class_app/model/date_event.dart';
+import 'package:class_app/model/event_dto.dart';
+import 'package:class_app/model/lecture_dto.dart';
+import 'package:class_app/service/event_dao.dart';
+import 'package:class_app/service/lecture_dao.dart';
 import 'package:class_app/ui/admin/admin_screen.dart';
 import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/today.dart';
+import 'package:class_app/ui/list_items/combined_event_preview_list_item.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
+import 'package:class_app/ui/utils/helper_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+
+import 'courses.dart';
+import 'events_screen.dart';
 
 
 class Dashboard extends StatefulWidget {
@@ -13,8 +27,24 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
+  var monthYear;
+  var dateFormat = DateFormat('yyyy-MM-dd');
+
+  @override
+  void initState() {
+    var date = DateTime.now();
+    monthYear = DateFormat("EEEE, MMM dd, yyyy").format(date);
+
+    super.initState();
+  }
+
+  var todayEvents = <EventDTO>[];
+  var todayLectures = <LectureDTO>[];
+
   @override
   Widget build(BuildContext context) {
+    refresh();
     return Scaffold(
       appBar: AppBar(
           title: GestureDetector(onHorizontalDragEnd: (details){
@@ -22,52 +52,115 @@ class _DashboardState extends State<Dashboard> {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
           }, child: Text("Dashboard", textAlign: TextAlign.center)),
           elevation: 0.0),
-      body: Container(
-          color: Colors.grey[200],
-          child: Stack(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: 100.0),
-                child: _body(),
-              ),
-              Positioned(top: 0, right: 0, left: 0, child: _topBar()),
-            ],
-          )),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: lectureStream,
+          builder: (context, lecturesStream){
+
+        if(lecturesStream.hasData){
+          todayLectures.clear();
+
+          lecturesStream.data.documents.forEach((doc){
+            var lecture = LectureDTO.fromJson(doc.data);
+            String date = "${dateFormat.format(today)} ${lecture.startTime}";
+            lecture.timeStamp = DateTime.parse(date).millisecondsSinceEpoch;
+            todayLectures.add(lecture);
+          });
+
+          return StreamBuilder<QuerySnapshot>(
+            stream: eventStream,
+            builder: (context, eventsStream){
+
+              if(eventsStream.hasData){
+                todayEvents.clear();
+
+                eventsStream.data.documents.forEach((doc) => todayEvents.add(EventDTO.fromJson(doc.data)));
+
+                return Container(
+                    color: Colors.grey[200],
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(top: 0, right: 0, left: 0, child: _topBar()),
+                        Container(
+                          padding: EdgeInsets.only(top: 100.0),
+                          child: _body(),
+                        ),
+                      ],
+                    ));
+              }
+
+              if(eventsStream.hasError){
+                return Center(child: Text("Error fetching data, please check your network and try again"));
+              }
+
+              return Loading();
+            },
+          );
+        }
+
+        if(lecturesStream.hasError){
+          return Center(child: Text("Error fetching data, please check your network and try again"));
+        }
+
+        return Loading();
+      })
     );
   }
 
-  Widget category(title, color, icon, {Function() onTap}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-        elevation: 2.0,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0))),
-        child: ClipRect(
-          child: InkWell(
-            onTap: onTap,
-            child: Container(
+  Stream<QuerySnapshot> lectureStream;
+  Stream<QuerySnapshot> eventStream;
+
+
+
+  var today = DateTime.now();
+  refresh(){
+    lectureStream = LectureDAO.fetchLectures(today.weekday);
+    eventStream = EventDAO.queryEventsByDate(dateFormat.format(today));
+  }
+
+  Widget category(title, color, icon, {Function() onTap, int total = 0}) {
+    return Stack(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Material(
+            elevation: 2.0,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: ClipRect(
+              child: InkWell(
+                onTap: onTap,
+                child: Container(
 //                              height: 70,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(icon, color: color, size: 20.0),
-                        SizedBox(height: 8.0),
-                        Text(title, style: Theme.of(context).textTheme.subhead)
-                      ],
-                    ),
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(icon, color: color, size: 20.0),
+                            SizedBox(height: 8.0),
+                            Text(title, style: Theme.of(context).textTheme.subhead)
+                          ],
+                        ),
+                      ),
+                      Container(height: 4, color: color)
+                    ],
                   ),
-                  Container(height: 4, color: color)
-                ],
+                ),
               ),
             ),
           ),
         ),
-      ),
+        total > 0 ? Positioned(child: Container(
+          padding: EdgeInsets.all(8),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: ColorUtils.accentColor,
+              shape: BoxShape.circle
+            ),
+            child: Text("$total", style: TextStyle(color: Colors.white),)), top: 0, right: 0) : SizedBox()
+      ],
     );
   }
 
@@ -93,16 +186,16 @@ class _DashboardState extends State<Dashboard> {
           ], color: Colors.white, borderRadius: borderRadius),
           child: Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // This next line does the trick.
             children: <Widget>[
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("100L",
+                  Text("2ND ",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text("1ST SEMS",
+                  Text("Semester",
                       style:
                           TextStyle(fontSize: 10, fontWeight: FontWeight.w300))
                 ],
@@ -110,10 +203,10 @@ class _DashboardState extends State<Dashboard> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("16",
+                  Text("200L",
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  Text("MAY, 2019",
+                  Text("Computer Science.",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w300))
                 ],
@@ -121,10 +214,10 @@ class _DashboardState extends State<Dashboard> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("08",
+                  Text("${(todayEvents.length + todayLectures.length).toString().padLeft(2, "0")}",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text("TODAY",
+                  Text("Activities Today",
                       style:
                           TextStyle(fontSize: 10, fontWeight: FontWeight.w300))
                 ],
@@ -140,8 +233,78 @@ class _DashboardState extends State<Dashboard> {
     return CustomScrollView(
       primary: false,
       slivers: <Widget>[
-        SliverList(
+        summaryDisplay(),
+        SliverPadding(
+          padding: const EdgeInsets.all(8.0),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 6 / 5,
+            ),
             delegate: SliverChildListDelegate(<Widget>[
+              category(
+                  "Lectures", eventColors[EventType.LECTURES], FontAwesomeIcons.chalkboardTeacher,
+                total: todayLectures.length,
+                onTap: (){
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Lectures()));
+                   }
+              ),
+              category("Fixed Class", eventColors[EventType.CLASS], Icons.library_books,
+                  total: todayEvents.where((event) => event.type == EventType.CLASS).toList().length,
+                  onTap: () {
+                    navigateToEvent(EventType.CLASS);
+                  }
+              ),
+              category("Assignment/CA", eventColors[EventType.ASSIGNEMTCA], FontAwesomeIcons.twitch,
+                  total: todayEvents.where((event) => event.type == EventType.ASSIGNEMTCA).toList().length,
+                  onTap: (){
+                    navigateToEvent(EventType.ASSIGNEMTCA);}
+              ),
+              category(
+                  "Test",  eventColors[EventType.TEST], FontAwesomeIcons.tasks,
+                  total: todayEvents.where((event) => event.type == EventType.TEST).toList().length,
+                  onTap: (){
+                    navigateToEvent(EventType.TEST);}
+              ),
+              category("Exam", eventColors[EventType.EXAM], FontAwesomeIcons.clipboardList,
+                  total: todayEvents.where((event) => event.type == EventType.EXAM).toList().length,
+                  onTap: (){
+                    navigateToEvent(EventType.EXAM);}
+              ),
+              category(
+                  "Others", eventColors[EventType.OTHERS], FontAwesomeIcons.tasks,
+                  total: todayEvents.where((event) => event.type == EventType.OTHERS).toList().length,
+                  onTap: (){
+                    navigateToEvent(EventType.OTHERS);
+                  }
+              ),
+              category("Courses", Colors.grey, FontAwesomeIcons.book,
+                  onTap: (){
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => CoursesScreen()));
+                  }
+              ),
+              category("Class excos", Colors.brown, FontAwesomeIcons.users,
+                  onTap: (){}
+              ),
+            ]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  summaryDisplay() {
+    var combinedList = <DateEvent>[];
+    combinedList.addAll(todayLectures);
+    combinedList.addAll(todayEvents);
+
+    combinedList.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
+    combinedList = combinedList.reversed.toList();
+
+    return SliverList(
+        delegate: SliverChildListDelegate(<Widget>[
           Container(
             padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
             alignment: Alignment.centerLeft,
@@ -161,7 +324,7 @@ class _DashboardState extends State<Dashboard> {
                           Text("TODAY'S TIMELINE",
                               style: Theme.of(context).textTheme.caption),
                           SizedBox(height: 3),
-                          Text("Mon, Oct 22, 2018",
+                          Text(monthYear,
                               style: Theme.of(context).textTheme.subhead),
                         ],
                       ),
@@ -170,7 +333,7 @@ class _DashboardState extends State<Dashboard> {
                           onPressed: () {
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
-                              return Today();
+                              return Today(events: combinedList, date: monthYear);
                             }));
                           },
                           color: Theme.of(context).primaryColor,
@@ -182,121 +345,24 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 Expanded(
-                    child: ListView.builder(
+                    child: combinedList.isEmpty ? Center(child: Text("No event today")) :
+                    ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 4,
+                        itemCount: combinedList.length,
                         itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.only(
-                                right: 8.0, top: 8.0, bottom: 8.0),
-                            padding: EdgeInsets.all(4.0),
-                            child: Material(
-                              elevation: 4.0,
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: borderRadius),
-                              child: Container(
-                                padding: EdgeInsets.all(16.0),
-                                width: 280,
-//                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: borderRadius,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Icon(Icons.watch_later,
-                                            color: Colors.grey, size: 14.0),
-                                        SizedBox(width: 5),
-                                        Text(
-                                          "04-4:30PM",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                        Expanded(child: SizedBox()),
-                                        Icon(Icons.play_circle_filled,
-                                            color: Colors.green, size: 10.0),
-                                        SizedBox(width: 5),
-                                        Text(
-                                          "ONGOING",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      "CS4512 -  Theory of Computation Theory of Computation",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style:
-                                          Theme.of(context).textTheme.subhead,
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Icon(Icons.near_me,
-                                            color: Colors.grey, size: 14.0),
-                                        SizedBox(width: 5),
-                                        Expanded(
-                                          child: Text(
-                                            "PHYSICAL SCIENCES LECTURE THEATRE",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }))
+                          return CombinedPreviewEventListItem(combinedList[index], isLecture: combinedList[index] is LectureDTO);
+                        })
+
+
+    )
               ],
             ),
           ),
-        ])),
-        SliverPadding(
-          padding: const EdgeInsets.all(8.0),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 6 / 5,
-            ),
-            delegate: SliverChildListDelegate(<Widget>[
-              category(
-                  "Lectures", Colors.red, FontAwesomeIcons.chalkboardTeacher,
-                onTap: (){
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Lectures()));
-                }
-              ),
-              category("Fixed Class", Colors.purple, Icons.library_books,
-                  onTap: (){}
-              ),
-              category("Assignment/CA", ColorUtils.primaryColor, FontAwesomeIcons.twitch,
-                  onTap: (){}
-              ),
-              category(
-                  "Test", ColorUtils.accentColor, FontAwesomeIcons.tasks,
-                  onTap: (){}
-              ),
-              category("Exam", Colors.green[600], FontAwesomeIcons.clipboardList,
-                  onTap: (){}
-              ),
-              category("Class excos", Colors.grey, FontAwesomeIcons.users,
-                  onTap: (){}
-              ),
-            ]),
-          ),
-        ),
-      ],
-    );
+        ]));
+  }
+
+  void navigateToEvent(String eventType) {
+    Navigator.of(context).push(
+    MaterialPageRoute(builder: (context) => EventsScreen(eventType)));
   }
 }

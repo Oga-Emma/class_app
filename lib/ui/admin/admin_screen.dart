@@ -1,4 +1,5 @@
 import 'package:class_app/model/course_dto.dart';
+import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/ui/utils/sButton.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'add_edit_lectures.dart';
 import 'classes.dart';
 import 'add_edit_course_screen.dart';
 import 'courses.dart';
+import 'events.dart';
 
 class AdminScreen extends StatelessWidget {
   @override
@@ -69,10 +71,10 @@ class AdminScreen extends StatelessWidget {
             ),
             Column(
               children: <Widget>[
-                Expanded(child: Classes()),
+                Expanded(child: Events()),
                 SButton(labelText: "ADD EVENT", onTap: (){
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => AddEditEvent())
+                      MaterialPageRoute(builder: (context) => AddEditEvent(EventDTO.withId(Uuid().v1())))
                   );
                 }),
               ],

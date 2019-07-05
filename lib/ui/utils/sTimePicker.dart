@@ -9,7 +9,7 @@ class STimePicker extends StatelessWidget {
       this.inputType,
       {this.label,
         this.validator,
-        this.onSaved,
+        this.onChanged,
         this.textInputType,
         this.controller,
         this.initialValue});
@@ -17,7 +17,7 @@ class STimePicker extends StatelessWidget {
 InputType inputType;
 String label;
 Function(String) validator;
-Function(String) onSaved;
+Function(DateTime) onChanged;
 TextInputType textInputType;
 TextEditingController controller;
 String initialValue;
@@ -56,7 +56,10 @@ String initialValue;
 //              labelText: 'Date/Time',
 //              hasFloatingPlaceholder: false),
       onChanged: (dt) {
-        onSaved("${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}");
+        if(dt != null) {
+          onChanged(dt);
+        }
+//        onSaved("${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}");
       },
     );
   }

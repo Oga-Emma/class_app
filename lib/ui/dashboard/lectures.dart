@@ -77,8 +77,11 @@ class _LecturesState extends State<Lectures> {
           title: Text("Lectures"),
           bottom: PreferredSize(
               preferredSize: Size.fromHeight(40),//Size.fromHeight(kToolbarHeight),
-              child: new Container(
-                color: Colors.white,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)
+                ),
                   height: 46.0,
                   child: TabBar(
                     unselectedLabelColor: Colors.white,

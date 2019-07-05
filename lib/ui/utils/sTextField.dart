@@ -31,6 +31,7 @@ class STextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initialValue,
       focusNode: focusNode,
       textInputAction: inputAction,
       enabled: enabled,

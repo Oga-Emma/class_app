@@ -13,6 +13,7 @@ import 'package:class_app/ui/utils/ui_snackbar.dart';
 import 'package:class_app/ui/utils/validators.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AddEditLectures extends StatefulWidget {
   AddEditLectures(this.lecture);
@@ -37,7 +38,18 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
     Days.THURSDAY, Days.FRIDAY, Days.SATURDAY];
 
   @override
+  void initState() {
+
+    _day = getDayLabel(widget.lecture.day);
+    courseController.text = widget.lecture.courseCode;
+    startTime.text = widget.lecture.startTime;
+    endTime.text = widget.lecture.endTime;
+    super.initState();
+  }
+
+  @override
   void dispose() {
+
     courseController.dispose();
     startTime.dispose();
     endTime.dispose();
@@ -86,7 +98,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
                       padding: EdgeInsets.only(left: 12.0, right: 12.0),
 //                            width: double.infinity,
                       child: FixedDropdownButton<String>(
-                        hint: Text('Select the course type'),
+                        hint: Text('Select the day of week'),
                         value: _day,
                         items: days.map((String value) {
                           return DropdownMenuItem<String>(
@@ -130,8 +142,9 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
                       InputType.time,
                       controller: startTime,
                       label: "TIME START",
-                      onSaved: (value) {
-                        widget.lecture.startTime = value;
+                      onChanged: (dt) {
+                        widget.lecture.startTime = DateFormat("Hm").format(dt);
+                            //"${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
                       },
                       textInputType: TextInputType.text,
                       validator: Validators.validateString(),
@@ -143,8 +156,9 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
                       InputType.time,
                       controller: endTime,
                       label: "TIME END",
-                      onSaved: (value) {
-                        widget.lecture.endTime = value;
+                      onChanged: (dt) {
+                        widget.lecture.endTime = DateFormat("Hm").format(dt);
+                        //"${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
                       },
                       textInputType: TextInputType.text,
                               validator: Validators.validateString(),
@@ -155,6 +169,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
               gap,
               gap,
               STextField(
+                initialValue: widget.lecture.venue,
                 label: "VENUE",
                 onSaved: (value){
                   widget.lecture.venue = value;
@@ -230,6 +245,17 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
       case Days.FRIDAY: return 5;
       case Days.SATURDAY: return 6;
       default: return 1;
+    }
+  }
+  String getDayLabel(int day) {
+    switch(day){
+      case 1: return Days.MONDAY;
+      case 2: return Days.TUESDAY;
+      case 3: return Days.WEDNESDAY;
+      case 4: return Days.THURSDAY;
+      case 5: return Days.FRIDAY;
+      case 6: return Days.SATURDAY;
+      default: return Days.MONDAY;
     }
   }
 }

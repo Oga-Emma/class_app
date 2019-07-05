@@ -1,3 +1,3 @@
 class DateEvent{
-  DateTime timeStamp;
+  int timeStamp;
 }

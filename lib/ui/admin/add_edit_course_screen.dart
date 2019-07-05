@@ -26,6 +26,7 @@ class _AddEditCourseState extends State<AddEditCourse> with UISnackBarProvider {
 
   @override
   void initState() {
+    _courseType = widget.course.type;
     super.initState();
   }
 
@@ -43,6 +44,7 @@ class _AddEditCourseState extends State<AddEditCourse> with UISnackBarProvider {
 
             children: <Widget>[
               STextField(
+                initialValue: widget.course.code,
                 label: "Course Code",
 onSaved: (value){
                   widget.course.code = value.toUpperCase();
@@ -58,6 +60,7 @@ onSaved: (value){
               gap,
               gap,
               STextField(
+                initialValue: widget.course.title,
                 label: "Course Title",
                 onSaved: (value){
                   widget.course.title = value.toUpperCase();},
@@ -71,6 +74,7 @@ onSaved: (value){
               ), gap,
               gap,
               STextField(
+                initialValue: widget.course.unitLoad,
                 label: "Unit Load",
                 textInputType: TextInputType.number,
                 onSaved: (value){

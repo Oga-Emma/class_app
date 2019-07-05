@@ -1,12 +1,14 @@
-import 'package:class_app/model/course_dto.dart';
+import 'package:class_app/model/event_dto.dart';
+import 'package:class_app/model/event_dto.dart';
+import 'package:class_app/ui/admin/add_edit_event_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:flutter/material.dart';
 
-class CourseListItem extends StatelessWidget {
-  CourseListItem(this.course, {this.onTap});
-  final CourseDTO course;
-  final Function(CourseDTO course) onTap;
+class EventListItemAdmin extends StatelessWidget {
+  EventListItemAdmin(this.event, {this.onTap});
+  final EventDTO event;
+  final Function(EventDTO event) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,22 +22,32 @@ class CourseListItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: (){
-          onTap(course);
+          onTap(event);
         },
         child: Column(
           children: <Widget>[
             Row(
               children: <Widget>[
                 Text(
-                  course.code,
+                  event.courseCode,
                   style: Theme.of(context).textTheme.title.copyWith(
                       color: ColorUtils.primaryColor),
                 ),
+                Expanded(child: SizedBox()),
+                FlatButton.icon(onPressed: (){
+                  Navigator.of(context)
+                      .push(
+                      MaterialPageRoute(
+                          builder: (context) => AddEditEvent(event))
+                  );
+                },
+                    icon: Icon(Icons.edit, size: 14,),
+                    label: Text("Edit"))
               ],
             ),
             gap,
             Text(
-              course.title,
+              event.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context)
@@ -49,25 +61,25 @@ class CourseListItem extends StatelessWidget {
            Container(height: 1, color: Colors.grey.withOpacity(0.3),
              margin: EdgeInsets.symmetric(vertical: 8.0),
            ),
-           Row(
-             children: <Widget>[
-               Text("TYPE: ${course.type}",
-                 style: Theme.of(context)
-                     .textTheme
-                     .caption,
-                 overflow: TextOverflow.ellipsis,
-                 maxLines: 2,
-               ),
-               Expanded(child: SizedBox()),
-               Text("Unit Load: ${course.unitLoad}",
-                 style: Theme.of(context)
-                     .textTheme
-                     .caption,
-                 overflow: TextOverflow.ellipsis,
-                 maxLines: 2,
-               )
-             ],
-           )
+            Row(
+              children: <Widget>[
+                Text("DATE: ${event.date}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                Expanded(child: SizedBox()),
+                Text("TIME: ${event.time}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                )
+              ],
+            )
           ],
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
