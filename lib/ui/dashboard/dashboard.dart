@@ -8,6 +8,8 @@ import 'package:class_app/service/lecture_dao.dart';
 import 'package:class_app/ui/admin/admin_screen.dart';
 import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/today.dart';
+import 'package:class_app/ui/event/event_details_screen.dart';
+import 'package:class_app/ui/lecture/lecture_details_screen.dart';
 import 'package:class_app/ui/list_items/combined_event_preview_list_item.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
@@ -17,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
+import 'class_excos_screen.dart';
 import 'courses.dart';
 import 'events_screen.dart';
 
@@ -286,7 +289,10 @@ class _DashboardState extends State<Dashboard> {
                   }
               ),
               category("Class excos", Colors.brown, FontAwesomeIcons.users,
-                  onTap: (){}
+                  onTap: (){
+                Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ClassExcoScreen()));
+                  }
               ),
             ]),
           ),
@@ -350,7 +356,19 @@ class _DashboardState extends State<Dashboard> {
                         scrollDirection: Axis.horizontal,
                         itemCount: combinedList.length,
                         itemBuilder: (context, index) {
-                          return CombinedPreviewEventListItem(combinedList[index], isLecture: combinedList[index] is LectureDTO);
+                          return CombinedPreviewEventListItem(combinedList[index],
+                              isLecture: combinedList[index] is LectureDTO,
+
+                          onTap: (event){
+                              Navigator.of( context)
+                                  .push(MaterialPageRoute(
+                                  builder: (context) => event is LectureDTO ?
+                                  LectureDetailsScreen(lecture: event) : EventDetailsScreen(event: event as EventDTO)
+                              ));
+
+
+                          },
+                          );
                         })
 
 

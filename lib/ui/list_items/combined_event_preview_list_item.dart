@@ -27,7 +27,9 @@ class CombinedPreviewEventListItem extends StatelessWidget {
             borderRadius: borderRadius),
         child: InkWell(
           onTap: (){
-            onTap(event);
+            if(onTap != null) {
+              onTap(event);
+            }
           },
           child: Container(
             padding: EdgeInsets.all(16.0),

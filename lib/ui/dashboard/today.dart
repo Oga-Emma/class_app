@@ -1,6 +1,8 @@
 import 'package:class_app/model/date_event.dart';
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
+import 'package:class_app/ui/event/event_details_screen.dart';
+import 'package:class_app/ui/lecture/lecture_details_screen.dart';
 import 'package:class_app/ui/list_items/combined_list_item_user.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
@@ -23,8 +25,9 @@ class Today extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                InkWell(onTap: () => Navigator.pop(context), child: Icon(Icons.arrow_back, size: 36,
-                  color: ColorUtils.primaryColor,)),
+                gap2x,
+                InkWell(onTap: () => Navigator.pop(context), child: Icon(
+                  Icons.arrow_back, size: 24, color: ColorUtils.primaryColor,)),
                 gap,
                 Text("TODAY EVENTS", style: Theme.of(context).textTheme.title.copyWith(fontSize: 32, color: ColorUtils.primaryColor)),
                 Text(date, style: Theme.of(context).textTheme.subhead.copyWith(color: ColorUtils.accentColor)),
@@ -34,7 +37,13 @@ class Today extends StatelessWidget {
                         itemCount: events.length,
                         itemBuilder: (context, index) {
                           return CombinedListItemUser(events[index], onTap: (event){
-                          },);
+
+                            Navigator.of( context)
+                                .push(MaterialPageRoute(
+                                builder: (context) => event is LectureDTO ?
+                                LectureDetailsScreen(lecture: event) : EventDetailsScreen(event: event)
+                            ));
+                            },);
                         })
                 )
               ],

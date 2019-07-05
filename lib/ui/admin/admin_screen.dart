@@ -91,7 +91,7 @@ class AdminScreen extends StatelessWidget {
             ),
             Column(
               children: <Widget>[
-                Expanded(child: Classes()),
+                Expanded(child: Container()),
                 SButton(labelText: "ADD EXCO", onTap: (){
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => AddEditExco())

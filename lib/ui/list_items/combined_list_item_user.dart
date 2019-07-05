@@ -82,7 +82,7 @@ class CombinedListItemUser extends StatelessWidget {
                         Icon(
                           Icons.location_on,
                           size: 16,
-                          color: ColorUtils.accentColor,
+                          color: ColorUtils.primaryColor,
                         ),
                         SizedBox(width: 5),
                         Expanded(
@@ -124,7 +124,7 @@ class CombinedListItemUser extends StatelessWidget {
                 Text(timeFormat.format(DateTime.parse("2019-02-27 ${event.startTime}")),
                   style: Theme.of(context).textTheme.display1.copyWith(fontWeight: FontWeight.w700, fontSize: 20, color: lightGrey),),
                 Text(timeOfDayFormat.format(DateTime.parse("2019-02-27 ${event.startTime}")),
-                  style: TextStyle(color: lightGrey),),
+                  style: TextStyle(color: Colors.grey[800]),),
               ],
             ),
             gap,
@@ -133,7 +133,7 @@ class CombinedListItemUser extends StatelessWidget {
                 SizedBox(height: 6),
                 Icon(Icons.add_circle, size: 12, color: lightGrey,),
                 gap,
-                Container(width: 1, height: 90, color: lightGrey,
+                Container(width: 1, height: 90, color: Colors.grey[800],
                   margin: EdgeInsets.symmetric(horizontal: 10),)
               ],
             ),
@@ -155,7 +155,7 @@ class CombinedListItemUser extends StatelessWidget {
                       "Lecture",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.display1.copyWith(fontSize: 16, color: lightGrey),
+                      style: Theme.of(context).textTheme.display1.copyWith(fontSize: 16, color: Colors.grey[800]),
                     ),
                     gap2x,
                     Row(
@@ -173,7 +173,7 @@ class CombinedListItemUser extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme
-                                .caption.copyWith(color: lightGrey),
+                                .caption.copyWith(color: Colors.grey[800]),
                           ),
                         ),
                       ],

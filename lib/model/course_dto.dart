@@ -7,7 +7,8 @@ class CourseDTO{
   String department;
   bool deleted;
   String faculty;
-  List<String> lecturers;
+  String lecturers;
+  List<String> outline;
 
   CourseDTO(){
     id =  "";
@@ -18,7 +19,8 @@ class CourseDTO{
     department = "";
     faculty = "";
     deleted = false;
-    lecturers = [];
+    lecturers = "";
+    outline = [];
   }
 
   CourseDTO.withId(String id): super(){
@@ -30,7 +32,9 @@ class CourseDTO{
     department = "";
     faculty = "";
     deleted = false;
-    lecturers = [];
+    lecturers = "";
+    lecturers = "";
+    outline = [];
   }
 
 
@@ -41,6 +45,10 @@ class CourseDTO{
         type = data['type'] ?? "",
         code = data['code'] ?? "",
         title = data['title'] ?? "",
+        faculty = data['faculty'] ?? "",
+        department = data['department'] ?? "",
+        lecturers = data['lecturers'] ?? "",
+        outline = data['outline'] ?? [],
   deleted = data['deleted'] ?? false;
 
   Map<String, dynamic> toMap(){
@@ -51,6 +59,10 @@ class CourseDTO{
       "code": code,
       "title": title,
       "deleted": deleted,
+      "department": department,
+      "faculty": faculty,
+      "lecturers": lecturers,
+      "outline": outline,
     };
   }
 

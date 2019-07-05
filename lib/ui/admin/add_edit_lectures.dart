@@ -6,6 +6,7 @@ import 'package:class_app/service/lecture_dao.dart';
 import 'package:class_app/ui/admin/select_course_dialog.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/fixed_dropdown.dart';
+import 'package:class_app/ui/utils/helper_methods.dart';
 import 'package:class_app/ui/utils/sButton.dart';
 import 'package:class_app/ui/utils/sTextField.dart';
 import 'package:class_app/ui/utils/sTimePicker.dart';
@@ -235,29 +236,6 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
 
   @override
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
-
-  int getDay(String day) {
-    switch(day){
-      case Days.MONDAY: return 1;
-      case Days.TUESDAY: return 2;
-      case Days.WEDNESDAY: return 3;
-      case Days.THURSDAY: return 4;
-      case Days.FRIDAY: return 5;
-      case Days.SATURDAY: return 6;
-      default: return 1;
-    }
-  }
-  String getDayLabel(int day) {
-    switch(day){
-      case 1: return Days.MONDAY;
-      case 2: return Days.TUESDAY;
-      case 3: return Days.WEDNESDAY;
-      case 4: return Days.THURSDAY;
-      case 5: return Days.FRIDAY;
-      case 6: return Days.SATURDAY;
-      default: return Days.MONDAY;
-    }
-  }
 }
 
 class DayOfWeek{
@@ -271,5 +249,5 @@ class Days{
   static const WEDNESDAY = "Wednesday";
   static const THURSDAY = "Thursday";
   static const FRIDAY = "Friday";
-  static const SATURDAY = "Friday";
+  static const SATURDAY = "Saturday";
 }

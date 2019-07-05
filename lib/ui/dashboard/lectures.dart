@@ -78,6 +78,7 @@ class _LecturesState extends State<Lectures> {
           bottom: PreferredSize(
               preferredSize: Size.fromHeight(40),//Size.fromHeight(kToolbarHeight),
               child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 8.0),
                 decoration: BoxDecoration(
                     color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0)

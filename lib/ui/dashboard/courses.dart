@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/service/course_dao.dart';
+import 'package:class_app/ui/course/course_details_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
@@ -113,20 +114,23 @@ class _CoursesScreenState extends State<CoursesScreen> {
 
                                 return GridView.count(
                                     crossAxisCount: 2,
-                                    childAspectRatio: 6 / 5,
+                                    childAspectRatio: 1.0,//6 / 5,
                                     padding: const EdgeInsets.all(4.0),
                                     mainAxisSpacing: 4.0,
                                     crossAxisSpacing: 4.0,
                                     children: sortedList.map((CourseDTO course) {
                                       return InkWell(
                                         onTap: (){
-
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(builder: (context)
+                                            => CourseDetailsScreen(courseCode: course.code))
+                                          );
                                         },
                                         child: Container(
                                           margin: EdgeInsets.all(8.0),
                                           padding: EdgeInsets.all(16.0),
                                           decoration: BoxDecoration(
-                                              color: Colors.cyan,
+                                              color: ColorUtils.primaryColor,
                                               borderRadius: BorderRadius.circular(
                                                   16.0)
                                           ),
@@ -144,12 +148,12 @@ class _CoursesScreenState extends State<CoursesScreen> {
                                                       .copyWith(fontSize: 24,
                                                       color: Colors.white)),
                                               Text(course.title,
-                                                  maxLines: 2,
+                                                  maxLines: 1,
                                                   style: Theme
                                                       .of(context)
                                                       .textTheme
                                                       .display1
-                                                      .copyWith(fontSize: 14,
+                                                      .copyWith(fontSize: 12,
                                                       color: Colors.grey[200])),
                                               Container(height: 2, color: Colors.grey[200],
                                                 margin: EdgeInsets.symmetric(vertical: 8),

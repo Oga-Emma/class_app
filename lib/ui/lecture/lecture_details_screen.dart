@@ -1,20 +1,23 @@
 import 'package:class_app/model/course_dto.dart';
+import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/course_dao.dart';
+import 'package:class_app/ui/course/course_details_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
+import 'package:class_app/ui/utils/helper_methods.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 
-class CourseDetailsScreen extends StatefulWidget {
-  CourseDetailsScreen({this.courseCode});
-  final String courseCode;
+class LectureDetailsScreen extends StatefulWidget {
+  LectureDetailsScreen({@required this.lecture});
+  final LectureDTO lecture;
   @override
-  _CourseDetailsScreenState createState() => _CourseDetailsScreenState();
+  _LectureDetailsScreenState createState() => _LectureDetailsScreenState();
 }
 
-class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
+class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
 
   var selected = 0;
   @override
@@ -42,13 +45,13 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                     Navigator.pop(context);
                   }, child: Icon(Icons.arrow_back)),
                   gap2x,
-                  Text("COURSE DETAILS")
+                  Text("LECTURE")
                 ],
               ),
             ),
             Expanded(
                 child: FutureBuilder<QuerySnapshot>(
-                    future: CourseDAO.getCourse(widget.courseCode),
+                    future: CourseDAO.getCourse(widget.lecture.courseCode),
                     builder: (context, snapshot) {
                       if(snapshot.hasData) {
 
@@ -81,11 +84,18 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                               gap2x,
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
+                                  padding: const EdgeInsets.all(24.0),
+                                  child: ListView(
                                     children: <Widget>[
+                                      headingDetails(context, "Lecture Starts", widget.lecture.startTime),
+                                      headingDetails(context, "Lecture Ends", widget.lecture.endTime),
+                                      headingDetails(context, "Lecture Day", getDayLabel(widget.lecture.day)),
+                                      headingDetails(context, "Venue", widget.lecture.venue),
+                                      gap2x,
+                                      gap2x,
+                                      gap2x,
                                       Material(
-                                    borderRadius: BorderRadius.circular(24.0),
+                                        borderRadius: BorderRadius.circular(24.0),
                                         elevation: 4.0,
                                         child: Container(
                                           decoration: BoxDecoration(),
@@ -95,24 +105,16 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                               Expanded(
                                                 child: InkWell(
                                                   onTap: (){
-                                                    setState(() {
-                                                    selected = 0;
-                                                  });},
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    padding: EdgeInsets.all(8.0),
-                                                    child: Text("DETAILS", style: selected == 0 ? selectedInputStyle : deselectedInputStyle, ), decoration: selected == 0 ? selectedDecoration : deselectedDecoration),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: (){
-                                                    setState(() {
+                                                    /*setState(() {
                                                       selected = 1;
-                                                    });},
+                                                    });*/
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                        builder: (context) => CourseDetailsScreen(courseCode: widget.lecture.courseCode)));
+                                                  },
                                                   child: Container(
-                                                    alignment: Alignment.center,
-                                                    padding: EdgeInsets.all(8.0), child: Text("OUTLINE", style: selected == 1 ? selectedInputStyle : deselectedInputStyle),
+                                                      alignment: Alignment.center,
+                                                      padding: EdgeInsets.all(8.0), child: Text("VIEW COURSE DETAILS", style: selected == 1 ? selectedInputStyle : deselectedInputStyle),
                                                       decoration: selected == 1 ? selectedDecoration : deselectedDecoration),
                                                 ),
                                               )
@@ -120,10 +122,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                           ),
                                         ),
                                       ),
-                                      Expanded(child: Padding(
-                                          padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 8.0),
-                                          child: selected == 0 ? details(course) : courseOutline(course),
-                                      ))
+
                                     ],
                                   ),
                                 ),
@@ -161,37 +160,6 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
           headingDetails(context, "Department", course.department),
           headingDetails(context, "Faculty", course.faculty),
 
-        ],
-      ),
-    );
-  }
-
-  Widget courseOutline(CourseDTO course){
-
-    return Container(
-      alignment: Alignment.topLeft,
-      child: ListView(
-        children: <Widget>[
-          Text("COURSE OUTLINE", style: Theme.of(context).textTheme.title.copyWith(color: Colors.grey[500]),),
-          gap,
-          Container(color: Colors.grey[300], height: 2, ),
-          gap2x,
-          course.outline.isEmpty ? Center(child: Text("Course outline available"),) : Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: course.outline.map((str) => Container(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: ColorUtils.accentColor.withOpacity(0.3)))
-              ),
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.chevron_right, size: 16,),
-                  gap,
-                  Expanded(child: Text(str, style: Theme.of(context).textTheme.subhead,)),
-                ],
-              ),
-            )).toList(),
-          )
         ],
       ),
     );

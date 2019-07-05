@@ -1,5 +1,6 @@
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/service/event_dao.dart';
+import 'package:class_app/ui/event/event_details_screen.dart';
 import 'package:class_app/ui/list_items/event_list_item_user.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,7 +37,10 @@ class EventsScreen extends StatelessWidget {
                   return  ListView.builder(
                       itemCount: events.length,
                       itemBuilder: (context, index) {
-                        return EventListItemUser(events[index], onTap: (evnt){
+                        return EventListItemUser(events[index], onTap: (event){
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                              builder: (context) => EventDetailsScreen(event: event,)));
                         });
                       });
                 }

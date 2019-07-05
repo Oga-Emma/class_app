@@ -19,14 +19,15 @@ class EventListItemUser extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(
-          vertical: 8.0, horizontal: 8.0),
+          vertical: 16.0, horizontal: 16.0),
       child: Material(
-          elevation: 0.5,
-          shape: RoundedRectangleBorder(
-              borderRadius: borderRadius),
+          elevation: 8.0,
+          borderRadius: BorderRadius.circular(16.0),
           child: InkWell(
             onTap: (){
-              onTap(event);},
+              onTap(event);
+
+              },
             child: Container(
               padding: const EdgeInsets.all(16.0),
 //              height: 150,
@@ -34,19 +35,26 @@ class EventListItemUser extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        color: eventColors[event.type],
-                        borderRadius: borderRadius),
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(event.type,
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.white)),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                            color: eventColors[event.type],
+                            borderRadius: borderRadius),
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(event.type,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.white)),
+                      ),
+                      Expanded(child: SizedBox()),
+                    ],
                   ),
-                  SizedBox(height: 10),
+                  gap2x,
                   Text(
                     "${event.courseCode.isEmpty ? '' : event.courseCode + ' - '}${event.title}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
                         .textTheme
                         .headline.copyWith(fontSize: 18),
@@ -60,6 +68,8 @@ class EventListItemUser extends StatelessWidget {
 
                   Text(
                     "${event.description}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   gap2x,
                   Row(
