@@ -8,7 +8,8 @@ class CourseDTO{
   bool deleted;
   String faculty;
   String lecturers;
-  List<String> outline;
+  String courseRep;
+  List<dynamic> outline;
 
   CourseDTO(){
     id =  "";
@@ -20,6 +21,7 @@ class CourseDTO{
     faculty = "";
     deleted = false;
     lecturers = "";
+    courseRep = "";
     outline = [];
   }
 
@@ -34,6 +36,7 @@ class CourseDTO{
     deleted = false;
     lecturers = "";
     lecturers = "";
+    courseRep = "";
     outline = [];
   }
 
@@ -48,6 +51,7 @@ class CourseDTO{
         faculty = data['faculty'] ?? "",
         department = data['department'] ?? "",
         lecturers = data['lecturers'] ?? "",
+        courseRep = data['courseRep'] ?? "",
         outline = data['outline'] ?? [],
   deleted = data['deleted'] ?? false;
 
@@ -62,6 +66,7 @@ class CourseDTO{
       "department": department,
       "faculty": faculty,
       "lecturers": lecturers,
+      "courseRep": courseRep,
       "outline": outline,
     };
   }

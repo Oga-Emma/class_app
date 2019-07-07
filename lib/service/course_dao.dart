@@ -45,4 +45,12 @@ class CourseDAO {
     var firestore = Firestore.instance;
     return firestore.collection("courses").snapshots();
   }
+
+  static Future<DocumentSnapshot>  getCourseById(String courseId) {
+    var firestore = Firestore.instance;
+    return firestore
+        .collection("courses")
+    .document(courseId)
+    .get();
+  }
 }

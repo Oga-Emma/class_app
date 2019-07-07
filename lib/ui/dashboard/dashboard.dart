@@ -13,6 +13,7 @@ import 'package:class_app/ui/lecture/lecture_details_screen.dart';
 import 'package:class_app/ui/list_items/combined_event_preview_list_item.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
+import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -44,20 +45,33 @@ class _DashboardState extends State<Dashboard> {
 
   var todayEvents = <EventDTO>[];
   var todayLectures = <LectureDTO>[];
+  var checked = false;
 
   @override
   Widget build(BuildContext context) {
     refresh();
     return Scaffold(
       appBar: AppBar(
-          title: GestureDetector(onHorizontalDragEnd: (details){
+          title: GestureDetector(onHorizontalDragEnd: (details)  {
+//            print(details.primaryVelocity);
+//            print(details.velocity);
+
+          if(details.primaryVelocity > 500){
+            showPasswordDialog();
+          }
 //            print("Drag happened");
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
+//            showPasswordDialog();
+
           }, child: Text("Dashboard", textAlign: TextAlign.center)),
           elevation: 0.0),
       body: StreamBuilder<QuerySnapshot>(
           stream: lectureStream,
           builder: (context, lecturesStream){
+//
+//            if(!checked) {
+//              checkForNewVersion();
+//              checked = true;
+//            }
 
         if(lecturesStream.hasData){
           todayLectures.clear();
@@ -337,6 +351,7 @@ class _DashboardState extends State<Dashboard> {
                       Expanded(child: SizedBox()),
                       RaisedButton(
                           onPressed: () {
+//
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
                               return Today(events: combinedList, date: monthYear);
@@ -379,8 +394,64 @@ class _DashboardState extends State<Dashboard> {
         ]));
   }
 
+  String pass;
+  showPasswordDialog() async {
+    var password = await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text("Admin Login", textAlign: TextAlign.center,),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0)
+            ),
+            contentPadding: EdgeInsets.all(16.0),
+            children: <Widget>[
+              TextField(
+                onChanged: (value){
+                  pass = value;
+                },
+                obscureText: true,
+                decoration: InputDecoration(
+                    labelText: "Password"
+                ),
+              ),
+              RaisedButton(onPressed: (){
+                Navigator.of(context).pop(pass);
+              }, child: Text("Login"))
+            ],
+          );
+        }) ?? "";
+
+    if(password == "admin1234"){
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
+    }else{
+      if(password.isNotEmpty) {
+        showError(message: "Wrong password");
+      }
+    }
+  }
+
   void navigateToEvent(String eventType) {
     Navigator.of(context).push(
     MaterialPageRoute(builder: (context) => EventsScreen(eventType)));
+  }
+
+  void checkForNewVersion() {
+    Future.delayed(Duration.zero, (){
+      showDialog(
+          context: context, builder: (context){
+        return SimpleDialog(
+          title: Text("New version available", textAlign: TextAlign.left,),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          contentPadding: EdgeInsets.all(16.0),
+          children: <Widget>[
+            Text("What is new"),
+            Container(height: 1, color: Colors.grey.withOpacity(0.5),),
+            gap2x,
+
+          ],
+        );
+      });
+    });
   }
 }

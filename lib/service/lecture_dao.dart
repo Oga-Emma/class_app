@@ -25,4 +25,18 @@ class LectureDAO {
         .collection("classes").where("day", isEqualTo: day).snapshots();
   }
 
+  static void deleteLecture(String id) {
+    print("deleting");
+    var firestore = Firestore.instance;
+    firestore
+        .collection("classes")
+        .document(id)
+    .delete()
+        .then((_) {
+          print("deleted");
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
 }

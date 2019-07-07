@@ -7,7 +7,7 @@ class Classes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 7,
       child: Scaffold(
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
@@ -15,7 +15,7 @@ class Classes extends StatelessWidget {
                 height: 50.0,
                 child: TabBar(
                   isScrollable: true,
-                  tabs: ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat"].map((str) => Padding(
+                  tabs: ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"].map((str) => Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
                       str,
@@ -33,6 +33,7 @@ class Classes extends StatelessWidget {
               LectureListBuilder(day: 4, isAdmin: true),
               LectureListBuilder(day: 5, isAdmin: true),
               LectureListBuilder(day: 6, isAdmin: true),
+              LectureListBuilder(day: 7, isAdmin: true),
             ],
           ),
         ),

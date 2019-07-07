@@ -1,8 +1,10 @@
 import 'package:class_app/model/event_dto.dart';
+import 'package:class_app/model/exco_dto.dart';
 import 'package:class_app/service/event_dao.dart';
 import 'package:class_app/ui/event/event_details_screen.dart';
+import 'package:class_app/ui/exco/exco_user.dart';
 import 'package:class_app/ui/list_items/event_list_item_user.dart';
-import 'package:class_app/ui/list_items/person_list_item.dart';
+import 'package:class_app/ui/list_items/exco_list_item.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
@@ -27,8 +29,10 @@ class _ClassExcoScreenState extends State<ClassExcoScreen> {
     var deselectedDecoration = BoxDecoration(
     );
 
-    var selectedInputStyle = Theme.of(context).textTheme.title.copyWith(color: Colors.white, fontSize: 16);
-    var deselectedInputStyle = Theme.of(context).textTheme.subtitle.copyWith(fontSize: 12);
+    var selectedInputStyle = Theme.of(context).textTheme.title.copyWith(
+        color: Colors.white, fontSize: 14);
+    var deselectedInputStyle = Theme.of(context).textTheme.subtitle.copyWith(
+        fontSize: 12);
 
 
     return Scaffold(
@@ -76,11 +80,8 @@ class _ClassExcoScreenState extends State<ClassExcoScreen> {
 
               gap2x,
               Expanded(
-                  child: ListView.builder(
-                    itemCount: 5,
-                      itemBuilder: (context, index){
-                      return PersonListItem();
-                      }))
+                  child: ExcoUserScreen(excoList[selected])
+              )
             ],
           ),
 

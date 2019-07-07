@@ -32,6 +32,8 @@ dependencies:
   fluttertoast: ^3.1.0
   image_picker: ^0.6.0+3
   provider: ^3.0.0+1
+  firebase_storage: ^3.0.2
+  curved_navigation_bar: ^0.2.20
 
 
 dev_dependencies:

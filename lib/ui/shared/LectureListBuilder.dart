@@ -25,8 +25,12 @@ class LectureListBuilder extends StatelessWidget {
               return Center(child: Text("No Lecture today"));
             }
 
-            stream.data.documents.forEach((doc) =>
-                classes.add(LectureDTO.fromJson(doc.data)));
+            stream.data.documents.forEach((doc)
+                {
+                  var lec = LectureDTO.fromJson(doc.data);
+                  lec.id = doc.documentID;
+                  classes.add(lec);
+                });
 
             return ListView.builder(
                 itemCount: classes.length,

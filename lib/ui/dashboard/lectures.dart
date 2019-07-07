@@ -27,7 +27,13 @@ class _LecturesState extends State<Lectures> {
 
     var today = date.weekday;
     var todayDate = date.day;
-    selectedDate = todayDate;
+
+    selectedDate = today;
+    /*if(today == 7){
+      selectedDate = 1;
+    }else {
+      selectedDate = today;
+    }*///todayDate;
     var mondayDate = todayDate - (today - 1);
     print("Monday date => $mondayDate");
 
@@ -43,6 +49,8 @@ class _LecturesState extends State<Lectures> {
     daysAndDates.add(DaysAndDates(5, "Fri", getNextDate(mondayDate + 4,
         getDaysInMonth(date.month, isLeapYear: isLeapYear))));
     daysAndDates.add(DaysAndDates(6, "Sat", getNextDate(mondayDate + 5,
+        getDaysInMonth(date.month, isLeapYear: isLeapYear))));
+    daysAndDates.add(DaysAndDates(6, "Sun", getNextDate(mondayDate + 6,
         getDaysInMonth(date.month, isLeapYear: isLeapYear))));
 
     super.initState();
@@ -71,7 +79,7 @@ class _LecturesState extends State<Lectures> {
 
     return DefaultTabController(
       initialIndex: selectedDate-1,
-      length: 6,
+      length: 7,
       child: Scaffold(
         appBar: AppBar(
           title: Text("Lectures"),
@@ -92,7 +100,7 @@ class _LecturesState extends State<Lectures> {
 
                     ),*/
                     isScrollable: true,
-                    tabs: ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat"].map((str) => Padding(
+                    tabs: ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"].map((str) => Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         str, style: TextStyle(fontSize: 15.0, color: ColorUtils.primaryColor),
@@ -110,6 +118,7 @@ class _LecturesState extends State<Lectures> {
               LectureListBuilder(day: 4),
               LectureListBuilder(day: 5),
               LectureListBuilder(day: 6),
+              LectureListBuilder(day: 7),
             ],
           ),
         ),

@@ -78,7 +78,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
               child: STextField(
                 label: "COURSE",
                 onSaved: (value) {
-                  widget.lecture.courseCode = selectedCourse.code;
+                  widget.lecture.courseCode = value;
                 },
                 controller: courseController,
                 textInputType: TextInputType.text,
@@ -213,6 +213,10 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
       widget.lecture.startTime = startTime.text;
       widget.lecture.endTime = endTime.text;
       widget.lecture.day = getDay(_day);
+
+      if(selectedCourse != null) {
+        widget.lecture.courseId = selectedCourse.id;
+      }
     }
 
     if(_formKey.currentState.validate()){

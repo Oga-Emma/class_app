@@ -1,6 +1,7 @@
 import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/course_dao.dart';
+import 'package:class_app/service/lecture_dao.dart';
 import 'package:class_app/ui/admin/add_edit_lectures.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
@@ -16,7 +17,7 @@ class LectureAdminListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 160.0,
+      height: 200.0,
       child: Row(
         children: <Widget>[
           Column(
@@ -72,33 +73,19 @@ class LectureAdminListItem extends StatelessWidget {
                   border: Border.all(color: ColorUtils.accentColor.withOpacity(0.2)),
                   borderRadius: BorderRadius.circular(16.0)
                 ),
-                child: FutureBuilder<QuerySnapshot>(
-                  future: CourseDAO.getCourse(lecture.courseCode),
+                child: FutureBuilder<DocumentSnapshot>(
+                  future: CourseDAO.getCourseById(lecture.courseId),
                   builder:
                     (context, snapshot) {
-                  if(snapshot.hasData && snapshot.data.documents.isNotEmpty){
-                    var course = CourseDTO.fromJson(snapshot.data.documents[0].data);
+                  if(snapshot.hasData){
+                    var course = CourseDTO.fromJson(snapshot.data.data);
 
                     return Column(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              course.code,
-                              style: Theme.of(context).textTheme.title.copyWith(
-                                  color: ColorUtils.primaryColor),
-                            ),
-                            Expanded(child: SizedBox()),
-                            FlatButton.icon(onPressed: (){
-                              Navigator.of(context)
-                                  .push(
-                                  MaterialPageRoute(
-                                      builder: (context) => AddEditLectures(lecture))
-                              );
-                            },
-                                icon: Icon(Icons.edit, size: 14,),
-                                label: Text("Edit"))
-                          ],
+                        Text(
+                          course.code,
+                          style: Theme.of(context).textTheme.title.copyWith(
+                              color: ColorUtils.primaryColor),
                         ),
                         gap,
                         Expanded(
@@ -134,7 +121,46 @@ class LectureAdminListItem extends StatelessWidget {
                               ),
                             )
                           ],
-                        )
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(child: SizedBox()),
+                            FlatButton(
+                                shape: StadiumBorder(
+                                    side: BorderSide(color: ColorUtils.accentColor)
+                                ),
+                                onPressed: (){
+                                  Navigator.of(context)
+                                      .push(
+                                      MaterialPageRoute(
+                                          builder: (context) => AddEditLectures(lecture))
+                                  );
+                                },
+                                child: Text("Edit")),
+                            gap2x,
+                            FlatButton(
+                                shape: StadiumBorder(
+                                    side: BorderSide(color: Colors.redAccent)
+                                ),
+                                onPressed: () async {
+                                  bool delete = await showDialog<bool>(context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Delete Lecture"),
+                                      content: Text("Are you sure?\nThis aciton cannot be undone"),
+                                      actions: <Widget>[
+                                        FlatButton(onPressed: () => Navigator.of(context).pop(false), child: Text("Cancel")),
+                                        FlatButton(onPressed: () => Navigator.of(context).pop(true), child: Text("Delete"))
+                                      ],
+                                    )
+                                  ) ?? false;
+
+                                  if(delete){
+                                    LectureDAO.deleteLecture(lecture.id);
+                                  }
+                                },
+                                child: Text("Delete"))
+                          ],
+                        ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -49,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
           initialSelection: 1,
     /*)
 
+    //Todo: user curved navigation bar here (curved_navigation_bar: ^0.2.20)
+
         BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(

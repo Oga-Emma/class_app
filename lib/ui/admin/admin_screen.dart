@@ -1,5 +1,6 @@
 import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/event_dto.dart';
+import 'package:class_app/model/exco_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/ui/utils/sButton.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'classes.dart';
 import 'add_edit_course_screen.dart';
 import 'courses.dart';
 import 'events.dart';
+import 'exco.dart';
 
 class AdminScreen extends StatelessWidget {
   @override
@@ -91,10 +93,10 @@ class AdminScreen extends StatelessWidget {
             ),
             Column(
               children: <Widget>[
-                Expanded(child: Container()),
+                Expanded(child: Exco()),
                 SButton(labelText: "ADD EXCO", onTap: (){
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => AddEditExco())
+                      MaterialPageRoute(builder: (context) => AddEditExco(ExcoDTO.withId(Uuid().v1())))
                   );
                 }),
               ],
