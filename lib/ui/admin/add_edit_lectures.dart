@@ -30,7 +30,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
   var _scaffoldKey = GlobalKey<ScaffoldState>();
   var startTime = TextEditingController();
   var endTime = TextEditingController();
-  CourseDTO selectedCourse = CourseDTO();
+  CourseDTO selectedCourse;
   var courseController = TextEditingController();
   var _day = Days.MONDAY;
   var dayError = false;
@@ -41,10 +41,14 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
   @override
   void initState() {
 
-    _day = getDayLabel(widget.lecture.day);
-    courseController.text = widget.lecture.courseCode;
-    startTime.text = widget.lecture.startTime;
-    endTime.text = widget.lecture.endTime;
+    if(widget.lecture.course != null) {
+      _day = getDayLabel(widget.lecture.day);
+      courseController.text = widget.lecture.course.code;
+      startTime.text = widget.lecture.startTime;
+      endTime.text = widget.lecture.endTime;
+      selectedCourse = widget.lecture.course;
+    }
+
     super.initState();
   }
 
@@ -78,7 +82,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
               child: STextField(
                 label: "COURSE",
                 onSaved: (value) {
-                  widget.lecture.courseCode = value;
+                  widget.lecture.course = selectedCourse;
                 },
                 controller: courseController,
                 textInputType: TextInputType.text,
@@ -199,7 +203,6 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
           return SelectCourse(onCourseSelected: (course){
             selectedCourse = course;
             courseController.text = selectedCourse.code;
-
             Navigator.pop(context);
           },);
         });
@@ -213,20 +216,18 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
       widget.lecture.startTime = startTime.text;
       widget.lecture.endTime = endTime.text;
       widget.lecture.day = getDay(_day);
-
-      if(selectedCourse != null) {
-        widget.lecture.courseId = selectedCourse.id;
-      }
     }
 
     if(_formKey.currentState.validate()){
       _formKey.currentState.save();
 
       showLoadingSnackBar();
-      LectureDAO.saveLecture(widget.lecture, (success){
+      LectureDAO.saveLecture(widget.lecture, selectedCourse, (success){
         if(success){
           showInSnackBar("Changes saved");
-          Future.delayed(Duration(seconds: 2), () => Navigator.pop(context));
+          if(mounted) {
+            Future.delayed(Duration(seconds: 2), () => Navigator.pop(context));
+          }
 
         }else{
           showInSnackBar("Error saving changes, please check your network and try again");

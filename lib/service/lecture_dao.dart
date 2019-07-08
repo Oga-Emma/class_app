@@ -1,16 +1,38 @@
 import 'dart:async';
 
+import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LectureDAO {
-  static void saveLecture(LectureDTO lecture, Function(bool success) callback) {
-    var firestore = Firestore.instance;
+import 'app_info_dao.dart';
 
-    firestore
+class LectureDAO {
+  static void saveLecture(LectureDTO lecture, CourseDTO course, Function(bool success) callback) {
+    var firestore = Firestore.instance;
+    var batch = firestore.batch();
+
+    var lectureRef =
+    AppInfoDAO.getDocumentPath()
         .collection("classes")
-        .document(lecture.id)
-        .setData(lecture.toMap())
+        .document(lecture.id);
+
+
+    if(course != null) {
+      var lectureIds = Set.from(course.lectureIds);
+      lectureIds.add(lecture.id);
+
+      var courseRef =
+      AppInfoDAO.getDocumentPath()
+          .collection("courses")
+          .document(lecture.course.id);
+
+      lecture.course = course;
+      batch.updateData(courseRef, {"lectureIds" : lectureIds.toList()});
+    }
+
+    batch.setData(lectureRef, lecture.toMap(), merge: true);
+
+    batch.commit()
         .then((_) {
       callback(true);
     }).catchError((error) {
@@ -19,21 +41,32 @@ class LectureDAO {
     });
   }
   static Stream<QuerySnapshot> fetchLectures(int day) {
-    var firestore = Firestore.instance;
 
-    return firestore
+    return
+      AppInfoDAO.getDocumentPath()
         .collection("classes").where("day", isEqualTo: day).snapshots();
   }
 
-  static void deleteLecture(String id) {
+  static void deleteLecture(LectureDTO lecture) {
     print("deleting");
     var firestore = Firestore.instance;
-    firestore
+    var batch = firestore.batch();
+
+    var lectureRef =
+    AppInfoDAO.getDocumentPath()
         .collection("classes")
-        .document(id)
-    .delete()
+        .document(lecture.id);
+
+    var courseRef =
+    AppInfoDAO.getDocumentPath()
+        .collection("courses")
+        .document(lecture.course.id);
+
+    batch.updateData(courseRef, {"lectureIds" : FieldValue.arrayRemove([lecture.id])});
+    batch.delete(lectureRef);
+
+    batch.commit()
         .then((_) {
-          print("deleted");
     }).catchError((error) {
       print(error);
     });

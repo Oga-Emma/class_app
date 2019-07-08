@@ -61,7 +61,7 @@ class CombinedListItemUser extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "${event.courseCode.isEmpty ? '' : event.courseCode + ' - '}${event.title}",
+                      "${event.courseId.isEmpty ? '' : event.courseId + ' - '}${event.title}",
                       style: Theme.of(context).textTheme.display1.copyWith(fontWeight: FontWeight.w700,
                           fontSize: 18, color: lightGrey),
                       maxLines: 1,
@@ -145,7 +145,7 @@ class CombinedListItemUser extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "${event.courseCode}",
+                      "${event.course.code}",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.display1.copyWith(fontWeight: FontWeight.w700,

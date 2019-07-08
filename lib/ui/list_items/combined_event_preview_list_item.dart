@@ -73,7 +73,7 @@ class CombinedPreviewEventListItem extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        isLecture ? "${(event as LectureDTO).courseCode}" : "${(event as EventDTO).title}",
+                        isLecture ? "${(event as LectureDTO).course.code}" : "${(event as EventDTO).title}",
                         maxLines: 1,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,

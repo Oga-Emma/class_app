@@ -78,79 +78,55 @@ class LectureListItem extends StatelessWidget {
                     border: Border.all(color: ColorUtils.accentColor.withOpacity(0.2)),
                     borderRadius: BorderRadius.circular(16.0)
                   ),
-                  child: FutureBuilder<QuerySnapshot>(
-                    future: CourseDAO.getCourse(lecture.courseCode),
-                    builder:
-                      (context, snapshot) {
-                    if(snapshot.hasData && snapshot.data.documents.isNotEmpty){
-                      var course = CourseDTO.fromJson(snapshot.data.documents[0].data);
-
-                      return Column(
+                  child: Column(
+                    children: <Widget>[
+                      Row(
                         children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                course.code,
-                                style: Theme.of(context).textTheme.title.copyWith(
-                                    color: ColorUtils.primaryColor),
-                              ),
-                            ],
+                          Text(
+                            lecture.course.code,
+                            style: Theme.of(context).textTheme.title.copyWith(
+                                color: ColorUtils.primaryColor),
+                          ),
+                        ],
+                      ),
+                      gap,
+                      Expanded(
+                        child: Text(
+                          lecture.course.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .body2
+                              .copyWith(
+                              color: Colors.black
+                                  .withOpacity(0.5)),
+                        ),
+                      ),
+                      gap,
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.near_me,
+                            size: 18,
+                            color: Theme.of(context).accentColor,
                           ),
                           gap,
                           Expanded(
                             child: Text(
-                              course.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                              lecture.venue,
                               style: Theme.of(context)
                                   .textTheme
-                                  .body2
-                                  .copyWith(
-                                  color: Colors.black
-                                      .withOpacity(0.5)),
+                                  .caption,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                             ),
-                          ),
-                          gap,
-                          Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.near_me,
-                                size: 18,
-                                color: Theme.of(context).accentColor,
-                              ),
-                              gap,
-                              Expanded(
-                                child: Text(
-                                  lecture.venue,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                ),
-                              )
-                            ],
                           )
                         ],
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                      );
-
-                    }
-
-                    if(snapshot.hasError){
-                      print(snapshot.error);
-
-                      return Center(
-                        child: Text("Error fetching data\nPlease check your network")
-                      );
-                    }
-
-                    return Container(
-                      child: Loading(),
-                    );
-                      },
-
+                      )
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                   )
                 ))
           ],

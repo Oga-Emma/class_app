@@ -10,6 +10,8 @@ class CourseDTO{
   String lecturers;
   String courseRep;
   List<dynamic> outline;
+  List<dynamic> lectureIds;
+  List<dynamic> eventIds;
 
   CourseDTO(){
     id =  "";
@@ -23,6 +25,8 @@ class CourseDTO{
     lecturers = "";
     courseRep = "";
     outline = [];
+    lectureIds = [];
+    eventIds = [];
   }
 
   CourseDTO.withId(String id): super(){
@@ -38,6 +42,8 @@ class CourseDTO{
     lecturers = "";
     courseRep = "";
     outline = [];
+    lectureIds = [];
+    eventIds = [];
   }
 
 
@@ -53,7 +59,28 @@ class CourseDTO{
         lecturers = data['lecturers'] ?? "",
         courseRep = data['courseRep'] ?? "",
         outline = data['outline'] ?? [],
+        lectureIds = data['lectureIds'] ?? [],
+        eventIds = data['lectureIds'] ?? [],
   deleted = data['deleted'] ?? false;
+
+  CourseDTO.fromEvent(Map<dynamic, dynamic> res){
+    var data = Map<String, dynamic>.from(res);
+
+    id = data['id'] ?? "";
+    unitLoad = data['unitLoad'] ?? "";
+    type = data['type'] ?? "";
+    code = data['code'] ?? "";
+    title = data['title'] ?? "";
+    faculty = data['faculty'] ?? "";
+    department = data['department'] ?? "";
+    lecturers = data['lecturers'] ?? "";
+    courseRep = data['courseRep'] ?? "";
+    outline = data['outline'] ?? [];
+    lectureIds = data['lectureIds'] ?? [];
+    eventIds = data['lectureIds'] ?? [];
+    deleted = data['deleted'] ??
+    false;
+  }
 
   Map<String, dynamic> toMap(){
     return<String, dynamic>{
@@ -68,6 +95,8 @@ class CourseDTO{
       "lecturers": lecturers,
       "courseRep": courseRep,
       "outline": outline,
+      "lectureIds": lectureIds,
+      "eventIds": eventIds,
     };
   }
 

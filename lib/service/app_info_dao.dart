@@ -4,11 +4,10 @@ import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/exco_dto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'app_info_dao.dart';
-
-class ExcoDAO {
+class AppInfoDAO {
   static void saveExco(ExcoDTO exco, Function(bool success) callback) {
-    AppInfoDAO.getDocumentPath()
+    var firestore = Firestore.instance;
+    firestore
         .collection("excos")
         .document(exco.id)
         .setData(exco.toMap())
@@ -19,16 +18,17 @@ class ExcoDAO {
       callback(false);
     });
   }
-
-  static Future<DocumentSnapshot> getExco(String excoId) {
-    return AppInfoDAO.getDocumentPath()
-        .collection("excos")
-        .document(excoId)
-        .get();
+  static Future<QuerySnapshot> getAllDepartments(String uni) {
+    var firestore = Firestore.instance;
+    return firestore
+        .collection("uni").getDocuments();
   }
 
-  static void deleteExco(String excoId, Function(bool success) callback) {
-    AppInfoDAO.getDocumentPath()
+  static void deleteExco(
+      String excoId, Function(bool success) callback) {
+    var firestore = Firestore.instance;
+
+    firestore
         .collection("excos")
         .document(excoId)
         .delete()
@@ -41,6 +41,14 @@ class ExcoDAO {
   }
 
   static Stream<QuerySnapshot> fetchAllExcos() {
-    return AppInfoDAO.getDocumentPath().collection("excos").snapshots();
+    var firestore = Firestore.instance;
+    return firestore.collection("excos").snapshots();
+  }
+
+
+  static DocumentReference getDocumentPath({String uni = "unn", String uniId = "pFnWxL7imA2gxkjy6QCT"}){
+    var firestore = Firestore.instance;
+
+    return firestore.collection(uni).document(uniId);
   }
 }

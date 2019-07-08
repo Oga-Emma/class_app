@@ -32,7 +32,9 @@ class _AddEditCourseState extends State<AddEditCourse> with UISnackBarProvider {
 
   @override
   void initState() {
+    if(widget.course.type.isNotEmpty){
     _courseType = widget.course.type;
+    }
 //    outlines.addAll();
     widget.course.outline.forEach((str) => outlines.add(str as String));
     super.initState();

@@ -39,7 +39,8 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
     if(widget.event.type.isNotEmpty){
     _eventType = widget.event.type;
     }
-    courseController.text = widget.event.courseCode;
+    selectedCourse = widget.event.course;
+    courseController.text = widget.event.courseId;
     timeController.text = widget.event.time;
     dateController.text = widget.event.date;
 
@@ -140,7 +141,7 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
                           child: STextField(
                             label: "COURSE",
                             onSaved: (value) {
-                              widget.event.courseCode = value;
+                              widget.event.courseId = value;
                             },
                             controller: courseController,
                             textInputType: TextInputType.text,
@@ -246,14 +247,14 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
 
       widget.event.date = dateController.text;
       widget.event.time = timeController.text;
-      widget.event.courseCode = courseController.text;
+      widget.event.courseId = courseController.text;
       widget.event.timeStamp = selectedDate.millisecondsSinceEpoch;
       widget.event.type = _eventType;
 
 //      print(widget.event.toMap());
       showLoadingSnackBar();
 
-      EventDAO.savEvent(widget.event, (success) {
+      EventDAO.savEvent(widget.event, selectedCourse, (success) {
         if (success) {
           showInSnackBar("Changes saved");
           Future.delayed(Duration(seconds: 2), () => Navigator.pop(context));

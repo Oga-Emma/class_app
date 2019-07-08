@@ -29,7 +29,7 @@ class EventListItemAdmin extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  event.courseCode,
+                  event.courseId,
                   style: Theme.of(context).textTheme.title.copyWith(
                       color: ColorUtils.primaryColor),
                 ),

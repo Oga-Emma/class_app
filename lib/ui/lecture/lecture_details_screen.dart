@@ -50,94 +50,75 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
               ),
             ),
             Expanded(
-                child: FutureBuilder<QuerySnapshot>(
-                    future: CourseDAO.getCourse(widget.lecture.courseCode),
-                    builder: (context, snapshot) {
-                      if(snapshot.hasData) {
-
-                        if(snapshot.data.documents.isEmpty){
-                          return Center(child: Text("Course details not found\n"
-                              "check your network and try again"));
-                        }
-                        var course = CourseDTO.fromJson(snapshot.data.documents[0].data);
-                        return Container(
+                child: Container(
 //                          color: Colors.grey[200],
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 28.0, top: 24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(widget.lecture.course.code,
+                                textAlign: TextAlign.left,
+                                style: Theme.of(context).
+                                textTheme.display1.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorUtils.primaryColor)),
+                            Text(widget.lecture.course.title)
+                          ],
+                        ),
+                      ),
+                      gap2x,
+                      gap2x,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: ListView(
                             children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 28.0, top: 24.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(course.code,
-                                        textAlign: TextAlign.left,
-                                        style: Theme.of(context).
-                                        textTheme.display1.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: ColorUtils.primaryColor)),
-                                    Text(course.title)
-                                  ],
-                                ),
-                              ),
+                              headingDetails(context, "Lecture Starts", widget.lecture.startTime),
+                              headingDetails(context, "Lecture Ends", widget.lecture.endTime),
+                              headingDetails(context, "Lecture Day", getDayLabel(widget.lecture.day)),
+                              headingDetails(context, "Venue", widget.lecture.venue),
                               gap2x,
                               gap2x,
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(24.0),
-                                  child: ListView(
+                              gap2x,
+                              Material(
+                                borderRadius: BorderRadius.circular(24.0),
+                                elevation: 4.0,
+                                child: Container(
+                                  decoration: BoxDecoration(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
-                                      headingDetails(context, "Lecture Starts", widget.lecture.startTime),
-                                      headingDetails(context, "Lecture Ends", widget.lecture.endTime),
-                                      headingDetails(context, "Lecture Day", getDayLabel(widget.lecture.day)),
-                                      headingDetails(context, "Venue", widget.lecture.venue),
-                                      gap2x,
-                                      gap2x,
-                                      gap2x,
-                                      Material(
-                                        borderRadius: BorderRadius.circular(24.0),
-                                        elevation: 4.0,
-                                        child: Container(
-                                          decoration: BoxDecoration(),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: (){
-                                                    /*setState(() {
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: (){
+                                            /*setState(() {
                                                       selected = 1;
                                                     });*/
-                                                    Navigator.of(context)
-                                                        .push(MaterialPageRoute(
-                                                        builder: (context) => CourseDetailsScreen(courseCode: widget.lecture.courseCode)));
-                                                  },
-                                                  child: Container(
-                                                      alignment: Alignment.center,
-                                                      padding: EdgeInsets.all(8.0), child: Text("VIEW COURSE DETAILS", style: selected == 1 ? selectedInputStyle : deselectedInputStyle),
-                                                      decoration: selected == 1 ? selectedDecoration : deselectedDecoration),
-                                                ),
-                                              )
-                                            ],
-                                          ),
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                builder: (context) => CourseDetailsScreen(courseCode: widget.lecture.course.code)));
+                                          },
+                                          child: Container(
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.all(8.0), child: Text("VIEW COURSE DETAILS", style: selected == 1 ? selectedInputStyle : deselectedInputStyle),
+                                              decoration: selected == 1 ? selectedDecoration : deselectedDecoration),
                                         ),
-                                      ),
-
+                                      )
                                     ],
                                   ),
                                 ),
                               ),
+
                             ],
                           ),
-                        );
-                      }
-
-                      if(snapshot.hasError){
-                        return Center(child: Text("Error fetching data"));
-                      }
-
-                      return Loading();
-                    }
+                        ),
+                      ),
+                    ],
+                  ),
                 )),
           ],
         ),

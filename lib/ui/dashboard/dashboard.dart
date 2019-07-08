@@ -52,7 +52,8 @@ class _DashboardState extends State<Dashboard> {
     refresh();
     return Scaffold(
       appBar: AppBar(
-          title: GestureDetector(onHorizontalDragEnd: (details)  {
+          title: GestureDetector(
+              onHorizontalDragEnd: (details)  {
 //            print(details.primaryVelocity);
 //            print(details.velocity);
 
@@ -62,7 +63,13 @@ class _DashboardState extends State<Dashboard> {
 //            print("Drag happened");
 //            showPasswordDialog();
 
-          }, child: Text("Dashboard", textAlign: TextAlign.center)),
+          },
+
+              onDoubleTap: (){
+                showPasswordDialog();
+              },
+
+              child: Text("Dashboard", textAlign: TextAlign.center)),
           elevation: 0.0),
       body: StreamBuilder<QuerySnapshot>(
           stream: lectureStream,

@@ -52,7 +52,7 @@ class EventListItemUser extends StatelessWidget {
                   ),
                   gap2x,
                   Text(
-                    "${event.courseCode.isEmpty ? '' : event.courseCode + ' - '}${event.title}",
+                    "${event.courseId.isEmpty ? '' : event.courseId + ' - '}${event.title}",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)

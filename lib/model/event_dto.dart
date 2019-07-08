@@ -1,6 +1,7 @@
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 
+import 'course_dto.dart';
 import 'date_event.dart';
 
 class EventDTO implements DateEvent{
@@ -9,10 +10,11 @@ class EventDTO implements DateEvent{
   String type;
   String time;
   String title;
-  String courseCode;
+  String courseId;
   String description;
   String venue;
   String date;
+  CourseDTO course;
 
   bool deleted;
 
@@ -21,7 +23,7 @@ class EventDTO implements DateEvent{
     this.type = "";
     this.time = "";
     this.title = "";
-    this.courseCode = "";
+    this.courseId = "";
     this.description = "";
     this.venue = "";
     this.date = "";
@@ -33,7 +35,7 @@ class EventDTO implements DateEvent{
     this.type = "";
     this.time = "";
     this.title = "";
-    this.courseCode = "";
+    this.courseId = "";
     this.description = "";
     this.venue = "";
     this.date = "";
@@ -46,9 +48,10 @@ class EventDTO implements DateEvent{
         time = data["time"] ?? "",
         title = data["title"] ?? "",
         description = data["description"] ?? "",
-        courseCode = data["courseCode"] ?? "",
+        courseId = data["courseId"] ?? "",
         venue = data["venue"] ?? "",
         date = data["date"] ?? "",
+        course = CourseDTO.fromEvent(data["date"] ?? {}) ?? null,
         deleted = data["deleted"] ?? false,
   timeStamp = data["timeStamp"] ?? 0;
 
@@ -59,10 +62,11 @@ class EventDTO implements DateEvent{
       "time" : time,
       "title" : title,
       "description" : description,
-      "courseCode" : courseCode,
+      "courseId" : courseId,
       "venue" : venue,
       "date" : date,
       "deleted" : deleted,
+      "course" : course.toMap(),
       "timeStamp" : timeStamp,
     };
   }

@@ -76,7 +76,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
                       gap2x,
                       gap2x,
-                      Text("${widget.event.courseCode.isEmpty ? '' : widget.event.courseCode + ' - '}${widget.event.title}",
+                      Text("${widget.event.courseId.isEmpty ? '' : widget.event.courseId + ' - '}${widget.event.title}",
                           textAlign: TextAlign.left,
                           style: Theme.of(context).
                           textTheme.display1.copyWith(
