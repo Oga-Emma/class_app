@@ -39,7 +39,6 @@ void showError(
       textColor: Colors.white);
 }
 
-
 void showLongErrorToast(String msg) {
   Fluttertoast.showToast(
       msg: msg,
@@ -58,4 +57,9 @@ void showShortToast(String msg) {
       timeInSecForIos: 1,
       backgroundColor: ColorUtils.accentColor,
       textColor: Colors.white);
+}
+
+Widget emptySpace({multiple: 1.0}) {
+  var size = 8.0 * multiple;
+  return SizedBox(height: size, width: size);
 }

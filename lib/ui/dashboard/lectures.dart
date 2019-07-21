@@ -29,11 +29,9 @@ class _LecturesState extends State<Lectures> {
     var todayDate = date.day;
 
     selectedDate = today;
-    /*if(today == 7){
-      selectedDate = 1;
-    }else {
-      selectedDate = today;
-    }*///todayDate;
+    if(today == 7) {
+      selectedDate = 0;
+    }
     var mondayDate = todayDate - (today - 1);
     print("Monday date => $mondayDate");
 
@@ -78,11 +76,11 @@ class _LecturesState extends State<Lectures> {
   Widget build(BuildContext context) {
 
     return DefaultTabController(
-      initialIndex: selectedDate-1,
+      initialIndex: selectedDate,
       length: 7,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Lectures"),
+          title: Text("LECTURES"),
           bottom: PreferredSize(
               preferredSize: Size.fromHeight(40),//Size.fromHeight(kToolbarHeight),
               child: Container(
@@ -100,7 +98,7 @@ class _LecturesState extends State<Lectures> {
 
                     ),*/
                     isScrollable: true,
-                    tabs: ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"].map((str) => Padding(
+                    tabs: ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"].map((str) => Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         str, style: TextStyle(fontSize: 15.0, color: ColorUtils.primaryColor),
@@ -112,13 +110,13 @@ class _LecturesState extends State<Lectures> {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: TabBarView(
             children: [
+              LectureListBuilder(day: 7),
               LectureListBuilder(day: 1),
               LectureListBuilder(day: 2),
               LectureListBuilder(day: 3),
               LectureListBuilder(day: 4),
               LectureListBuilder(day: 5),
               LectureListBuilder(day: 6),
-              LectureListBuilder(day: 7),
             ],
           ),
         ),

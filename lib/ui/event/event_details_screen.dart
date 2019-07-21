@@ -73,7 +73,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                               child: Text("${widget.event.type}", style: Theme.of(context).textTheme.caption,))
                         ],
                       ),
-
                       gap2x,
                       gap2x,
                       Text("${widget.event.courseId.isEmpty ? '' : widget.event.courseId + ' - '}${widget.event.title}",

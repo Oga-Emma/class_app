@@ -36,7 +36,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                     InkWell(onTap: (){
                       Navigator.pop(context);
 
-                    }, child: Icon(Icons.arrow_back)),
+                    }, child: Icon(Icons.arrow_back, color: ColorUtils.primaryColor,)),
                     Expanded(
                       child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0,
@@ -61,7 +61,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                     ),
                     InkWell(
                         onTap: (){},
-                        child: Icon(Icons.search)),
+                        child: Icon(Icons.search, color: ColorUtils.primaryColor)),
                   ],
                 ),
               ),
@@ -82,7 +82,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                                 style: Theme.of(context).
                                 textTheme.display1.copyWith(
                                   fontWeight: FontWeight.bold,
-                                    color: Colors.black)),
+                                    color: Colors.grey[500])),
                             Text("Select a course to see more details")
                           ],
                         ),
@@ -126,46 +126,39 @@ class _CoursesScreenState extends State<CoursesScreen> {
                                             => CourseDetailsScreen(courseCode: course.code))
                                           );
                                         },
-                                        child: Container(
-                                          margin: EdgeInsets.all(8.0),
-                                          padding: EdgeInsets.all(16.0),
-                                          decoration: BoxDecoration(
-                                              color: ColorUtils.primaryColor,
-                                              borderRadius: BorderRadius.circular(
-                                                  16.0)
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .center,
-                                            children: <Widget>[
-                                              Text(course.code,
-                                                  style: Theme
-                                                      .of(context)
-                                                      .textTheme
-                                                      .display1
-                                                      .copyWith(fontSize: 24,
-                                                      color: Colors.white)),
-                                              Text(course.title,
-                                                  maxLines: 1,
-                                                  style: Theme
-                                                      .of(context)
-                                                      .textTheme
-                                                      .display1
-                                                      .copyWith(fontSize: 12,
-                                                      color: Colors.grey[200])),
-                                              Container(height: 2, color: Colors.grey[200],
-                                                margin: EdgeInsets.symmetric(vertical: 8),
-                                              ),
-                                              Text("UNIT: ${course.unitLoad}",
-                                                  style: Theme
-                                                      .of(context)
-                                                      .textTheme
-                                                      .caption
-                                                      .copyWith(
-                                                      color: Colors.grey[200])),
-                                            ],
+                                        child: Card(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .center,
+                                              children: <Widget>[
+                                                Text(course.code,
+                                                    style: Theme
+                                                        .of(context)
+                                                        .textTheme
+                                                        .title
+                                                        .copyWith(fontSize: 24, color: ColorUtils.primaryColor.withGreen(80))),
+                                                Text(course.title,
+                                                    maxLines: 1,
+                                                    style: Theme
+                                                        .of(context)
+                                                        .textTheme
+                                                        .display1
+                                                        .copyWith(fontSize: 12)),
+                                                Container(height: 2, color: Colors.grey[200],
+                                                  margin: EdgeInsets.symmetric(vertical: 8),
+                                                ),
+                                                Text("UNIT: ${course.unitLoad}",
+                                                    style: Theme
+                                                        .of(context)
+                                                        .textTheme
+                                                        .caption
+                                                        .copyWith()),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );

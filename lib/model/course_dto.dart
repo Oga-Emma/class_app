@@ -60,7 +60,7 @@ class CourseDTO{
         courseRep = data['courseRep'] ?? "",
         outline = data['outline'] ?? [],
         lectureIds = data['lectureIds'] ?? [],
-        eventIds = data['lectureIds'] ?? [],
+        eventIds = data['eventIds'] ?? [],
   deleted = data['deleted'] ?? false;
 
   CourseDTO.fromEvent(Map<dynamic, dynamic> res){

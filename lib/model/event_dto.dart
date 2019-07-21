@@ -14,7 +14,7 @@ class EventDTO implements DateEvent{
   String description;
   String venue;
   String date;
-  CourseDTO course;
+//  CourseDTO course;
 
   bool deleted;
 
@@ -51,7 +51,7 @@ class EventDTO implements DateEvent{
         courseId = data["courseId"] ?? "",
         venue = data["venue"] ?? "",
         date = data["date"] ?? "",
-        course = CourseDTO.fromEvent(data["date"] ?? {}) ?? null,
+//        course = CourseDTO.fromEvent(data["date"] ?? {}) ?? null,
         deleted = data["deleted"] ?? false,
   timeStamp = data["timeStamp"] ?? 0;
 
@@ -66,7 +66,7 @@ class EventDTO implements DateEvent{
       "venue" : venue,
       "date" : date,
       "deleted" : deleted,
-      "course" : course.toMap(),
+//      "course" : course.toMap(),
       "timeStamp" : timeStamp,
     };
   }

@@ -16,16 +16,16 @@ class EventDAO {
     var batch = firestore.batch();
     batch.setData(eventRef, event.toMap(), merge: true);
 
-    if (course != null) {
-      var courseRef = AppInfoDAO.getDocumentPath()
-          .collection("courses")
-          .document(event.courseId);
-
-      var eventIds = Set.from(course.eventIds);
-      eventIds.add(course.id);
-
-      batch.updateData(courseRef, {"eventIds": eventIds.toList()});
-    }
+//    if (course != null) {
+//      var courseRef = AppInfoDAO.getDocumentPath()
+//          .collection("courses")
+//          .document(event.courseId);
+//
+//      var eventIds = Set.from(course.eventIds);
+//      eventIds.add(course.id);
+//
+//      batch.updateData(courseRef, {"eventIds": eventIds.toList()});
+//    }
 
     batch.commit().then((_) {
       callback(true);
@@ -54,13 +54,12 @@ class EventDAO {
   }
 
   static void deleteEvent(
-      EventDTO event, bool delete, Function(bool success) callback) {
-    event.deleted = delete;
+      EventDTO event, Function(bool success) callback) {
 
     AppInfoDAO.getDocumentPath()
         .collection("events")
         .document(event.id)
-        .setData(event.toMap())
+    .delete()
         .then((_) {
       callback(true);
     }).catchError((error) {

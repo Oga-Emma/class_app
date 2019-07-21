@@ -39,7 +39,7 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
     if(widget.event.type.isNotEmpty){
     _eventType = widget.event.type;
     }
-    selectedCourse = widget.event.course;
+//    selectedCourse = widget.event.course;
     courseController.text = widget.event.courseId;
     timeController.text = widget.event.time;
     dateController.text = widget.event.date;

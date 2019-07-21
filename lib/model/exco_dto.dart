@@ -44,4 +44,4 @@ class ExcoType{
   static String COURSE_REP = "COURSE REP";
 }
 
-var excoList = [ExcoType.EXCO, ExcoType.COURSE_REP];
+var excoList = [ExcoType.COURSE_REP, ExcoType.EXCO];

@@ -6,10 +6,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CourseDAO {
   static void saveCourse(CourseDTO course, Function(bool success) callback) {
-    AppInfoDAO.getDocumentPath()
+    var batch = Firestore.instance.batch();
+
+    course.lectureIds.forEach((id) =>
+    batch.updateData( AppInfoDAO.getDocumentPath()
+        .collection("classes")
+        .document(id), {"course": course.toMap()})
+    );
+    course.eventIds.forEach((id) =>
+    batch.updateData( AppInfoDAO.getDocumentPath()
+        .collection("events")
+        .document(id), {"course": course.toMap()})
+    );
+
+    batch.setData(AppInfoDAO.getDocumentPath()
         .collection("courses")
-        .document(course.id)
-        .setData(course.toMap(), merge: true)
+        .document(course.id), course.toMap(), merge: true);
+
+
+       batch.commit()
         .then((_) {
       callback(true);
     }).catchError((error) {

@@ -1,5 +1,6 @@
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/event_dto.dart';
+import 'package:class_app/service/event_dao.dart';
 import 'package:class_app/ui/admin/add_edit_event_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
@@ -34,6 +35,24 @@ class EventListItemAdmin extends StatelessWidget {
                       color: ColorUtils.primaryColor),
                 ),
                 Expanded(child: SizedBox()),
+                FlatButton.icon(onPressed: () async {
+                  bool delete = await showDialog<bool>(context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text("Delete Event"),
+                        content: Text("Are you sure?\nThis aciton cannot be undone"),
+                        actions: <Widget>[
+                          FlatButton(onPressed: () => Navigator.of(context).pop(false), child: Text("Cancel")),
+                          FlatButton(onPressed: () => Navigator.of(context).pop(true), child: Text("Delete"))
+                        ],
+                      )
+                  ) ?? false;
+
+                  if(delete){
+                    EventDAO.deleteEvent(event, (success){});
+                  }
+                },
+                    icon: Icon(Icons.delete, size: 14,),
+                    label: Text("Delete")),
                 FlatButton.icon(onPressed: (){
                   Navigator.of(context)
                       .push(

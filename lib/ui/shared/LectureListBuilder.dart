@@ -32,6 +32,8 @@ class LectureListBuilder extends StatelessWidget {
                   classes.add(lec);
                 });
 
+            classes.sort((a, b) => a.startTime.compareTo(b.startTime));
+
             return ListView.builder(
                 itemCount: classes.length,
                 itemBuilder: (context, index){

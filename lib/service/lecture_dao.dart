@@ -16,7 +16,6 @@ class LectureDAO {
         .collection("classes")
         .document(lecture.id);
 
-
     if(course != null) {
       var lectureIds = Set.from(course.lectureIds);
       lectureIds.add(lecture.id);
@@ -46,6 +45,12 @@ class LectureDAO {
       AppInfoDAO.getDocumentPath()
         .collection("classes").where("day", isEqualTo: day).snapshots();
   }
+  static Stream<QuerySnapshot> fetchAllLectures() {
+
+    return
+      AppInfoDAO.getDocumentPath()
+        .collection("classes").snapshots();
+  }
 
   static void deleteLecture(LectureDTO lecture) {
     print("deleting");
@@ -70,6 +75,12 @@ class LectureDAO {
     }).catchError((error) {
       print(error);
     });
+  }
+
+  static Stream<QuerySnapshot> fetchAllCourseLectures(String courseId) {
+    return
+      AppInfoDAO.getDocumentPath()
+          .collection("classes").where("course.id", isEqualTo: courseId).snapshots();
   }
 
 }

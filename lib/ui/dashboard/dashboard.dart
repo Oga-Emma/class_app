@@ -26,6 +26,8 @@ import 'events_screen.dart';
 
 
 class Dashboard extends StatefulWidget {
+  Dashboard(this.calendarScreen);
+  final Function() calendarScreen;
   @override
   _DashboardState createState() => _DashboardState();
 }
@@ -71,7 +73,10 @@ class _DashboardState extends State<Dashboard> {
 
               child: Text("Dashboard", textAlign: TextAlign.center)),
           elevation: 0.0),
-      body: StreamBuilder<QuerySnapshot>(
+      body:
+
+
+      StreamBuilder<QuerySnapshot>(
           stream: lectureStream,
           builder: (context, lecturesStream){
 //
@@ -132,8 +137,6 @@ class _DashboardState extends State<Dashboard> {
 
   Stream<QuerySnapshot> lectureStream;
   Stream<QuerySnapshot> eventStream;
-
-
 
   var today = DateTime.now();
   refresh(){
@@ -328,7 +331,7 @@ class _DashboardState extends State<Dashboard> {
     combinedList.addAll(todayEvents);
 
     combinedList.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
-    combinedList = combinedList.reversed.toList();
+    combinedList = combinedList.toList();
 
     return SliverList(
         delegate: SliverChildListDelegate(<Widget>[
@@ -358,11 +361,13 @@ class _DashboardState extends State<Dashboard> {
                       Expanded(child: SizedBox()),
                       RaisedButton(
                           onPressed: () {
+
+                            widget.calendarScreen();
 //
-                            Navigator.of(context)
+                           /* Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
                               return Today(events: combinedList, date: monthYear);
-                            }));
+                            }));*/
                           },
                           color: Theme.of(context).primaryColor,
                           shape: RoundedRectangleBorder(

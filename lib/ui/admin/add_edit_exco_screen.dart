@@ -231,7 +231,9 @@ class _AddEditExcoState extends State<AddEditExco> with UISnackBarProvider {
               STextField(
                 initialValue: widget.exco.phone,
                 label: "PHONE NUMBER",
-                onSaved: (value) {},
+                onSaved: (value) {
+                  widget.exco.phone = value;
+                  },
 //              hint: "Course Code",
               ),
               gap2x,
