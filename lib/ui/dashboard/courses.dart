@@ -15,7 +15,6 @@ class CoursesScreen extends StatefulWidget {
 }
 
 class _CoursesScreenState extends State<CoursesScreen> {
-
   String _searchText = "";
   bool alreadyFetched = false;
   var list = <CourseDTO>[];
@@ -24,162 +23,96 @@ class _CoursesScreenState extends State<CoursesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Material(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: <Widget>[
-                    InkWell(onTap: (){
-                      Navigator.pop(context);
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(title: Text("SEMESTER COURSES")),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: CourseDAO.fetchAllCourses(),
+          builder: (context, snapshot) {
+            if (alreadyFetched || snapshot.hasData) {
+              if (!alreadyFetched) {
+                list.clear();
+                snapshot.data.documents
+                    .forEach((doc) => list.add(CourseDTO.fromJson(doc.data)));
 
-                    }, child: Icon(Icons.arrow_back, color: ColorUtils.primaryColor,)),
-                    Expanded(
-                      child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0,
-                              vertical: 10.0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(16.0)
-                        ),
-                        margin: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: TextField(
-                          decoration: InputDecoration.collapsed(
-                              hintText: "Search course"
-                          ),
-                          onChanged: (value){
-//                            print(value);
-                            setState(() {
-                              _searchText = value;
-                            });
-                          },
-                        )
-                      ),
-                    ),
-                    InkWell(
-                        onTap: (){},
-                        child: Icon(Icons.search, color: ColorUtils.primaryColor)),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-                child: Container(
-              color: Colors.grey[200],
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 28.0, top: 24.0),
+                Future.delayed(Duration.zero, () => alreadyFetched = true);
+              }
+              sortedList = list
+                  .where((course) =>
+                      course.title.toLowerCase().contains(_searchText) ||
+                      course.code.toLowerCase().contains(_searchText))
+                  .toList();
+
+              sortedList.sort((a, b) => a.code.compareTo(b.code));
+
+              return GridView.count(
+                  crossAxisCount: 2,
+                  childAspectRatio: 6 / 5,
+                  padding: const EdgeInsets.all(4.0),
+                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 8.0,
+                  children: sortedList.map((CourseDTO course) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                CourseDetailsScreen(courseCode: course.code)));
+                      },
+                      child: Material(
+                        clipBehavior: Clip.hardEdge,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text("COURSES",
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context).
-                                textTheme.display1.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                    color: Colors.grey[500])),
-                            Text("Select a course to see more details")
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(course.code,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .title
+                                            .copyWith(
+                                                fontSize: 24,
+                                                color: ColorUtils.primaryColor
+                                                    .withGreen(80))),
+                                    Text(course.title,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .display1
+                                            .copyWith(fontSize: 12)),
+                                    Container(
+                                      height: 2,
+                                      color: Colors.grey[200],
+                                      margin: EdgeInsets.symmetric(vertical: 8),
+                                    ),
+                                    Text("UNIT: ${course.unitLoad}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption
+                                            .copyWith()),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                                height: 5, color: ColorUtils.primaryColor[200]),
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: CourseDAO.fetchAllCourses(),
-                            builder: (context, snapshot) {
+                    );
+                  }).toList());
+            }
 
-                              if(alreadyFetched || snapshot.hasData) {
+            if (snapshot.hasError) {
+              return Text("Error fetching data");
+            }
 
-                                if(!alreadyFetched) {
-                                  list.clear();
-                                  snapshot.data.documents.forEach(
-                                          (doc) =>
-                                          list.add(
-                                              CourseDTO.fromJson(doc.data)));
-
-                                Future.delayed(Duration.zero, () => alreadyFetched = true);
-
-                                }
-                                sortedList = list.where((course) =>
-                                course.title.toLowerCase().contains(_searchText)
-                                    || course.code.toLowerCase().contains(_searchText)).toList();
-
-                                sortedList.sort((a, b) => a.code.compareTo(b.code));
-
-                                return GridView.count(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 1.0,//6 / 5,
-                                    padding: const EdgeInsets.all(4.0),
-                                    mainAxisSpacing: 4.0,
-                                    crossAxisSpacing: 4.0,
-                                    children: sortedList.map((CourseDTO course) {
-                                      return InkWell(
-                                        onTap: (){
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(builder: (context)
-                                            => CourseDetailsScreen(courseCode: course.code))
-                                          );
-                                        },
-                                        child: Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment
-                                                  .start,
-                                              mainAxisAlignment: MainAxisAlignment
-                                                  .center,
-                                              children: <Widget>[
-                                                Text(course.code,
-                                                    style: Theme
-                                                        .of(context)
-                                                        .textTheme
-                                                        .title
-                                                        .copyWith(fontSize: 24, color: ColorUtils.primaryColor.withGreen(80))),
-                                                Text(course.title,
-                                                    maxLines: 1,
-                                                    style: Theme
-                                                        .of(context)
-                                                        .textTheme
-                                                        .display1
-                                                        .copyWith(fontSize: 12)),
-                                                Container(height: 2, color: Colors.grey[200],
-                                                  margin: EdgeInsets.symmetric(vertical: 8),
-                                                ),
-                                                Text("UNIT: ${course.unitLoad}",
-                                                    style: Theme
-                                                        .of(context)
-                                                        .textTheme
-                                                        .caption
-                                                        .copyWith()),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }).toList());
-                              }
-
-                              if(snapshot.hasError){
-                                return Text("Error fetching data");
-                              }
-
-                              return Loading();
-                            }
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-            ))
-          ],
-        ),
-      ),
+            return Loading();
+          }),
     );
   }
 }

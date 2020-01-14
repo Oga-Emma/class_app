@@ -36,172 +36,144 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
     var deselectedInputStyle = Theme.of(context).textTheme.subtitle;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("COURSE DETAILS"),
+      ),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: <Widget>[
-                  InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.arrow_back)),
-                  gap2x,
-                  Text("COURSE DETAILS")
-                ],
-              ),
-            ),
-            Expanded(
-                child: FutureBuilder<QuerySnapshot>(
-                    future: CourseDAO.getCourse(widget.courseCode),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data.documents.isEmpty) {
-                          return Center(
-                              child: Text("Course details not found\n"
-                                  "check your network and try again"));
-                        }
-                        var course =
-                            CourseDTO.fromJson(snapshot.data.documents[0].data);
-                        return Container(
+      body: FutureBuilder<QuerySnapshot>(
+          future: CourseDAO.getCourse(widget.courseCode),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data.documents.isEmpty) {
+                return Center(
+                    child: Text("Course details not found\n"
+                        "check your network and try again"));
+              }
+              var course = CourseDTO.fromJson(snapshot.data.documents[0].data);
+              return Container(
 //                          color: Colors.grey[200],
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 28.0, top: 24.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 28.0, top: 24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(course.code,
+                              textAlign: TextAlign.left,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .display1
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorUtils.primaryColor)),
+                          Text(course.title)
+                        ],
+                      ),
+                    ),
+                    gap2x,
+                    gap2x,
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: <Widget>[
+                            Material(
+                              borderRadius: BorderRadius.circular(24.0),
+                              elevation: 4.0,
+                              child: Container(
+                                decoration: BoxDecoration(),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Text(course.code,
-                                        textAlign: TextAlign.left,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .display1
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color:
-                                                    ColorUtils.primaryColor)),
-                                    Text(course.title)
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            selected = 0;
+                                          });
+                                        },
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Text(
+                                              "DETAILS",
+                                              style: selected == 0
+                                                  ? selectedInputStyle
+                                                  : deselectedInputStyle,
+                                            ),
+                                            decoration: selected == 0
+                                                ? selectedDecoration
+                                                : deselectedDecoration),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            selected = 1;
+                                          });
+                                        },
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Text(
+                                              "OUTLINE",
+                                              style: selected == 1
+                                                  ? selectedInputStyle
+                                                  : deselectedInputStyle,
+                                            ),
+                                            decoration: selected == 1
+                                                ? selectedDecoration
+                                                : deselectedDecoration),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            selected = 2;
+                                          });
+                                        },
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Text("CLASSES",
+                                                style: selected == 2
+                                                    ? selectedInputStyle
+                                                    : deselectedInputStyle),
+                                            decoration: selected == 2
+                                                ? selectedDecoration
+                                                : deselectedDecoration),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
-                              gap2x,
-                              gap2x,
-                              Expanded(
+                            ),
+                            Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Material(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0),
-                                        elevation: 4.0,
-                                        child: Container(
-                                          decoration: BoxDecoration(),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      selected = 0;
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Text(
-                                                        "DETAILS",
-                                                        style: selected == 0
-                                                            ? selectedInputStyle
-                                                            : deselectedInputStyle,
-                                                      ),
-                                                      decoration: selected == 0
-                                                          ? selectedDecoration
-                                                          : deselectedDecoration),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      selected = 1;
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Text(
-                                                        "OUTLINE",
-                                                        style: selected == 1
-                                                            ? selectedInputStyle
-                                                            : deselectedInputStyle,
-                                                      ),
-                                                      decoration: selected == 1
-                                                          ? selectedDecoration
-                                                          : deselectedDecoration),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      selected = 2;
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Text("CLASSES",
-                                                          style: selected == 2
-                                                              ? selectedInputStyle
-                                                              : deselectedInputStyle),
-                                                      decoration: selected == 2
-                                                          ? selectedDecoration
-                                                          : deselectedDecoration),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                          child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 24.0, horizontal: 8.0),
-                                        child: getPage(course, selected),
-                                      ))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 24.0, horizontal: 8.0),
+                              child: getPage(course, selected),
+                            ))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
 
-                      if (snapshot.hasError) {
-                        return Center(child: Text("Error fetching data"));
-                      }
+            if (snapshot.hasError) {
+              return Center(child: Text("Error fetching data"));
+            }
 
-                      return Loading();
-                    })),
-          ],
-        ),
-      ),
+            return Loading();
+          }),
     );
   }
 
@@ -335,26 +307,44 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                         children: <Widget>[
                                           gap2x,
                                           Material(
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                             elevation: 4.0,
                                             child: InkWell(
-                                              onTap: (){
-                                                Navigator.of(context)
-                                                    .push(MaterialPageRoute(builder:
-                                                    (context) => LectureDetailsScreen(lecture: lectures[index],)));
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            LectureDetailsScreen(
+                                                              lecture: lectures[
+                                                                  index],
+                                                            )));
                                               },
                                               child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
                                                   children: <Widget>[
-                                                    Text("${getDayLabel(lectures[index].day).toUpperCase()}S",
-                                                      style: Theme.of(context).textTheme.subhead,),
-                                                    Container(height: 1, color: ColorUtils.primaryColor,),
+                                                    Text(
+                                                      "${getDayLabel(lectures[index].day).toUpperCase()}S",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .subhead,
+                                                    ),
+                                                    Container(
+                                                      height: 1,
+                                                      color: ColorUtils
+                                                          .primaryColor,
+                                                    ),
                                                     gap2x,
-                                                    Text("TIME: ${lectures[index].startTime} - ${lectures[index].endTime}"),
+                                                    Text(
+                                                        "TIME: ${lectures[index].startTime} - ${lectures[index].endTime}"),
                                                     gap,
-                                                    Text("VENUE: ${lectures[index].venue}"),
+                                                    Text(
+                                                        "VENUE: ${lectures[index].venue}"),
                                                   ],
                                                 ),
                                               ),

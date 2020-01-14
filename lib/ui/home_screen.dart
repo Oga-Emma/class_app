@@ -1,7 +1,7 @@
 import 'package:class_app/ui/around_me/around_me.dart';
+import 'package:class_app/ui/dashboard/courses.dart';
 import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/dashboard.dart';
-import 'package:class_app/ui/announcement/announcement.dart';
 import 'package:class_app/ui/more/more.dart';
 import 'package:class_app/ui/profile/profile_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
@@ -10,6 +10,7 @@ import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'calendar/calender_screen.dart';
 import 'dashboard/today.dart';
+import 'hangout_screen/hangout_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -21,8 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _widgetOptions = [];
 
   static var unselectedColor = Colors.grey[600];
-  static var size = 20.0;
-  static var selectedSize = 22.0;
+  static var size = 18.0;
+  static var selectedSize = 20.0;
 
   var calendar = SvgPicture.asset("assets/svg/ic_calendar.svg",
       color: unselectedColor, width: size, height: size);
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }),
         HangoutScreen(),
+        CoursesScreen(),
         ProfileScreen()
       ];
     }
@@ -69,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.white,
-            unselectedFontSize: 12,
-            selectedFontSize: 13,
+            unselectedFontSize: 11,
+            selectedFontSize: 12,
             selectedItemColor: ColorUtils.primaryColor,
             unselectedItemColor: unselectedColor,
             items: [
@@ -86,6 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: hangout,
                   activeIcon: hangout_selected,
                   title: Text("Hangout")),
+              BottomNavigationBarItem(
+                  icon: hangout,
+                  activeIcon: hangout_selected,
+                  title: Text("Courses")),
               BottomNavigationBarItem(
                   icon: user, activeIcon: user_selected, title: Text("Profile"))
             ],

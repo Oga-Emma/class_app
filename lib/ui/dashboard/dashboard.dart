@@ -24,7 +24,6 @@ import 'class_excos_screen.dart';
 import 'courses.dart';
 import 'events_screen.dart';
 
-
 class Dashboard extends StatefulWidget {
   Dashboard(this.calendarScreen);
   final Function() calendarScreen;
@@ -33,7 +32,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   var monthYear;
   var dateFormat = DateFormat('yyyy-MM-dd');
 
@@ -53,93 +51,93 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     refresh();
     return Scaffold(
-      appBar: AppBar(
-          title: GestureDetector(
-              onHorizontalDragEnd: (details)  {
+        appBar: AppBar(
+            title: GestureDetector(
+                onHorizontalDragEnd: (details) {
 //            print(details.primaryVelocity);
 //            print(details.velocity);
 
-          if(details.primaryVelocity > 500){
-            showPasswordDialog();
-          }
+                  if (details.primaryVelocity > 500) {
+                    showPasswordDialog();
+                  }
 //            print("Drag happened");
 //            showPasswordDialog();
-
-          },
-
-              onDoubleTap: (){
-                showPasswordDialog();
-              },
-
-              child: Text("Dashboard", textAlign: TextAlign.center)),
-          elevation: 0.0),
-      body:
-
-
-      StreamBuilder<QuerySnapshot>(
-          stream: lectureStream,
-          builder: (context, lecturesStream){
+                },
+                onDoubleTap: () {
+                  showPasswordDialog();
+                },
+                child: Text("Dashboard", textAlign: TextAlign.center)),
+            elevation: 0.0),
+        body: StreamBuilder<QuerySnapshot>(
+            stream: lectureStream,
+            builder: (context, lecturesStream) {
 //
 //            if(!checked) {
 //              checkForNewVersion();
 //              checked = true;
 //            }
 
-        if(lecturesStream.hasData){
-          todayLectures.clear();
+              if (lecturesStream.hasData) {
+                todayLectures.clear();
 
-          lecturesStream.data.documents.forEach((doc){
-            var lecture = LectureDTO.fromJson(doc.data);
-            String date = "${dateFormat.format(today)} ${lecture.startTime}";
-            lecture.timeStamp = DateTime.parse(date).millisecondsSinceEpoch;
-            todayLectures.add(lecture);
-          });
+                lecturesStream.data.documents.forEach((doc) {
+                  var lecture = LectureDTO.fromJson(doc.data);
+                  String date =
+                      "${dateFormat.format(today)} ${lecture.startTime}";
+                  lecture.timeStamp =
+                      DateTime.parse(date).millisecondsSinceEpoch;
+                  todayLectures.add(lecture);
+                });
 
-          return StreamBuilder<QuerySnapshot>(
-            stream: eventStream,
-            builder: (context, eventsStream){
+                return StreamBuilder<QuerySnapshot>(
+                  stream: eventStream,
+                  builder: (context, eventsStream) {
+                    if (eventsStream.hasData) {
+                      todayEvents.clear();
 
-              if(eventsStream.hasData){
-                todayEvents.clear();
+                      eventsStream.data.documents.forEach((doc) =>
+                          todayEvents.add(EventDTO.fromJson(doc.data)));
 
-                eventsStream.data.documents.forEach((doc) => todayEvents.add(EventDTO.fromJson(doc.data)));
+                      return Container(
+                          color: Colors.grey[200],
+                          child: Stack(
+                            children: <Widget>[
+                              Positioned(
+                                  top: 0, right: 0, left: 0, child: _topBar()),
+                              Container(
+                                padding: EdgeInsets.only(top: 100.0),
+                                child: _body(),
+                              ),
+                            ],
+                          ));
+                    }
 
-                return Container(
-                    color: Colors.grey[200],
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(top: 0, right: 0, left: 0, child: _topBar()),
-                        Container(
-                          padding: EdgeInsets.only(top: 100.0),
-                          child: _body(),
-                        ),
-                      ],
-                    ));
+                    if (eventsStream.hasError) {
+                      return Center(
+                          child: Text(
+                              "Error fetching data, please check your network and try again"));
+                    }
+
+                    return Loading();
+                  },
+                );
               }
 
-              if(eventsStream.hasError){
-                return Center(child: Text("Error fetching data, please check your network and try again"));
+              if (lecturesStream.hasError) {
+                return Center(
+                    child: Text(
+                        "Error fetching data, please check your network and try again"));
               }
 
               return Loading();
-            },
-          );
-        }
-
-        if(lecturesStream.hasError){
-          return Center(child: Text("Error fetching data, please check your network and try again"));
-        }
-
-        return Loading();
-      })
-    );
+            }));
   }
 
   Stream<QuerySnapshot> lectureStream;
   Stream<QuerySnapshot> eventStream;
 
   var today = DateTime.now();
-  refresh(){
+  refresh() {
     lectureStream = LectureDAO.fetchLectures(today.weekday);
     eventStream = EventDAO.queryEventsByDate(dateFormat.format(today));
   }
@@ -147,46 +145,49 @@ class _DashboardState extends State<Dashboard> {
   Widget category(title, color, icon, {Function() onTap, int total = 0}) {
     return Stack(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Material(
-            elevation: 2.0,
-            clipBehavior: Clip.antiAlias,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0))),
-            child: ClipRect(
-              child: InkWell(
-                onTap: onTap,
-                child: Container(
+        Material(
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          child: ClipRect(
+            child: InkWell(
+              onTap: onTap,
+              child: Container(
 //                              height: 70,
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(icon, color: color, size: 20.0),
-                            SizedBox(height: 8.0),
-                            Text(title, style: Theme.of(context).textTheme.subhead)
-                          ],
-                        ),
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(icon, color: color, size: 20.0),
+                          SizedBox(height: 8.0),
+                          Text(title,
+                              style: Theme.of(context).textTheme.subhead)
+                        ],
                       ),
-                      Container(height: 4, color: color)
-                    ],
-                  ),
+                    ),
+                    Container(height: 4, color: color)
+                  ],
                 ),
               ),
             ),
           ),
         ),
-        total > 0 ? Positioned(child: Container(
-          padding: EdgeInsets.all(8),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: ColorUtils.accentColor,
-              shape: BoxShape.circle
-            ),
-            child: Text("$total", style: TextStyle(color: Colors.white),)), top: 0, right: 0) : SizedBox()
+        total > 0
+            ? Positioned(
+                child: Container(
+                    padding: EdgeInsets.all(8),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: ColorUtils.accentColor, shape: BoxShape.circle),
+                    child: Text(
+                      "$total",
+                      style: TextStyle(color: Colors.white),
+                    )),
+                top: 0,
+                right: 0)
+            : SizedBox()
       ],
     );
   }
@@ -241,7 +242,8 @@ class _DashboardState extends State<Dashboard> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("${(todayEvents.length + todayLectures.length).toString().padLeft(2, "0")}",
+                  Text(
+                      "${(todayEvents.length + todayLectures.length).toString().padLeft(2, "0")}",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Text("Activities Today",
@@ -267,57 +269,67 @@ class _DashboardState extends State<Dashboard> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 6 / 5,
+              mainAxisSpacing: 8.0,
+              crossAxisSpacing: 8.0,
             ),
             delegate: SliverChildListDelegate(<Widget>[
+              category("Lectures", eventColors[EventType.LECTURES],
+                  FontAwesomeIcons.chalkboardTeacher,
+                  total: todayLectures.length, onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => Lectures()));
+              }),
+              category("Fixed Class", eventColors[EventType.CLASS],
+                  Icons.library_books,
+                  total: todayEvents
+                      .where((event) => event.type == EventType.CLASS)
+                      .toList()
+                      .length, onTap: () {
+                navigateToEvent(EventType.CLASS);
+              }),
+              category("Assignment/CA", eventColors[EventType.ASSIGNEMTCA],
+                  FontAwesomeIcons.twitch,
+                  total: todayEvents
+                      .where((event) => event.type == EventType.ASSIGNEMTCA)
+                      .toList()
+                      .length, onTap: () {
+                navigateToEvent(EventType.ASSIGNEMTCA);
+              }),
               category(
-                  "Lectures", eventColors[EventType.LECTURES], FontAwesomeIcons.chalkboardTeacher,
-                total: todayLectures.length,
-                onTap: (){
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Lectures()));
-                   }
-              ),
-              category("Fixed Class", eventColors[EventType.CLASS], Icons.library_books,
-                  total: todayEvents.where((event) => event.type == EventType.CLASS).toList().length,
-                  onTap: () {
-                    navigateToEvent(EventType.CLASS);
-                  }
-              ),
-              category("Assignment/CA", eventColors[EventType.ASSIGNEMTCA], FontAwesomeIcons.twitch,
-                  total: todayEvents.where((event) => event.type == EventType.ASSIGNEMTCA).toList().length,
-                  onTap: (){
-                    navigateToEvent(EventType.ASSIGNEMTCA);}
-              ),
-              category(
-                  "Test",  eventColors[EventType.TEST], FontAwesomeIcons.tasks,
-                  total: todayEvents.where((event) => event.type == EventType.TEST).toList().length,
-                  onTap: (){
-                    navigateToEvent(EventType.TEST);}
-              ),
-              category("Exam", eventColors[EventType.EXAM], FontAwesomeIcons.clipboardList,
-                  total: todayEvents.where((event) => event.type == EventType.EXAM).toList().length,
-                  onTap: (){
-                    navigateToEvent(EventType.EXAM);}
-              ),
-              category(
-                  "Others", eventColors[EventType.OTHERS], FontAwesomeIcons.tasks,
-                  total: todayEvents.where((event) => event.type == EventType.OTHERS).toList().length,
-                  onTap: (){
-                    navigateToEvent(EventType.OTHERS);
-                  }
-              ),
-              category("Courses", Colors.grey, FontAwesomeIcons.book,
+                  "Test", eventColors[EventType.TEST], FontAwesomeIcons.tasks,
+                  total: todayEvents
+                      .where((event) => event.type == EventType.TEST)
+                      .toList()
+                      .length, onTap: () {
+                navigateToEvent(EventType.TEST);
+              }),
+              category("Exam", eventColors[EventType.EXAM],
+                  FontAwesomeIcons.clipboardList,
+                  total: todayEvents
+                      .where((event) => event.type == EventType.EXAM)
+                      .toList()
+                      .length, onTap: () {
+                navigateToEvent(EventType.EXAM);
+              }),
+              category("Others", eventColors[EventType.OTHERS],
+                  FontAwesomeIcons.tasks,
+                  total: todayEvents
+                      .where((event) => event.type == EventType.OTHERS)
+                      .toList()
+                      .length, onTap: () {
+                navigateToEvent(EventType.OTHERS);
+              }),
+              /*category("Courses", Colors.grey, FontAwesomeIcons.book,
                   onTap: (){
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => CoursesScreen()));
                   }
-              ),
+              ),*/
               category("Class excos", Colors.brown, FontAwesomeIcons.users,
-                  onTap: (){
+                  onTap: () {
                 Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ClassExcoScreen()));
-                  }
-              ),
+                    MaterialPageRoute(builder: (context) => ClassExcoScreen()));
+              }),
             ]),
           ),
         ),
@@ -335,135 +347,140 @@ class _DashboardState extends State<Dashboard> {
 
     return SliverList(
         delegate: SliverChildListDelegate(<Widget>[
-          Container(
-            padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
-            alignment: Alignment.centerLeft,
-            height: 220,
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
+      Container(
+        padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
+        alignment: Alignment.centerLeft,
+        height: 220,
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("TODAY'S TIMELINE",
-                              style: Theme.of(context).textTheme.caption),
-                          SizedBox(height: 3),
-                          Text(monthYear,
-                              style: Theme.of(context).textTheme.subhead),
-                        ],
-                      ),
-                      Expanded(child: SizedBox()),
-                      RaisedButton(
-                          onPressed: () {
-
-                            widget.calendarScreen();
+                      Text("TODAY'S TIMELINE",
+                          style: Theme.of(context).textTheme.caption),
+                      SizedBox(height: 3),
+                      Text(monthYear,
+                          style: Theme.of(context).textTheme.subhead),
+                    ],
+                  ),
+                  Expanded(child: SizedBox()),
+                  RaisedButton(
+                      onPressed: () {
+                        widget.calendarScreen();
 //
-                           /* Navigator.of(context)
+                        /* Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
                               return Today(events: combinedList, date: monthYear);
                             }));*/
-                          },
-                          color: Theme.of(context).primaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: borderRadius),
-                          child: Text("View all",
-                              style: TextStyle(color: Colors.white)))
-                    ],
-                  ),
-                ),
-                Expanded(
-                    child: combinedList.isEmpty ? Center(child: Text("No event today")) :
-                    ListView.builder(
+                      },
+                      color: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(borderRadius: borderRadius),
+                      child: Text("View all",
+                          style: TextStyle(color: Colors.white)))
+                ],
+              ),
+            ),
+            Expanded(
+                child: combinedList.isEmpty
+                    ? Center(child: Text("No event today"))
+                    : ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: combinedList.length,
                         itemBuilder: (context, index) {
-                          return CombinedPreviewEventListItem(combinedList[index],
-                              isLecture: combinedList[index] is LectureDTO,
-
-                          onTap: (event){
-                              Navigator.of( context)
-                                  .push(MaterialPageRoute(
-                                  builder: (context) => event is LectureDTO ?
-                                  LectureDetailsScreen(lecture: event) : EventDetailsScreen(event: event as EventDTO)
-                              ));
-
-
-                          },
+                          return CombinedPreviewEventListItem(
+                            combinedList[index],
+                            isLecture: combinedList[index] is LectureDTO,
+                            onTap: (event) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => event is LectureDTO
+                                      ? LectureDetailsScreen(lecture: event)
+                                      : EventDetailsScreen(
+                                          event: event as EventDTO)));
+                            },
                           );
-                        })
-
-
-    )
-              ],
-            ),
-          ),
-        ]));
+                        }))
+          ],
+        ),
+      ),
+    ]));
   }
 
   String pass;
   showPasswordDialog() async {
     var password = await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text("Admin Login", textAlign: TextAlign.center,),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0)
-            ),
-            contentPadding: EdgeInsets.all(16.0),
-            children: <Widget>[
-              TextField(
-                onChanged: (value){
-                  pass = value;
-                },
-                obscureText: true,
-                decoration: InputDecoration(
-                    labelText: "Password"
+            context: context,
+            builder: (BuildContext context) {
+              return SimpleDialog(
+                title: Text(
+                  "Admin Login",
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              RaisedButton(onPressed: (){
-                Navigator.of(context).pop(pass);
-              }, child: Text("Login"))
-            ],
-          );
-        }) ?? "";
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0)),
+                contentPadding: EdgeInsets.all(16.0),
+                children: <Widget>[
+                  TextField(
+                    onChanged: (value) {
+                      pass = value;
+                    },
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: "Password"),
+                  ),
+                  RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(pass);
+                      },
+                      child: Text("Login"))
+                ],
+              );
+            }) ??
+        "";
 
-    if(password == "admin1234"){
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminScreen()));
-    }else{
-      if(password.isNotEmpty) {
+    if (password == "admin1234") {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => AdminScreen()));
+    } else {
+      if (password.isNotEmpty) {
         showError(message: "Wrong password");
       }
     }
   }
 
   void navigateToEvent(String eventType) {
-    Navigator.of(context).push(
-    MaterialPageRoute(builder: (context) => EventsScreen(eventType)));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => EventsScreen(eventType)));
   }
 
   void checkForNewVersion() {
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       showDialog(
-          context: context, builder: (context){
-        return SimpleDialog(
-          title: Text("New version available", textAlign: TextAlign.left,),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-          contentPadding: EdgeInsets.all(16.0),
-          children: <Widget>[
-            Text("What is new"),
-            Container(height: 1, color: Colors.grey.withOpacity(0.5),),
-            gap2x,
-
-          ],
-        );
-      });
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: Text(
+                "New version available",
+                textAlign: TextAlign.left,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0)),
+              contentPadding: EdgeInsets.all(16.0),
+              children: <Widget>[
+                Text("What is new"),
+                Container(
+                  height: 1,
+                  color: Colors.grey.withOpacity(0.5),
+                ),
+                gap2x,
+              ],
+            );
+          });
     });
   }
 }
