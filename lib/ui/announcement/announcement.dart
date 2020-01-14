@@ -1,17 +1,17 @@
 import 'package:class_app/ui/utils/decoration_utils.dart';
 import 'package:flutter/material.dart';
 
-class Announcement extends StatefulWidget {
+class HangoutScreen extends StatefulWidget {
   @override
-  _AnnouncementState createState() => _AnnouncementState();
+  _HangoutScreenState createState() => _HangoutScreenState();
 }
 
-class _AnnouncementState extends State<Announcement> {
+class _HangoutScreenState extends State<HangoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text("Announcement", textAlign: TextAlign.center),
+          title: Text("Hangout", textAlign: TextAlign.center),
           elevation: 0.0),
       body: Container(
           color: Colors.grey[200],
@@ -24,28 +24,29 @@ class _AnnouncementState extends State<Announcement> {
                       color: Theme.of(context).scaffoldBackgroundColor),
                   Container(height: 30, color: Theme.of(context).primaryColor),
                   Container(
-                      height: 55,
-                      margin: EdgeInsets.symmetric(horizontal: 14.0),
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            offset: Offset(1, 5),
-                            color: Colors.grey,
-                            blurRadius: 20,
-                            spreadRadius: 1)
-                      ], color: Colors.white, borderRadius: borderRadius),
-                      child: /*ListView(
+                    height: 55,
+                    margin: EdgeInsets.symmetric(horizontal: 14.0),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          offset: Offset(1, 5),
+                          color: Colors.grey,
+                          blurRadius: 20,
+                          spreadRadius: 1)
+                    ], color: Colors.white, borderRadius: borderRadius),
+                    child:
+                        /*ListView(
                         scrollDirection: Axis.horizontal,
                         children: getButtons(),
                       )*/
 
-                      Row(
+                        Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       // This next line does the trick.
                       children: getButtons(),
                     ),
-                      )
+                  )
                 ],
               ),
               SizedBox(height: 20.0),

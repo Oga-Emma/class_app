@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ColorUtils{
+class ColorUtils {
 //static var primaryColor = Colors.red[900];
-static var primaryColor = Color(0XFF2B0DC4);
-static var accentColor = Colors.orange;
+  static var primaryColor = Colors.green;
+  static var accentColor = Colors.amber;
 }
