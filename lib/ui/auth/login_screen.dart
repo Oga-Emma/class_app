@@ -35,12 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 EmptySpace(multiple: 5),
                 CAButton(title: "Sign In", onPressed: () {}),
                 EmptySpace(multiple: 2),
-                Row(
+                Wrap(
                   children: <Widget>[
                     EmptySpace(multiple: 2),
                     Text("Dont have an account?"),
                     EmptySpace(),
-                    InkWell(onTap: () {}, child: Text("Signup here")),
+                    InkWell(onTap: () {}, child: Text("Signup here",
+                        style: TextStyle(color: ColorUtils.primaryColor))),
                   ],
                 )
               ],
