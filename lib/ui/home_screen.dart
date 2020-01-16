@@ -21,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = [];
 
-  static var unselectedColor = Colors.grey[600];
+//  static var unselectedColor = ColorUtils.primaryColor.withOpacity(0.7);
+  static var unselectedColor = Colors.grey[400];
   static var size = 18.0;
   static var selectedSize = 20.0;
 
