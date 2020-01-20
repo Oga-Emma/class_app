@@ -36,8 +36,12 @@ dependencies:
   firebase_storage: ^3.0.2
   curved_navigation_bar: ^0.2.20
 
+  firebase_auth: ^0.15.3+1
+  google_sign_in: ^4.1.1
+
   flutter_clean_calendar: ^1.0.1
   rxdart: ^0.22.0
+
 
   shared_preferences: ^0.5.6
   provider: ^4.0.1

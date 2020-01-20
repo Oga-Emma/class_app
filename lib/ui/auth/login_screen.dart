@@ -1,9 +1,10 @@
+import 'package:class_app/ui/auth/base_auth.dart';
 import 'package:class_app/ui/helper_widgets/ca_button.dart';
 import 'package:class_app/ui/helper_widgets/empty_space.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget with BaseAuth {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }

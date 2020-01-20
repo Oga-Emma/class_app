@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.white,
             unselectedFontSize: 11,
             selectedFontSize: 12,
-            selectedItemColor: ColorUtils.secondaryColor,
+            selectedItemColor: ColorUtils.primaryColor,
             unselectedItemColor: unselectedColor,
             items: [
               BottomNavigationBarItem(

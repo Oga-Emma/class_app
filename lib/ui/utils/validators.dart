@@ -91,6 +91,17 @@ class Validators {
     };
   }
 
+  static String Function(String) validateSimplePassword([String error]) {
+    return (String value) {
+      if (value == null || value.isEmpty || value.trim().isEmpty) {
+        return 'Password is required';
+      } else if (value.length < 6 || value.length > 255) {
+        return 'Password must be 6-255 characters';
+      }
+      return null;
+    };
+  }
+
   static String Function(File) validateFile([String error]) {
     return (File file) {
       if (file == null || file.path.isEmpty) {
