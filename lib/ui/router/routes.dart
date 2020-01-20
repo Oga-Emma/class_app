@@ -1,6 +1,7 @@
 import 'package:class_app/ui/auth/login_screen.dart';
 import 'package:class_app/ui/auth/signup_screen.dart';
 import 'package:class_app/ui/home_screen.dart';
+import 'package:class_app/ui/profile/profile_setup_page.dart';
 import 'package:class_app/ui/settings/initial_settings_screen.dart';
 import 'package:class_app/ui/splash/fetch_data.dart';
 import 'package:class_app/ui/splash/splash_screen.dart';
@@ -31,6 +32,7 @@ class Routes {
         LOGIN: (BuildContext context) => LoginScreen(),
         SIGNUP: (BuildContext context) => SignupScreen(),
         SCHOOL_SELECT: (BuildContext context) => InitialSettingsScreen(),
-    FETCH_DATA: (BuildContext context) => FetchDataScreen(),
+        FETCH_DATA: (BuildContext context) => FetchDataScreen(),
+        EDIT_PROFILE: (BuildContext context) => ProfileSetupPage(),
       };
 }
