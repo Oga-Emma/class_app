@@ -47,7 +47,7 @@ class LocalStorage {
     pref.setString('user-info', json.encode(user.toMap()));
   }
 
-  clearUser(bool firstTime) async {
+  clearUser() async {
     //cache to local storage
     pref = await SharedPreferences.getInstance();
     pref.setString('user-info', '');

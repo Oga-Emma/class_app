@@ -93,7 +93,7 @@ class _SignupScreenState extends State<SignupScreen>
                       Text("Already have an account?"),
                       EmptySpace(),
                       InkWell(
-                          onTap: () {},
+                          onTap: () => Navigator.pop(context),
                           child: Text("Sign in here",
                               style:
                                   TextStyle(color: ColorUtils.primaryColor))),
@@ -113,7 +113,8 @@ class _SignupScreenState extends State<SignupScreen>
       showLoadingSnackBar();
 
       try {
-        var user = await createAccountWithEmailAndPassword(email, password);
+        var user = await createAccountWithEmailAndPassword(
+            email.trim(), password.trim());
         appState.currentUser = user;
         Router.gotoNamed(Routes.HOME, context, clearStack: true);
       } catch (err) {

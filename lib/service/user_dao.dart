@@ -13,15 +13,17 @@ class UserDAO {
     await firestore
         .collection('users')
         .document(user.id)
-        .updateData(user.toMap());
+        .setData(user.toMap(), merge: true);
   }
 
   static Future<UserDTO> getUser(String userId) async {
     var firestore = Firestore.instance;
     var user = await firestore.collection('users').document(userId).get();
 
+//    print('User id: ${userId}');
+//    print(user.exists);
     if (!user.exists || user.data == null) {
-      throw Exception('User not found');
+      return UserDTO();
     }
     return UserDTO.fromMap(user.data);
   }

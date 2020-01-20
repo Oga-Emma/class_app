@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:class_app/model/app_info_dto.dart';
@@ -7,6 +8,7 @@ import 'package:class_app/model/user_dto.dart';
 import 'package:class_app/service/local_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AppStateProvider extends ChangeNotifier {
   UserDTO _user;
@@ -35,5 +37,17 @@ class AppStateProvider extends ChangeNotifier {
   set user(UserDTO user) {
     _user = user;
     notifyListeners();
+  }
+
+  Future<void> logout() async {
+    localStorage.clearUser();
+
+    user = null;
+    currentUser = null;
+    var google = GoogleSignIn();
+    if (google.currentUser != null) {
+      google.signOut();
+    }
+    FirebaseAuth.instance.signOut();
   }
 }

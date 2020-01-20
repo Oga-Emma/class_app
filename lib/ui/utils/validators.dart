@@ -5,7 +5,7 @@ class Validators {
   static String Function(String) validateAlpha([String error]) {
     return (String value) {
       if (value.isEmpty) {
-        return error ?? 'Name is required.';
+        return error ?? 'Field is required.';
       }
       final RegExp nameExp = RegExp(r'^[A-Za-z ]+$');
       if (!nameExp.hasMatch(value)) {

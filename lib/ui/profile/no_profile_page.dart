@@ -1,13 +1,17 @@
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/helper_widgets/ca_button.dart';
 import 'package:class_app/ui/helper_widgets/empty_space.dart';
 import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class NoProfilePage extends StatelessWidget {
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Stack(
       children: <Widget>[
         Container(
@@ -37,7 +41,7 @@ class NoProfilePage extends StatelessWidget {
                             .headline
                             .copyWith(fontSize: 20)),
                     EmptySpace(multiple: 2),
-                    Text("Just one more step",
+                    Text("One more step to go",
                         style: Theme.of(context).textTheme.body2),
                     Text("Click below to complete your profile setup below",
                         textAlign: TextAlign.center,
@@ -53,10 +57,14 @@ class NoProfilePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CAButton(
-                          title: "Logout",
-                          onPressed: () =>
-                              Router.gotoNamed(Routes.LOGIN, context),
-                          outline: true),
+                        title: "Logout",
+                        outline: true,
+                        onPressed: () {
+                          appState.logout();
+                          Router.gotoNamed(Routes.HOME, context,
+                              clearStack: true);
+                        },
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
