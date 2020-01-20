@@ -1,12 +1,14 @@
 import 'package:class_app/ui/auth/login_screen.dart';
 import 'package:class_app/ui/auth/signup_screen.dart';
 import 'package:class_app/ui/home_screen.dart';
+import 'package:class_app/ui/settings/initial_settings_screen.dart';
 import 'package:class_app/ui/splash/splash_screen.dart';
 import 'package:flutter/widgets.dart';
 
 class Routes {
   static const String SPLASH = "/";
   static const String HOME = "/home";
+  static const String SCHOOL_SELECT = "/school-select";
   static const String LOGIN = "/login";
   static const String SIGNUP = "/signup";
   static const String AUTH = "/auth";
@@ -27,5 +29,6 @@ class Routes {
         HOME: (BuildContext context) => HomeScreen(),
         LOGIN: (BuildContext context) => LoginScreen(),
         SIGNUP: (BuildContext context) => SignupScreen(),
+        SCHOOL_SELECT: (BuildContext context) => InitialSettingsScreen(),
       };
 }

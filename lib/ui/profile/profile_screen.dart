@@ -7,10 +7,8 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
-          brightness: Brightness.light,
           elevation: 0.0,
-          backgroundColor: Colors.grey[100],
-//          title: Text("Profile", textAlign: TextAlign.center),
+          title: Text("Profile", textAlign: TextAlign.center),
         ),
         body: NoAccountScreen());
   }
