@@ -23,27 +23,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //  static var unselectedColor = ColorUtils.primaryColor.withOpacity(0.7);
   static var unselectedColor = Colors.grey[400];
-  static var size = 18.0;
-  static var selectedSize = 20.0;
+  static var size = 24.0;
+  static var selectedSize = 24.0;
 
   var calendar = SvgPicture.asset("assets/svg/ic_calendar.svg",
       color: unselectedColor, width: size, height: size);
-  var calendar_selected = SvgPicture.asset("assets/svg/ic_calendar.svg",
-      color: ColorUtils.primaryColor, width: selectedSize, height: size);
+  var calendar_selected = SvgPicture.asset("assets/svg/nav_calendar.svg",
+      width: selectedSize, height: selectedSize);
 
-  var dashboard = SvgPicture.asset("assets/svg/ic_dashboard.svg",
+  var dashboard = SvgPicture.asset("assets/svg/nav_dashboard.svg",
       color: unselectedColor, width: size, height: size);
-  var dashboard_selected = SvgPicture.asset("assets/svg/ic_dashboard.svg",
-      color: ColorUtils.primaryColor, width: selectedSize, height: size);
+  var dashboard_selected = SvgPicture.asset(
+      "assets/svg/nav_dashboard_selected.svg",
+      width: selectedSize,
+      height: selectedSize);
 
   var hangout = SvgPicture.asset("assets/svg/ic_hangout.svg",
       color: unselectedColor, width: size, height: size);
   var hangout_selected = SvgPicture.asset("assets/svg/ic_hangout.svg",
-      color: ColorUtils.primaryColor, width: selectedSize, height: size);
+      width: selectedSize, height: selectedSize);
+
+  var courses = SvgPicture.asset("assets/svg/nav_courses.svg",
+      color: unselectedColor, width: size, height: size);
+  var courses_selected = SvgPicture.asset("assets/svg/nav_courses_selected.svg",
+      width: selectedSize, height: selectedSize);
+
   var user = SvgPicture.asset("assets/svg/ic_user.svg",
       color: unselectedColor, width: size, height: size);
-  var user_selected = SvgPicture.asset("assets/svg/ic_user.svg",
-      color: ColorUtils.primaryColor, width: selectedSize, height: size);
+  var user_selected = SvgPicture.asset("assets/svg/nav_user.svg",
+      width: selectedSize, height: selectedSize);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex = 0;
           });
         }),
-        HangoutScreen(),
+//        HangoutScreen(),
         CoursesScreen(),
         ProfileScreen()
       ];
@@ -74,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.white,
             unselectedFontSize: 11,
             selectedFontSize: 12,
-            selectedItemColor: ColorUtils.primaryColor,
+            selectedItemColor: ColorUtils.secondaryColor,
             unselectedItemColor: unselectedColor,
             items: [
               BottomNavigationBarItem(
@@ -85,13 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: dashboard,
                   activeIcon: dashboard_selected,
                   title: Text("Dashboard")),
+//              BottomNavigationBarItem(
+//                  icon: hangout,
+//                  activeIcon: hangout_selected,
+//                  title: Text("Hangout")),
               BottomNavigationBarItem(
-                  icon: hangout,
-                  activeIcon: hangout_selected,
-                  title: Text("Hangout")),
-              BottomNavigationBarItem(
-                  icon: hangout,
-                  activeIcon: hangout_selected,
+                  icon: courses,
+                  activeIcon: courses_selected,
                   title: Text("Courses")),
               BottomNavigationBarItem(
                   icon: user, activeIcon: user_selected, title: Text("Profile"))

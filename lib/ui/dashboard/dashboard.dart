@@ -279,30 +279,30 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => Lectures()));
               }),
-              category("Fixed Class", eventColors[EventType.CLASS],
-                  Icons.library_books,
+              category(
+                  "Others", eventColors[EventType.CLASS], Icons.library_books,
                   total: todayEvents
                       .where((event) => event.type == EventType.CLASS)
                       .toList()
                       .length, onTap: () {
                 navigateToEvent(EventType.CLASS);
               }),
-              category("Assignment/CA", eventColors[EventType.ASSIGNEMTCA],
-                  FontAwesomeIcons.twitch,
-                  total: todayEvents
-                      .where((event) => event.type == EventType.ASSIGNEMTCA)
-                      .toList()
-                      .length, onTap: () {
-                navigateToEvent(EventType.ASSIGNEMTCA);
-              }),
-              category(
-                  "Test", eventColors[EventType.TEST], FontAwesomeIcons.tasks,
-                  total: todayEvents
-                      .where((event) => event.type == EventType.TEST)
-                      .toList()
-                      .length, onTap: () {
-                navigateToEvent(EventType.TEST);
-              }),
+//              category("Assignment/CA", eventColors[EventType.ASSIGNEMTCA],
+//                  FontAwesomeIcons.twitch,
+//                  total: todayEvents
+//                      .where((event) => event.type == EventType.ASSIGNEMTCA)
+//                      .toList()
+//                      .length, onTap: () {
+//                navigateToEvent(EventType.ASSIGNEMTCA);
+//              }),
+//              category(
+//                  "Test", eventColors[EventType.TEST], FontAwesomeIcons.tasks,
+//                  total: todayEvents
+//                      .where((event) => event.type == EventType.TEST)
+//                      .toList()
+//                      .length, onTap: () {
+//                navigateToEvent(EventType.TEST);
+//              }),
               category("Exam", eventColors[EventType.EXAM],
                   FontAwesomeIcons.clipboardList,
                   total: todayEvents
@@ -311,14 +311,14 @@ class _DashboardState extends State<Dashboard> {
                       .length, onTap: () {
                 navigateToEvent(EventType.EXAM);
               }),
-              category("Others", eventColors[EventType.OTHERS],
-                  FontAwesomeIcons.tasks,
-                  total: todayEvents
-                      .where((event) => event.type == EventType.OTHERS)
-                      .toList()
-                      .length, onTap: () {
-                navigateToEvent(EventType.OTHERS);
-              }),
+//              category("Others", eventColors[EventType.OTHERS],
+//                  FontAwesomeIcons.tasks,
+//                  total: todayEvents
+//                      .where((event) => event.type == EventType.OTHERS)
+//                      .toList()
+//                      .length, onTap: () {
+//                navigateToEvent(EventType.OTHERS);
+//              }),
               /*category("Courses", Colors.grey, FontAwesomeIcons.book,
                   onTap: (){
                     Navigator.of(context).push(

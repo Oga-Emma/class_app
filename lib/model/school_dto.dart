@@ -9,4 +9,13 @@ class SchoolDTO {
     code = data['code'];
     state = data['state'];
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'code': code,
+      'state': state,
+    };
+  }
 }

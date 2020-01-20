@@ -1,14 +1,20 @@
 import 'dart:async';
 
+import 'package:class_app/model/app_info_dto.dart';
 import 'package:class_app/model/department_dto.dart';
 import 'package:class_app/model/school_dto.dart';
-import 'package:class_app/service/firebase/app_settings_dao.dart';
+import 'package:class_app/service/app_settings_dao.dart';
+import 'package:class_app/service/local_storage.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/helper_widgets/ca_button.dart';
 import 'package:class_app/ui/helper_widgets/empty_space.dart';
+import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/ui_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class InitialSettingsScreen extends StatefulWidget {
@@ -33,8 +39,10 @@ class _InitialSettingsScreenState extends State<InitialSettingsScreen>
     super.dispose();
   }
 
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.grey[200],
@@ -50,13 +58,19 @@ class _InitialSettingsScreenState extends State<InitialSettingsScreen>
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   EmptySpace(),
-                  Text("Welcome", style: Theme.of(context).textTheme.headline),
+                  SvgPicture.asset("assets/svg/landing_logo.svg",
+                      height: 100, width: 100),
+                  EmptySpace(multiple: 5),
+                  Text("Welcome",
+                      style: Theme.of(context).textTheme.headline,
+                      textAlign: TextAlign.center),
                   EmptySpace(),
-                  Text(
-                      "Please select your school and department/class below to get started"),
+                  Text("Please select your school and department/class",
+                      textAlign: TextAlign.center),
+                  Text("below to get started", textAlign: TextAlign.center),
                   EmptySpace(multiple: 3),
                   InkWell(
                     onTap: selectInstitution,
@@ -64,8 +78,9 @@ class _InitialSettingsScreenState extends State<InitialSettingsScreen>
                       ignoring: true,
                       child: TextFormField(
                           controller: schoolController,
-                          decoration:
-                              InputDecoration(labelText: "School/Institution")),
+                          decoration: InputDecoration(
+                              labelText: "School/Institution",
+                              border: OutlineInputBorder())),
                     ),
                   ),
                   EmptySpace(multiple: 3),
@@ -75,27 +90,37 @@ class _InitialSettingsScreenState extends State<InitialSettingsScreen>
                       ignoring: true,
                       child: TextFormField(
                           controller: departmentController,
-                          decoration: InputDecoration(labelText: "Department")),
+                          decoration: InputDecoration(
+                              labelText: "Department",
+                              border: OutlineInputBorder())),
                     ),
                   ),
                   EmptySpace(multiple: 5),
                   CAButton(title: "Continue", onPressed: continueSetup),
-                  EmptySpace(multiple: 2),
-                  Wrap(
+                  EmptySpace(multiple: 5),
+                  Row(
                     children: <Widget>[
-                      Text(
-                        "If you can't find your school or department",
-                        textAlign: TextAlign.center,
+                      Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "If you can't find your school or department",
+                            textAlign: TextAlign.center,
+                          ),
+                          EmptySpace(multiple: .3),
+                          InkWell(
+                              onTap: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text("REGISTER HERE",
+                                    style: TextStyle(
+                                        color: ColorUtils.accentColor,
+                                        fontWeight: FontWeight.bold)),
+                              )),
+                        ],
                       ),
-                      EmptySpace(),
-                      InkWell(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text("Click Here To Register Them",
-                                style:
-                                    TextStyle(color: ColorUtils.primaryColor)),
-                          )),
+                      Spacer(),
                     ],
                   ),
                 ],
@@ -149,6 +174,12 @@ class _InitialSettingsScreenState extends State<InitialSettingsScreen>
       showInSnackBar("Please select your department/class");
       return;
     }
+    AppInfoDTO appInfo = AppInfoDTO()
+      ..school = selectedSchool
+      ..department = selectedDepartment;
+
+    appState.appInfo = appInfo;
+    Router.gotoNamed(Routes.HOME, context, clearStack: true);
   }
 }
 

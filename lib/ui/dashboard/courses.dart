@@ -24,7 +24,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(title: Text("SEMESTER COURSES")),
+      appBar: AppBar(title: Text("Courses")),
       body: StreamBuilder<QuerySnapshot>(
           stream: CourseDAO.fetchAllCourses(),
           builder: (context, snapshot) {

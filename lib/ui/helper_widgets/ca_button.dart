@@ -15,7 +15,8 @@ class CAButton extends StatelessWidget {
       child: outline
           ? OutlineButton(
               color: ColorUtils.primaryColor,
-              shape: StadiumBorder(),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0)),
               borderSide:
                   BorderSide(width: 1.5, color: ColorUtils.primaryColor),
               child: Text(
@@ -25,7 +26,8 @@ class CAButton extends StatelessWidget {
               onPressed: onPressed)
           : FlatButton(
               color: ColorUtils.primaryColor,
-              shape: StadiumBorder(),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0)),
               child: Text(
                 title,
                 style: TextStyle(color: Colors.white),

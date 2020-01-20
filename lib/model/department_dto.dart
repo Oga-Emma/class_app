@@ -22,4 +22,19 @@ class DepartmentDTO {
     entryYear = data['entryYear'];
     graduationYear = data['graduationYear'];
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'departmentCode': departmentCode,
+      'currentLevel': currentLevel,
+      'currentSemester': currentSemester,
+      'currentSession': currentSession,
+      'faculty': faculty,
+      'studyDuration': studyDuration,
+      'entryYear': entryYear,
+      'graduationYear': graduationYear
+    };
+  }
 }
