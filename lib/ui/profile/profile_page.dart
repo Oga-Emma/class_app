@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
+
   AppStateProvider appState;
   @override
   Widget build(BuildContext context) {

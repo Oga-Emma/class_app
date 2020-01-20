@@ -4,7 +4,6 @@ import 'package:class_app/model/app_info_dto.dart';
 import 'package:class_app/model/department_dto.dart';
 import 'package:class_app/model/school_dto.dart';
 import 'package:class_app/service/app_settings_dao.dart';
-import 'package:class_app/service/local_storage.dart';
 import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/helper_widgets/ca_button.dart';
 import 'package:class_app/ui/helper_widgets/empty_space.dart';
@@ -179,7 +178,7 @@ class _InitialSettingsScreenState extends State<InitialSettingsScreen>
       ..department = selectedDepartment;
 
     appState.appInfo = appInfo;
-    Router.gotoNamed(Routes.HOME, context, clearStack: true);
+    Router.gotoNamed(Routes.SPLASH, context, clearStack: true);
   }
 }
 

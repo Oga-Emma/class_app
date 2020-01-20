@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:class_app/model/app_info_dto.dart';
+import 'package:class_app/model/user_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
@@ -18,7 +19,7 @@ class LocalStorage {
     pref = await SharedPreferences.getInstance();
     var data = pref.getString('app-info');
 
-    print(data);
+//    print(data);
     AppInfoDTO appInfo;
     if (data != null &&
         data.isNotEmpty &&
@@ -36,8 +37,33 @@ class LocalStorage {
   updateFirstTime(bool firstTime) {
     //cache to local storage
   }
-  bool getFirstTime() {
+
+  Future<bool> getFirstTime() async {}
+
+  saveUser(UserDTO user) async {
     //cache to local storage
+    //cache to local storage
+    pref = await SharedPreferences.getInstance();
+    pref.setString('user-info', json.encode(user.toMap()));
+  }
+
+  clearUser(bool firstTime) async {
+    //cache to local storage
+    pref = await SharedPreferences.getInstance();
+    pref.setString('user-info', '');
+  }
+
+  Future<UserDTO> getUser() async {
+    //cache to local storage
+    pref = await SharedPreferences.getInstance();
+    var data = pref.getString('user-info');
+
+    UserDTO user = UserDTO();
+    if (data != null && data.isNotEmpty) {
+      user = UserDTO.fromMap(json.decode(data));
+    }
+
+    return user;
   }
 }
 

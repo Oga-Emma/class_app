@@ -1,16 +1,12 @@
-import 'package:class_app/ui/around_me/around_me.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/dashboard/courses.dart';
-import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/dashboard.dart';
-import 'package:class_app/ui/more/more.dart';
 import 'package:class_app/ui/profile/profile_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'calendar/calender_screen.dart';
-import 'dashboard/today.dart';
-import 'hangout_screen/hangout_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -53,8 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
   var user_selected = SvgPicture.asset("assets/svg/nav_user.svg",
       width: selectedSize, height: selectedSize);
 
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     if (_widgetOptions.isEmpty) {
       _widgetOptions = [
         CalendarScreen(),
