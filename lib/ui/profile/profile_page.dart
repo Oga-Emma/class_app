@@ -8,6 +8,7 @@ import 'package:class_app/ui/profile/no_profile_page.dart';
 import 'package:class_app/ui/profile/profile_setup_page.dart';
 import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
+import 'package:class_app/ui/widgets/empty_space.dart';
 import 'package:class_app/ui/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -108,7 +109,8 @@ class ProfilePage extends StatelessWidget {
           child: categoryGroup([
             ListTile(
               title: Text("Admin Console"),
-              trailing: Icon(Icons.verified_user),
+              leading: Icon(Icons.verified_user),
+              trailing: Icon(Icons.chevron_right),
               onTap: () {
                 Router.gotoNamed(Routes.ADMIN, context);
               },
@@ -117,12 +119,33 @@ class ProfilePage extends StatelessWidget {
         ),
         categoryGroup([
           ListTile(
-            title: Text("Settings"),
+            title: Row(
+              children: <Widget>[
+                Text("Notification"),
+                emptySpace(),
+                Visibility(
+                  visible: false,
+                  child: CircleAvatar(
+                    radius: 12.0,
+                    child: Text('1',
+                        style: textStyle.caption.copyWith(color: Colors.white)),
+                  ),
+                )
+              ],
+            ),
+            leading: Icon(Icons.notifications),
             trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              Router.gotoNamed(Routes.NOTIFICATION, context);
+            },
           ),
           ListTile(
-            title: Text("Notifications"),
+            title: Text('Preferences'),
+            leading: Icon(Icons.settings),
             trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              Router.gotoNamed(Routes.SETTINGS, context);
+            },
           ),
 //          ListTile(
 //            title: Text("Downloads"),
@@ -132,10 +155,15 @@ class ProfilePage extends StatelessWidget {
         categoryGroup([
           ListTile(
             title: Text("Change Password"),
+            leading: Icon(Icons.lock),
             trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              Router.gotoNamed(Routes.PASSWORD_RESET, context);
+            },
           ),
           ListTile(
             title: Text("Support"),
+            leading: Icon(Icons.help),
             trailing: Icon(Icons.chevron_right),
           ),
         ]),

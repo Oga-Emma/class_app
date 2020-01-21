@@ -1,4 +1,5 @@
 import 'package:class_app/state/app_state_provider.dart';
+import 'package:class_app/state/preference_state_provider.dart';
 import 'package:class_app/ui/dashboard/dashboard.dart';
 import 'package:class_app/ui/home_screen.dart';
 import 'package:class_app/ui/router/routes.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AppStateProvider>(
           create: (context) => AppStateProvider(),
+        ),
+        ChangeNotifierProvider<PreferenceStateProvider>(
+          create: (context) => PreferenceStateProvider(),
         ),
       ],
     );

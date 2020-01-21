@@ -46,4 +46,10 @@ class BaseAuth {
     print("signed in " + user.displayName);
     return user;
   }
+
+  Future<FirebaseUser> resetPassword(String email) async {
+    await _auth.sendPasswordResetEmail(
+      email: email,
+    );
+  }
 }

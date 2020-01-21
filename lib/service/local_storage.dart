@@ -2,11 +2,22 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:class_app/model/app_info_dto.dart';
+import 'package:class_app/model/preference_dto.dart';
 import 'package:class_app/model/user_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
   SharedPreferences pref;
+
+  savePref(PreferenceDTO pref) async {
+    //cache to local storage
+    var prefString = await SharedPreferences.getInstance();
+  }
+
+  Future<PreferenceDTO> fetchPref() async {
+    //cache to local storage
+    pref = await SharedPreferences.getInstance();
+  }
 
   saveAppInfo(AppInfoDTO appInfo) async {
     //cache to local storage
