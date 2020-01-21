@@ -5,6 +5,7 @@ class SchoolDTO {
   String state;
   SchoolDTO();
   SchoolDTO.fromMap(Map<String, dynamic> data) {
+    id = data['id'];
     name = data['name'];
     code = data['code'];
     state = data['state'];

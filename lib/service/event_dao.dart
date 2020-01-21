@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:class_app/model/app_info_dto.dart';
 import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/event_dto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,16 +8,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'app_info_dao.dart';
 
 class EventDAO {
-  static void savEvent(
+  static void savEvent(AppInfoDTO appInfo, 
       EventDTO event, CourseDTO course, Function(bool success) callback) {
     var firestore = Firestore.instance;
 
-    var eventRef = AppInfoDAO.getDocumentPath().collection("events").document(event.id);
+    var eventRef = AppInfoDAO.getDocumentPath(appInfo).collection("events").document(event.id);
 
     var batch = firestore.batch();
     batch.setData(eventRef, event.toMap(), merge: true);
 
-//    if (course != null) {
+//    if (course != appInfo) {
 //      var courseRef = AppInfoDAO.getDocumentPath()
 //          .collection("courses")
 //          .document(event.courseId);
@@ -35,28 +36,28 @@ class EventDAO {
     });
   }
 
-  static Stream<QuerySnapshot> fetchAllEvents() {
-    return AppInfoDAO.getDocumentPath().collection("events").snapshots();
+  static Stream<QuerySnapshot> fetchAllEvents(AppInfoDTO appInfo) {
+    return AppInfoDAO.getDocumentPath(appInfo).collection("events").snapshots();
   }
 
-  static Stream<QuerySnapshot> queryEventsByType(String type) {
-    return AppInfoDAO.getDocumentPath()
+  static Stream<QuerySnapshot> queryEventsByType(AppInfoDTO appInfo, String type) {
+    return AppInfoDAO.getDocumentPath(appInfo)
         .collection("events")
         .where("type", isEqualTo: type)
         .snapshots();
   }
 
-  static Stream<QuerySnapshot> queryEventsByDate(String date) {
-    return AppInfoDAO.getDocumentPath()
+  static Stream<QuerySnapshot> queryEventsByDate(AppInfoDTO appInfo, String date) {
+    return AppInfoDAO.getDocumentPath(appInfo)
         .collection("events")
         .where("date", isEqualTo: date)
         .snapshots();
   }
 
-  static void deleteEvent(
+  static void deleteEvent(AppInfoDTO appInfo, 
       EventDTO event, Function(bool success) callback) {
 
-    AppInfoDAO.getDocumentPath()
+    AppInfoDAO.getDocumentPath(appInfo)
         .collection("events")
         .document(event.id)
     .delete()

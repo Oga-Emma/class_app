@@ -1,18 +1,22 @@
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/service/event_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/admin/add_edit_event_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EventListItemAdmin extends StatelessWidget {
   EventListItemAdmin(this.event, {this.onTap});
   final EventDTO event;
   final Function(EventDTO event) onTap;
 
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16.0),
       padding: EdgeInsets.all(16.0),
@@ -48,7 +52,7 @@ class EventListItemAdmin extends StatelessWidget {
                   ) ?? false;
 
                   if(delete){
-                    EventDAO.deleteEvent(event, (success){});
+                    EventDAO.deleteEvent(appState.appInfo, event, (success){});
                   }
                 },
                     icon: Icon(Icons.delete, size: 14,),

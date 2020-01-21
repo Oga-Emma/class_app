@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/exco_dto.dart';
 import 'package:class_app/service/course_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/admin/select_exco_dialog.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/fixed_dropdown.dart';
@@ -11,6 +12,7 @@ import 'package:class_app/ui/utils/sTextField.dart';
 import 'package:class_app/ui/utils/ui_snackbar.dart';
 import 'package:class_app/ui/utils/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class AddEditCourse extends StatefulWidget {
@@ -46,8 +48,11 @@ class _AddEditCourseState extends State<AddEditCourse> with UISnackBarProvider {
     super.dispose();
   }
 
+
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -274,7 +279,7 @@ onSaved: (value){
       _formKey.currentState.save();
       showLoadingSnackBar();
 
-      CourseDAO.saveCourse(widget.course, (success){
+      CourseDAO.saveCourse(appState.appInfo, widget.course, (success){
         if(success){
           showInSnackBar("Changes saved");
           Future.delayed(Duration(seconds: 2), (){

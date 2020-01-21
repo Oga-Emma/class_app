@@ -102,12 +102,18 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
         ),
-        categoryGroup([
-          ListTile(
-            title: Text("Admin Console"),
-            trailing: Icon(Icons.verified_user),
-          )
-        ]),
+        Visibility(
+          visible: appState.user.isAdmin,
+          child: categoryGroup([
+            ListTile(
+              title: Text("Admin Console"),
+              trailing: Icon(Icons.verified_user),
+              onTap: (){
+                Router.gotoNamed(Routes.ADMIN, context);
+              },
+            )
+          ]),
+        ),
         categoryGroup([
           ListTile(
             title: Text("Settings"),

@@ -14,13 +14,13 @@ class ExcoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Material(
-        borderRadius: BorderRadius.circular(16.0),
-        elevation: 8.0,
+        borderRadius: BorderRadius.circular(4.0),
+        elevation: 2.0,
         child: InkWell(
-          onTap: (){
-            if(onTap != null){
+          onTap: () {
+            if (onTap != null) {
               onTap(exco);
             }
           },
@@ -31,47 +31,57 @@ class ExcoListItem extends StatelessWidget {
                 CircleAvatar(
                   backgroundColor: Colors.grey,
                   radius: 30,
-                  backgroundImage: exco.imageUrl.isEmpty ? AssetImage("assets/img/user.png") :
-                  CachedNetworkImageProvider(exco.imageUrl),
+                  backgroundImage: exco.imageUrl.isEmpty
+                      ? AssetImage("assets/img/user.png")
+                      : CachedNetworkImageProvider(exco.imageUrl),
                 ),
                 gap2x,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("${exco.lastName} ${exco.firstName} ${exco.otherName}".toUpperCase(),
+                      Text(
+                        "${exco.lastName} ${exco.firstName} ${exco.otherName}"
+                            .toUpperCase(),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.title.copyWith(fontSize: 16),),
-                      Text("${exco.post}".toUpperCase(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .title
+                            .copyWith(fontSize: 16),
+                      ),
+                      Text(
+                        "${exco.post}".toUpperCase(),
                         style: Theme.of(context).textTheme.caption,
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis,),
-                    ],),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
                 gap2x,
                 InkWell(
                   onTap: () async {
-                    if(exco.phone.isNotEmpty){
+                    if (exco.phone.isNotEmpty) {
                       var url = "tel:${exco.phone}";
                       if (await canLaunch(url)) {
-                    await launch(url);
-                    } else {
+                        await launch(url);
+                      } else {
 //                  throw 'Could not launch $url';
-                    showShortToast("Could not make call");
-                    }
-                    }else{
+                        showShortToast("Could not make call");
+                      }
+                    } else {
                       showShortToast("Phone number not available");
                     }
                   },
                   child: Container(
                     height: 30,
                     width: 30,
-                    child: Icon(Icons.add_call, size: 14, color: ColorUtils.primaryColor),
+                    child: Icon(Icons.add_call,
+                        size: 14, color: ColorUtils.primaryColor),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(color: ColorUtils.primaryColor)
-                    ),
+                        border: Border.all(color: ColorUtils.primaryColor)),
                   ),
                 )
               ],

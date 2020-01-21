@@ -42,16 +42,20 @@ class _FetchDataScreenState extends State<FetchDataScreen> {
                       UserDAO.getUser(appState.currentUser.uid)),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      appState.user = snapshot.data;
-                      Future.delayed(Duration.zero,
-                          () => Router.gotoNamed(Routes.HOME, context, clearStack: true));
+                      Future.delayed(Duration.zero, () {
+                        appState.user = snapshot.data;
+                        Router.gotoNamed(Routes.HOME, context,
+                            clearStack: true);
+                      });
                     }
 
                     if (snapshot.hasError) {
                       print(snapshot.error);
 
-                      Future.delayed(Duration.zero,
-                          () => Router.gotoNamed(Routes.HOME, context, clearStack: true));
+                      Future.delayed(
+                          Duration.zero,
+                          () => Router.gotoNamed(Routes.HOME, context,
+                              clearStack: true));
 //                      return Center(
 //                        child: Text(
 //                            'Error fetching data, please check your network'),

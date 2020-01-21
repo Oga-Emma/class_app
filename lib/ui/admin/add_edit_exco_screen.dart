@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/exco_dto.dart';
 import 'package:class_app/service/exco_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/fixed_dropdown.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
 
 class AddEditExco extends StatefulWidget {
   AddEditExco(this.exco);
@@ -43,8 +45,10 @@ class _AddEditExcoState extends State<AddEditExco> with UISnackBarProvider {
     super.initState();
   }
 
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(title: Text("Exco Details", textAlign: TextAlign.center)),
@@ -284,7 +288,7 @@ class _AddEditExcoState extends State<AddEditExco> with UISnackBarProvider {
         }
       }
 
-      ExcoDAO.saveExco(widget.exco, (success){
+      ExcoDAO.saveExco(appState.appInfo, widget.exco, (success){
         if(success){
           showInSnackBar("Changes saved");
           Future.delayed(Duration(seconds: 2), () => Navigator.pop(context));

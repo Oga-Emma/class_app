@@ -1,3 +1,4 @@
+import 'package:class_app/ui/admin/admin_screen.dart';
 import 'package:class_app/ui/auth/login_screen.dart';
 import 'package:class_app/ui/auth/signup_screen.dart';
 import 'package:class_app/ui/home_screen.dart';
@@ -22,6 +23,7 @@ class Routes {
   static const String EDIT_PROFILE = "/edit_profile";
   static const String MY_STORE = "/my_store";
   static const String NOTIFICATION = "/notification";
+  static const String ADMIN = "/admin";
 
   static const String MY_REAL_ESTATE = "/my_real_estates";
   static const String SETTINGS = "/settings";
@@ -34,5 +36,6 @@ class Routes {
         SCHOOL_SELECT: (BuildContext context) => InitialSettingsScreen(),
         FETCH_DATA: (BuildContext context) => FetchDataScreen(),
         EDIT_PROFILE: (BuildContext context) => ProfileSetupPage(),
+        ADMIN: (BuildContext context) => AdminScreen(),
       };
 }

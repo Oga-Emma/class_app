@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     appState = Provider.of<AppStateProvider>(context);
     if (_widgetOptions.isEmpty) {
       _widgetOptions = [
-        CalendarScreen(),
+        CalendarScreen(appState),
         Dashboard(() {
           setState(() {
             _selectedIndex = 0;

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/service/event_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/admin/select_course_dialog.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/fixed_dropdown.dart';
@@ -14,6 +15,7 @@ import 'package:class_app/ui/utils/validators.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AddEditEvent extends StatefulWidget {
   AddEditEvent(this.event);
@@ -54,9 +56,10 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
     dateController.dispose();
     super.dispose();
   }
-
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(title: Text("Event Details", textAlign: TextAlign.center)),
@@ -254,7 +257,7 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
 //      print(widget.event.toMap());
       showLoadingSnackBar();
 
-      EventDAO.savEvent(widget.event, selectedCourse, (success) {
+      EventDAO.savEvent(appState.appInfo, widget.event, selectedCourse, (success) {
         if (success) {
           showInSnackBar("Changes saved");
           Future.delayed(Duration(seconds: 2), () => Navigator.pop(context));

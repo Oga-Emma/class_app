@@ -5,6 +5,7 @@ import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/event_dao.dart';
 import 'package:class_app/service/lecture_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/calendar/calendar_fixed.dart';
 import 'package:class_app/ui/list_items/calendar_events_list_item.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
@@ -12,9 +13,13 @@ import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CalendarScreen extends StatefulWidget {
+  CalendarScreen(this.appState);
+  AppStateProvider appState;
+
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
 }
@@ -55,6 +60,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   void initState() {
+    appState = widget.appState;
     fetchData();
     super.initState();
   }
@@ -65,8 +71,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   var _events = <DateTime, List<Map<String, dynamic>>>{};
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
 //    print("Selected day = ${_selectedDate.toString()}");
 //    print(_events);
 
@@ -290,7 +298,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Observable<EventLectures> fetchDataStream;
   void fetchData() {
     fetchDataStream = Observable.combineLatest2(
-        LectureDAO.fetchAllLectures(), EventDAO.fetchAllEvents(),
+        LectureDAO.fetchAllLectures(appState.appInfo),
+        EventDAO.fetchAllEvents(appState.appInfo),
         (QuerySnapshot lecturesSnapshot, QuerySnapshot eventsSnapshot) {
       print("Fetching done");
 

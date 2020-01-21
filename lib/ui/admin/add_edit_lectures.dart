@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/lecture_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/admin/select_course_dialog.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/fixed_dropdown.dart';
@@ -15,6 +16,7 @@ import 'package:class_app/ui/utils/validators.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AddEditLectures extends StatefulWidget {
   AddEditLectures(this.lecture);
@@ -61,8 +63,10 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
     super.dispose();
   }
 
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -222,7 +226,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
       _formKey.currentState.save();
 
       showLoadingSnackBar();
-      LectureDAO.saveLecture(widget.lecture, selectedCourse, (success){
+      LectureDAO.saveLecture(appState.appInfo, widget.lecture, selectedCourse, (success){
         if(success){
           showInSnackBar("Changes saved");
           if(mounted) {

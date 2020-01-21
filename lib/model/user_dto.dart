@@ -7,8 +7,7 @@ class UserDTO {
   String gender = "";
   String dateOfBirth = "";
   bool isAdmin;
-  bool isSuperAdmin;
-  var adminPrivilages;
+  AdminDTO admin;
 
   bool get noProfile => id == null || id.isEmpty;
   UserDTO();
@@ -20,8 +19,11 @@ class UserDTO {
     phoneNumber = data['phoneNumber'];
     gender = data['gender'];
     dateOfBirth = data['dateOfBirth'];
-    isSuperAdmin = data['isSuperAdmin'] ?? false;
     isAdmin = data['isAdmin'] ?? false;
+
+    if (isAdmin) {
+      admin = AdminDTO.fromMap(data['admin'] ?? {});
+    }
   }
 
   String get fullName => firstName + " " + lastName;
@@ -36,5 +38,25 @@ class UserDTO {
       'gender': gender,
       'dateOfBirth': dateOfBirth
     };
+  }
+}
+
+class AdminDTO {
+  String department;
+  bool course;
+  bool exco;
+  bool forum;
+  bool lecture;
+  AdminDTO();
+  AdminDTO.fromMap(Map<dynamic, dynamic> data) {
+    department = data['department'];
+
+    Map<dynamic, dynamic> privilages = data['privilages'];
+    if (privilages != null) {
+      course = privilages['course'] ?? false;
+      exco = privilages['exco'] ?? false;
+      forum = privilages['forum'] ?? false;
+      lecture = privilages['lecture'] ?? false;
+    }
   }
 }

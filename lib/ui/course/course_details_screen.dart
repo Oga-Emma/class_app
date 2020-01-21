@@ -2,6 +2,7 @@ import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/course_dao.dart';
 import 'package:class_app/service/lecture_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/lecture/lecture_details_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
@@ -9,6 +10,7 @@ import 'package:class_app/ui/utils/helper_methods.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CourseDetailsScreen extends StatefulWidget {
   CourseDetailsScreen({this.courseCode});
@@ -21,9 +23,10 @@ class CourseDetailsScreen extends StatefulWidget {
 
 class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
   var selected = 0;
-
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     var selectedDecoration = BoxDecoration(
         color: ColorUtils.primaryColor,
         borderRadius: BorderRadius.circular(24.0));
@@ -41,7 +44,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
       ),
       backgroundColor: Colors.white,
       body: FutureBuilder<QuerySnapshot>(
-          future: CourseDAO.getCourse(widget.courseCode),
+          future: CourseDAO.getCourse(appState.appInfo, widget.courseCode),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.documents.isEmpty) {
@@ -273,7 +276,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
     return Container(
         alignment: Alignment.topLeft,
         child: StreamBuilder<QuerySnapshot>(
-            stream: LectureDAO.fetchAllCourseLectures(course.id),
+            stream: LectureDAO.fetchAllCourseLectures(appState.appInfo, course.id),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
 //          print(snapshot.data.documents);

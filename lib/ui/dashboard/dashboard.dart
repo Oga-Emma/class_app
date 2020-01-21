@@ -5,6 +5,7 @@ import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/event_dao.dart';
 import 'package:class_app/service/lecture_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/admin/admin_screen.dart';
 import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/today.dart';
@@ -19,6 +20,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'class_excos_screen.dart';
 import 'courses.dart';
@@ -47,8 +49,10 @@ class _DashboardState extends State<Dashboard> {
   var todayLectures = <LectureDTO>[];
   var checked = false;
 
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     refresh();
     return Scaffold(
         appBar: AppBar(
@@ -58,7 +62,7 @@ class _DashboardState extends State<Dashboard> {
 //            print(details.velocity);
 
                   if (details.primaryVelocity > 500) {
-                    showPasswordDialog();
+//                    showPasswordDialog();
                   }
 //            print("Drag happened");
 //            showPasswordDialog();
@@ -138,8 +142,8 @@ class _DashboardState extends State<Dashboard> {
 
   var today = DateTime.now();
   refresh() {
-    lectureStream = LectureDAO.fetchLectures(today.weekday);
-    eventStream = EventDAO.queryEventsByDate(dateFormat.format(today));
+    lectureStream = LectureDAO.fetchLectures(appState.appInfo, today.weekday);
+    eventStream = EventDAO.queryEventsByDate(appState.appInfo, dateFormat.format(today));
   }
 
   Widget category(title, color, icon, {Function() onTap, int total = 0}) {
