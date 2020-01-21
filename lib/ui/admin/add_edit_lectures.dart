@@ -148,7 +148,6 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
                 children: <Widget>[
                   Expanded(
                     child: STimePicker(
-                      InputType.time,
                       controller: startTime,
                       label: "TIME START",
                       onChanged: (dt) {
@@ -162,7 +161,6 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
                   SizedBox(width: 16.0),
                   Expanded(
                     child: STimePicker(
-                      InputType.time,
                       controller: endTime,
                       label: "TIME END",
                       onChanged: (dt) {

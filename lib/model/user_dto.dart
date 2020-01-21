@@ -1,5 +1,6 @@
 class UserDTO {
   String id = "";
+  String profilePicture = "";
   String firstName = "";
   String lastName = "";
   String email = "";
@@ -13,6 +14,7 @@ class UserDTO {
   UserDTO();
   UserDTO.fromMap(Map<String, dynamic> data) {
     id = data['id'];
+    profilePicture = data['profilePicture'];
     firstName = data['firstName'];
     lastName = data['lastName'];
     email = data['email'];
@@ -31,6 +33,7 @@ class UserDTO {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'profilePicture': profilePicture,
       'firstName': firstName,
       'lastName': lastName,
       'email': email,

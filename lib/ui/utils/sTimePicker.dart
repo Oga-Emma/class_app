@@ -1,39 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 import 'color_utils.dart';
 
 class STimePicker extends StatelessWidget {
   STimePicker(
-      this.inputType,
       {this.label,
-        this.validator,
-        this.onChanged,
-        this.textInputType,
-        this.controller,
-        this.initialValue});
+      this.validator,
+      this.onChanged,
+      this.textInputType,
+      this.controller,
+      this.initialValue});
 
-InputType inputType;
-String label;
-Function(String) validator;
-Function(DateTime) onChanged;
-TextInputType textInputType;
-TextEditingController controller;
-String initialValue;
+  String label;
+  Function(String) validator;
+  Function(DateTime) onChanged;
+  TextInputType textInputType;
+  TextEditingController controller;
+  String initialValue;
+//
+//  final formats = {
+//    InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
+//    InputType.date: DateFormat('yyyy-MM-dd'),
+//    InputType.time: DateFormat("HH:mm"),
+//  };
 
-  final formats = {
-    InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
-    InputType.date: DateFormat('yyyy-MM-dd'),
-    InputType.time: DateFormat("HH:mm"),
-  };
+  final format = DateFormat("HH:mm");
 
   @override
   Widget build(BuildContext context) {
-    return DateTimePickerFormField(
-      inputType: inputType,
-      format: formats[inputType],
-      editable: false,
+    return DateTimeField(
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
@@ -56,12 +53,23 @@ String initialValue;
 //              labelText: 'Date/Time',
 //              hasFloatingPlaceholder: false),
       onChanged: (dt) {
-        if(dt != null) {
+        if (dt != null) {
           onChanged(dt);
         }
 //        onSaved("${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}");
       },
+      onShowPicker: (BuildContext context, DateTime currentValue) async {
+        final time = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+        );
+
+        if (time == null) {
+          return null;
+        }
+        return DateTimeField.convert(time);
+      },
+      format: format,
     );
   }
-
 }

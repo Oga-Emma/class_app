@@ -1,13 +1,20 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:class_app/model/user_dto.dart';
 import 'package:class_app/service/user_dao.dart';
 import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/helper_widgets/empty_space.dart';
+import 'package:class_app/ui/helper_widgets/toast_helper.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/error_handler.dart';
 import 'package:class_app/ui/utils/ui_snackbar.dart';
 import 'package:class_app/ui/utils/validators.dart';
+import 'package:class_app/ui/widgets/profile_avatar.dart';
+import 'package:class_app/ui/widgets/upload_image.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileSetupPage extends StatefulWidget {
@@ -126,7 +133,15 @@ class _ProfileSetupPageState extends State<ProfileSetupPage>
         ));
   }
 
-  void selectPicture() {}
+  File selectedPicture;
+  Future<void> selectPicture() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        selectedPicture = image;
+      });
+    }
+  }
 
   profilePicture() {
     return Container(
@@ -135,9 +150,10 @@ class _ProfileSetupPageState extends State<ProfileSetupPage>
       child: Center(
         child: Stack(
           children: <Widget>[
-            CircleAvatar(
+            ProfileAvatar(
               radius: 70,
-              backgroundColor: Colors.white,
+              url: user.profilePicture,
+              file: selectedPicture,
             ),
             Positioned(
               right: 0,
@@ -168,6 +184,22 @@ class _ProfileSetupPageState extends State<ProfileSetupPage>
 
       try {
         user..id = appState.currentUser.uid;
+
+        if (selectedPicture != null) {
+          String url = await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => UploadImage(
+                    selectedPicture,
+                    "users/${user.id}",
+                    "Uploading profile picture",
+                  ));
+          if (url != null && url.isNotEmpty) {
+            user..profilePicture = url;
+          } else {
+            showErrorToast('image upload failed');
+          }
+        }
         await UserDAO.saveUser(user);
         appState.user = user;
 

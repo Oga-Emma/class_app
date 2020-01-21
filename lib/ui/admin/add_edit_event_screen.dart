@@ -174,7 +174,6 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
                 children: <Widget>[
                   Expanded(
                     child: STimePicker(
-                      InputType.date,
                       controller: dateController,
                       label: "DATE",
                       onChanged: (dt) {
@@ -193,7 +192,6 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
                   SizedBox(width: 16.0),
                   Expanded(
                     child: STimePicker(
-                      InputType.time,
                       controller: timeController,
                       label: "TIME",
                       onChanged: (dt) {

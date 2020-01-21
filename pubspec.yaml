@@ -22,7 +22,7 @@ dependencies:
   fancy_bottom_navigation: ^0.3.2
   font_awesome_flutter: ^8.4.0
   material_design_icons_flutter: ^3.1.3493
-  datetime_picker_formfield: ^0.1.8
+  datetime_picker_formfield: ^1.0.0
 
   cloud_firestore: ^0.12.6
   url_launcher: ^5.0.3

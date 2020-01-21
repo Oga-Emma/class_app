@@ -8,6 +8,7 @@ import 'package:class_app/ui/profile/no_profile_page.dart';
 import 'package:class_app/ui/profile/profile_setup_page.dart';
 import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
+import 'package:class_app/ui/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -65,9 +66,9 @@ class ProfilePage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: <Widget>[
-                CircleAvatar(
+                ProfileAvatar(
                   radius: 32,
-                  backgroundColor: Colors.grey,
+                  url: appState.user.profilePicture,
                 ),
                 EmptySpace(multiple: 2),
                 Expanded(
@@ -108,7 +109,7 @@ class ProfilePage extends StatelessWidget {
             ListTile(
               title: Text("Admin Console"),
               trailing: Icon(Icons.verified_user),
-              onTap: (){
+              onTap: () {
                 Router.gotoNamed(Routes.ADMIN, context);
               },
             )
@@ -123,10 +124,10 @@ class ProfilePage extends StatelessWidget {
             title: Text("Notifications"),
             trailing: Icon(Icons.chevron_right),
           ),
-          ListTile(
-            title: Text("Downloads"),
-            trailing: Icon(Icons.chevron_right),
-          ),
+//          ListTile(
+//            title: Text("Downloads"),
+//            trailing: Icon(Icons.chevron_right),
+//          ),
         ]),
         categoryGroup([
           ListTile(
@@ -144,8 +145,11 @@ class ProfilePage extends StatelessWidget {
               Router.gotoNamed(Routes.HOME, context, clearStack: true);
               appState.logout();
             },
-            title: Text("Logout"),
-            trailing: Icon(Icons.exit_to_app),
+            title: Text(
+              "Logout",
+              style: TextStyle(color: Colors.red),
+            ),
+            trailing: Icon(Icons.exit_to_app, color: Colors.red),
           ),
         ])
       ],
