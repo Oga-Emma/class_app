@@ -51,7 +51,7 @@ class CalendarEventListItem extends StatelessWidget {
                                 dateEvent.timeStamp),
                         emptySpace(),
                         Text(
-                          "${isLecture ? '${(dateEvent as LectureDTO).startTime}\n${(dateEvent as LectureDTO).startTime}' : (dateEvent as EventDTO).time}",
+                          "${isLecture ? '${(dateEvent as LectureDTO).startTime}\n${(dateEvent as LectureDTO).endTime}' : (dateEvent as EventDTO).time}",
                           style: Theme.of(context).textTheme.caption,
                         ),
                         emptySpace(multiple: 2),
@@ -65,10 +65,8 @@ class CalendarEventListItem extends StatelessWidget {
                                   .toUpperCase(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline
-                                  .copyWith(fontSize: 16),
+                              style:
+                                  Theme.of(context).textTheme.body1.copyWith(),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 8),
@@ -80,7 +78,7 @@ class CalendarEventListItem extends StatelessWidget {
                                 "Venue: ${isLecture ? '${(dateEvent as LectureDTO).venue}' : (dateEvent as EventDTO).venue}",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.body2),
+                                style: Theme.of(context).textTheme.caption),
                           ],
                         )),
                       ],

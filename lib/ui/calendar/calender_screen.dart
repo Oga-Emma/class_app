@@ -333,8 +333,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
         /////////////////MONDAY THIS WEEK WEEK/////////////////////
         monDay = DateTime(monDay.year, monDay.month, monDay.day);
 
-        print("TODAY => ${_today.toString()}");
-        print("MONDAY => ${monDay.toString()}");
+//        print("TODAY => ${_today.toString()}");
+//        print("MONDAY => ${monDay.toString()}");
 
         lectures.forEach((lec) => lec.timeStamp =
             monDay.add(Duration(days: lec.day - 1)).millisecondsSinceEpoch);
@@ -348,11 +348,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
               'isDone': ev.timeStamp < _today.millisecondsSinceEpoch
             }));
 
-        print("after week 1 => $_events");
+//        print("after week 1 => $_events");
 
         /////////////////MONDAY NEXT WEEK/////////////////////
         var monDayNext = monDay.add(Duration(days: 7));
-        print("MONDAY NEXT => ${monDay.toString()}");
+//        print("MONDAY NEXT => ${monDay.toString()}");
 
         lectures2.forEach((lec) => lec.timeStamp =
             monDayNext.add(Duration(days: lec.day - 1)).millisecondsSinceEpoch);

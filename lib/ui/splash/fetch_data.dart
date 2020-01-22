@@ -81,7 +81,9 @@ class _FetchDataScreenState extends State<FetchDataScreen> {
   }
 
   void gotoHome() {
-    Future.delayed(Duration.zero,
-        () => Router.gotoNamed(Routes.HOME, context, clearStack: true));
+    if (mounted) {
+      Future.delayed(Duration.zero,
+          () => Router.gotoNamed(Routes.HOME, context, clearStack: true));
+    }
   }
 }

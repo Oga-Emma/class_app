@@ -1,6 +1,7 @@
 import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/dashboard/courses.dart';
 import 'package:class_app/ui/dashboard/dashboard.dart';
+import 'package:class_app/ui/info_screen/info_screen.dart';
 import 'package:class_app/ui/profile/profile_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //  static var unselectedColor = ColorUtils.primaryColor.withOpacity(0.7);
   static var unselectedColor = Colors.grey[400];
-  static var size = 24.0;
-  static var selectedSize = 24.0;
+  static var size = 20.0;
+  static var selectedSize = 20.0;
 
   var calendar = SvgPicture.asset("assets/svg/ic_calendar.svg",
       color: unselectedColor, width: size, height: size);
@@ -34,9 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
       width: selectedSize,
       height: selectedSize);
 
-  var hangout = SvgPicture.asset("assets/svg/ic_hangout.svg",
+  var info = SvgPicture.asset("assets/svg/nav_info.svg",
       color: unselectedColor, width: size, height: size);
-  var hangout_selected = SvgPicture.asset("assets/svg/ic_hangout.svg",
+  var info_selected = SvgPicture.asset("assets/svg/nav_info_selected.svg",
       width: selectedSize, height: selectedSize);
 
   var courses = SvgPicture.asset("assets/svg/nav_courses.svg",
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex = 0;
           });
         }),
-//        HangoutScreen(),
+        InfoScreen(),
         CoursesScreen(),
         ProfileScreen()
       ];
@@ -79,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
             type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.white,
             unselectedFontSize: 11,
-            selectedFontSize: 12,
+            selectedFontSize: 11,
             selectedItemColor: ColorUtils.primaryColor,
             unselectedItemColor: unselectedColor,
             items: [
@@ -91,10 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: dashboard,
                   activeIcon: dashboard_selected,
                   title: Text("Dashboard")),
-//              BottomNavigationBarItem(
-//                  icon: hangout,
-//                  activeIcon: hangout_selected,
-//                  title: Text("Hangout")),
+              BottomNavigationBarItem(
+                  icon: info, activeIcon: info_selected, title: Text("Info")),
               BottomNavigationBarItem(
                   icon: courses,
                   activeIcon: courses_selected,

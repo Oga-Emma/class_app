@@ -73,6 +73,12 @@ class _LoginScreenState extends State<LoginScreen>
                       },
                       validator: Validators.validateSimplePassword()),
                   EmptySpace(multiple: 5),
+                  InkWell(
+                      onTap: () =>
+                          Router.gotoNamed(Routes.PASSWORD_RESET, context),
+                      child: Text("Forgot your password?",
+                          style: TextStyle(color: ColorUtils.primaryColor))),
+                  EmptySpace(multiple: 5),
                   CAButton(title: "Sign In", onPressed: signIn),
                   EmptySpace(multiple: 2),
                   Wrap(
