@@ -44,6 +44,8 @@ dependencies:
 
   bubble_tab_indicator: "^0.1.4"
 
+  file_picker: ^1.4.3+2
+  multi_image_picker: ^4.6.1
 
   shared_preferences: ^0.5.6
   provider: ^4.0.1
