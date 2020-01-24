@@ -22,6 +22,13 @@ class AppStateProvider extends ChangeNotifier {
   FirebaseUser get currentUser => _currentuser;
   UserDTO get user => _user;
 
+  get isSuperAdmin =>
+      this._user != null &&
+      (this._user.isSuperAdmin ||
+          (this._user.admin.isMainAdmin &&
+              this._user.admin.department == department.departmentCode &&
+              this._user.admin.entryYear == department.entryYear));
+
   set appInfo(AppInfoDTO appInfo) {
     _appInfo = appInfo;
 

@@ -11,14 +11,18 @@ class CourseDAO {
     var batch = Firestore.instance.batch();
 
     course.lectureIds.forEach((id) => batch.updateData(
-        AppInfoDAO.getDocumentPath(appInfo).collection("classes").document(id),
+        AppInfoDAO.getFullDocumentPath(appInfo)
+            .collection("classes")
+            .document(id),
         {"course": course.toMap()}));
     course.eventIds.forEach((id) => batch.updateData(
-        AppInfoDAO.getDocumentPath(appInfo).collection("events").document(id),
+        AppInfoDAO.getFullDocumentPath(appInfo)
+            .collection("events")
+            .document(id),
         {"course": course.toMap()}));
 
     batch.setData(
-        AppInfoDAO.getDocumentPath(appInfo)
+        AppInfoDAO.getFullDocumentPath(appInfo)
             .collection("courses")
             .document(course.id),
         course.toMap(),
@@ -34,7 +38,7 @@ class CourseDAO {
 
   static Future<QuerySnapshot> getCourse(
       AppInfoDTO appInfo, String courseCode) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("courses")
         .where("code", isEqualTo: courseCode)
         .limit(1)
@@ -45,7 +49,7 @@ class CourseDAO {
       Function(bool success) callback) {
     course.deleted = delete;
 
-    AppInfoDAO.getDocumentPath(appInfo)
+    AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("courses")
         .document(course.id)
         .setData(course.toMap())
@@ -58,14 +62,14 @@ class CourseDAO {
   }
 
   static Stream<QuerySnapshot> fetchAllCourses(AppInfoDTO appInfo) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("courses")
         .snapshots();
   }
 
   static Future<DocumentSnapshot> getCourseById(
       AppInfoDTO appInfo, String courseId) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("courses")
         .document(courseId)
         .get();

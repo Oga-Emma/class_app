@@ -41,7 +41,19 @@ class AppInfoDAO {
     return firestore.collection("excos").snapshots();
   }
 
-  static DocumentReference getDocumentPath(AppInfoDTO appInfo) {
+  static DocumentReference getCoursePath(AppInfoDTO appInfo) {
+    var firestore = Firestore.instance;
+
+//    print(appInfo.school.id);
+//    print(
+//        '${appInfo.department.departmentCode}-${appInfo.department.entryYear}');
+
+    return firestore
+        .collection('schools')
+        .document(appInfo.school.id);
+  }
+
+  static DocumentReference getFullDocumentPath(AppInfoDTO appInfo) {
     var firestore = Firestore.instance;
 
 //    print(appInfo.school.id);

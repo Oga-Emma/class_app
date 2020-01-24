@@ -276,12 +276,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
         children: <Widget>[
           Image.asset(
             "assets/img/no_event.png",
-            height: 120,
-            width: 120,
+            height: 100,
+            width: 100,
           ),
           gap,
-          Text("No event today"),
-          Text("Any new event will appear here"),
+          Text("No event today", style: Theme.of(context).textTheme.title),
+          Text("Bew events will appear here",
+              style: Theme.of(context).textTheme.caption),
           gap2x
         ],
       ),

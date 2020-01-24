@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/state/preference_state_provider.dart';
 import 'package:class_app/ui/dashboard/dashboard.dart';
@@ -13,8 +14,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return BotToastInit(
+        child: MultiProvider(
       child: MaterialApp(
+        navigatorObservers: [BotToastNavigatorObserver()],
         title: 'Class App',
         theme: ThemeData(
             // This is the theme of your application.
@@ -41,6 +44,6 @@ class MyApp extends StatelessWidget {
           create: (context) => PreferenceStateProvider(),
         ),
       ],
-    );
+    ));
   }
 }

@@ -1,11 +1,16 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:class_app/service/post_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/info_screen/new_post_screen.dart';
 import 'package:class_app/ui/info_screen/post_details_screen.dart';
 import 'package:class_app/ui/info_screen/recent_posts.dart';
 import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 class InfoScreen extends StatefulWidget {
   @override
@@ -13,25 +18,29 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
 //          brightness: Brightness.light,
           title: Text("Information", textAlign: TextAlign.center),
           elevation: 0.0,
           actions: <Widget>[
-            FlatButton.icon(
-                onPressed: () {
-                  Router.gotoWidget(NewPostScreen(), context);
-                },
-                icon: Icon(Icons.add, color: ColorUtils.primaryColor),
-                label: Text(
-                  "New Post",
-                  style: TextStyle(color: Colors.white),
-                ))
+            Visibility(
+              visible: appState.isSuperAdmin,
+              child: FlatButton(
+                  onPressed: () {
+                    Router.gotoWidget(NewEditPostScreen(), context);
+                  },
+                  child: Text(
+                    "New Post",
+                    style: TextStyle(color: Colors.white),
+                  )),
+            )
           ],
         ),
         body: Container(
@@ -44,21 +53,22 @@ class _InfoScreenState extends State<InfoScreen> {
                       unselectedLabelColor: Colors.grey[600],
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicator: BubbleTabIndicator(
-                        indicatorHeight: 30.0,
+                        indicatorRadius: 4.0,
+                        indicatorHeight: 36.0,
                         indicatorColor: ColorUtils.primaryColor,
                         tabBarIndicatorSize: TabBarIndicatorSize.tab,
                       ),
                       tabs: [
-                        Tab(text: "FEATURED"),
-                        Tab(text: "TOP POST"),
                         Tab(text: "RECENT"),
+                        Tab(text: "TRENDING"),
+//                        Tab(text: "CATEGORY"),
                       ]),
                 ),
                 Expanded(
                   child: TabBarView(children: [
-                    PostsList(),
-                    PostsList(),
-                    PostsList(),
+                    RecentPosts(),
+                    TrendingPosts()
+//                    PostsList(),
                   ]),
                 ),
               ],
@@ -119,5 +129,46 @@ class _InfoScreenState extends State<InfoScreen> {
         ),
       ),
     );
+  }
+}
+
+class RecentPosts extends StatelessWidget {
+  AppStateProvider appState;
+  @override
+  Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
+    return StreamBuilder<QuerySnapshot>(
+        stream: Observable.fromFuture(PostDAO.getRecentPosts(appState.appInfo)),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return PostsList(snapshot.data.documents);
+          }
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return Center(child: Text("Error fetching data"));
+          }
+          return Center(child: CircularProgressIndicator());
+        });
+  }
+}
+
+class TrendingPosts extends StatelessWidget {
+  AppStateProvider appState;
+  @override
+  Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
+    return StreamBuilder<QuerySnapshot>(
+        stream:
+            Observable.fromFuture(PostDAO.getTrendingPosts(appState.appInfo)),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return PostsList(snapshot.data.documents);
+          }
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return Center(child: Text("Error fetching data"));
+          }
+          return Center(child: CircularProgressIndicator());
+        });
   }
 }

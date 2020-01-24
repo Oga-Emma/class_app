@@ -34,7 +34,8 @@ class _FetchDataScreenState extends State<FetchDataScreen> {
           ? Center(child: CircularProgressIndicator())
           : appState.currentUser == null
               ? Center(
-                  child: Text('Error fetching data, please check your network'),
+                  child: SizedBox(),
+//                  child: Text('Error fetching data, please check your network'),
                 )
               : StreamBuilder<UserDTO>(
                   initialData: appState.user,
@@ -72,9 +73,11 @@ class _FetchDataScreenState extends State<FetchDataScreen> {
 
     if (user != null) {
       appState.currentUser = user;
-      setState(() {
-        _checkingAuth = false;
-      });
+      Future.delayed(
+          Duration.zero,
+          () => setState(() {
+                _checkingAuth = false;
+              }));
     } else {
       gotoHome();
     }

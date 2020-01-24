@@ -12,7 +12,7 @@ class EventDAO {
       EventDTO event, CourseDTO course, Function(bool success) callback) {
     var firestore = Firestore.instance;
 
-    var eventRef = AppInfoDAO.getDocumentPath(appInfo).collection("events").document(event.id);
+    var eventRef = AppInfoDAO.getFullDocumentPath(appInfo).collection("events").document(event.id);
 
     var batch = firestore.batch();
     batch.setData(eventRef, event.toMap(), merge: true);
@@ -37,18 +37,18 @@ class EventDAO {
   }
 
   static Stream<QuerySnapshot> fetchAllEvents(AppInfoDTO appInfo) {
-    return AppInfoDAO.getDocumentPath(appInfo).collection("events").snapshots();
+    return AppInfoDAO.getFullDocumentPath(appInfo).collection("events").snapshots();
   }
 
   static Stream<QuerySnapshot> queryEventsByType(AppInfoDTO appInfo, String type) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("events")
         .where("type", isEqualTo: type)
         .snapshots();
   }
 
   static Stream<QuerySnapshot> queryEventsByDate(AppInfoDTO appInfo, String date) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("events")
         .where("date", isEqualTo: date)
         .snapshots();
@@ -57,7 +57,7 @@ class EventDAO {
   static void deleteEvent(AppInfoDTO appInfo, 
       EventDTO event, Function(bool success) callback) {
 
-    AppInfoDAO.getDocumentPath(appInfo)
+    AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("events")
         .document(event.id)
     .delete()

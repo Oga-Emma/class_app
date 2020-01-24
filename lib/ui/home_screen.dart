@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _widgetOptions = [];
 
 //  static var unselectedColor = ColorUtils.primaryColor.withOpacity(0.7);
-  static var unselectedColor = Colors.grey[400];
+  static var unselectedColor = Colors.grey[600];
   static var size = 20.0;
   static var selectedSize = 20.0;
 

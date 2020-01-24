@@ -1,17 +1,21 @@
 import 'dart:async';
 
+import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/model/date_event.dart';
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/event_dao.dart';
 import 'package:class_app/service/lecture_dao.dart';
 import 'package:class_app/state/app_state_provider.dart';
+import 'package:class_app/ui/admin/add_edit_course_screen.dart';
+import 'package:class_app/ui/admin/add_edit_lectures.dart';
 import 'package:class_app/ui/admin/admin_screen.dart';
 import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/today.dart';
 import 'package:class_app/ui/event/event_details_screen.dart';
 import 'package:class_app/ui/lecture/lecture_details_screen.dart';
 import 'package:class_app/ui/list_items/combined_event_preview_list_item.dart';
+import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
@@ -21,6 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import 'class_excos_screen.dart';
 import 'courses.dart';
@@ -56,22 +61,37 @@ class _DashboardState extends State<Dashboard> {
     refresh();
     return Scaffold(
         appBar: AppBar(
-            title: GestureDetector(
-                onHorizontalDragEnd: (details) {
+          title: GestureDetector(
+              onHorizontalDragEnd: (details) {
 //            print(details.primaryVelocity);
 //            print(details.velocity);
 
-                  if (details.primaryVelocity > 500) {
+                if (details.primaryVelocity > 500) {
 //                    showPasswordDialog();
-                  }
+                }
 //            print("Drag happened");
 //            showPasswordDialog();
-                },
-                onDoubleTap: () {
-                  showPasswordDialog();
-                },
-                child: Text("Dashboard", textAlign: TextAlign.center)),
-            elevation: 0.0),
+              },
+              onDoubleTap: () {
+                showPasswordDialog();
+              },
+              child: Text("Dashboard", textAlign: TextAlign.center)),
+          elevation: 0.0,
+          actions: <Widget>[
+            Visibility(
+              visible: appState.isSuperAdmin,
+              child: FlatButton(
+                  onPressed: () {
+                    Router.gotoWidget(
+                        AddEditLectures(LectureDTO.withId(Uuid().v1())), context);
+                  },
+                  child: Text(
+                    "New Event",
+                    style: TextStyle(color: Colors.white),
+                  )),
+            )
+          ],
+        ),
         body: StreamBuilder<QuerySnapshot>(
             stream: lectureStream,
             builder: (context, lecturesStream) {
@@ -143,7 +163,8 @@ class _DashboardState extends State<Dashboard> {
   var today = DateTime.now();
   refresh() {
     lectureStream = LectureDAO.fetchLectures(appState.appInfo, today.weekday);
-    eventStream = EventDAO.queryEventsByDate(appState.appInfo, dateFormat.format(today));
+    eventStream =
+        EventDAO.queryEventsByDate(appState.appInfo, dateFormat.format(today));
   }
 
   Widget category(title, color, icon, {Function() onTap, int total = 0}) {

@@ -13,7 +13,7 @@ class LectureDAO {
     var firestore = Firestore.instance;
     var batch = firestore.batch();
 
-    var lectureRef = AppInfoDAO.getDocumentPath(appInfo)
+    var lectureRef = AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("classes")
         .document(lecture.id);
 
@@ -21,7 +21,7 @@ class LectureDAO {
       var lectureIds = Set.from(course.lectureIds);
       lectureIds.add(lecture.id);
 
-      var courseRef = AppInfoDAO.getDocumentPath(appInfo)
+      var courseRef = AppInfoDAO.getFullDocumentPath(appInfo)
           .collection("courses")
           .document(lecture.course.id);
 
@@ -40,14 +40,14 @@ class LectureDAO {
   }
 
   static Stream<QuerySnapshot> fetchLectures(AppInfoDTO appInfo, int day) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("classes")
         .where("day", isEqualTo: day)
         .snapshots();
   }
 
   static Stream<QuerySnapshot> fetchAllLectures(AppInfoDTO appInfo) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("classes")
         .snapshots();
   }
@@ -57,11 +57,11 @@ class LectureDAO {
     var firestore = Firestore.instance;
     var batch = firestore.batch();
 
-    var lectureRef = AppInfoDAO.getDocumentPath(appInfo)
+    var lectureRef = AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("classes")
         .document(lecture.id);
 
-    var courseRef = AppInfoDAO.getDocumentPath(appInfo)
+    var courseRef = AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("courses")
         .document(lecture.course.id);
 
@@ -77,7 +77,7 @@ class LectureDAO {
 
   static Stream<QuerySnapshot> fetchAllCourseLectures(
       AppInfoDTO appInfo, String courseId) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("classes")
         .where("course.id", isEqualTo: courseId)
         .snapshots();

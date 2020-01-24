@@ -9,7 +9,7 @@ import 'app_info_dao.dart';
 
 class ExcoDAO {
   static void saveExco(AppInfoDTO appInfo, ExcoDTO exco, Function(bool success) callback) {
-    AppInfoDAO.getDocumentPath(appInfo)
+    AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("excos")
         .document(exco.id)
         .setData(exco.toMap())
@@ -22,14 +22,14 @@ class ExcoDAO {
   }
 
   static Future<DocumentSnapshot> getExco(AppInfoDTO appInfo, String excoId) {
-    return AppInfoDAO.getDocumentPath(appInfo)
+    return AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("excos")
         .document(excoId)
         .get();
   }
 
   static void deleteExco(AppInfoDTO appInfo, String excoId, Function(bool success) callback) {
-    AppInfoDAO.getDocumentPath(appInfo)
+    AppInfoDAO.getFullDocumentPath(appInfo)
         .collection("excos")
         .document(excoId)
         .delete()
@@ -42,6 +42,6 @@ class ExcoDAO {
   }
 
   static Stream<QuerySnapshot> fetchAllExcos(AppInfoDTO appInfo) {
-    return AppInfoDAO.getDocumentPath(appInfo).collection("excos").snapshots();
+    return AppInfoDAO.getFullDocumentPath(appInfo).collection("excos").snapshots();
   }
 }

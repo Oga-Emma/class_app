@@ -1,17 +1,18 @@
 import 'dart:io';
+import 'package:class_app/ui/helper_widgets/empty_space.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
-
-import 'empty_space.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class UploadImage extends StatefulWidget {
   String bucket;
   String title;
   File file;
+  Asset asset;
 //  Function(String url, Error e) getUrl;
 
-  UploadImage(this.file, this.bucket, this.title);
+  UploadImage(this.file, this.bucket, this.title, {this.asset = null});
   @override
   _UploadImageState createState() => _UploadImageState();
 }
@@ -39,7 +40,7 @@ class _UploadImageState extends State<UploadImage> {
                   style: TextStyle(fontSize: 14),
                 ),
               ),
-              emptySpace(multiple: 2),
+              EmptySpace(multiple: 2),
               Text(
                 "${updateProgress.toStringAsFixed(1)}%",
                 style:
@@ -47,7 +48,7 @@ class _UploadImageState extends State<UploadImage> {
               ),
             ],
           ),
-          emptySpace(),
+          EmptySpace(),
           LinearProgressIndicator()
         ],
       ),
@@ -76,7 +77,16 @@ class _UploadImageState extends State<UploadImage> {
     storageReference = FirebaseStorage.instance.ref().child(widget.bucket);
 
     print("Uploading profile picture...");
-    uploadTask = storageReference.putFile(widget.file);
+
+    if (widget.asset != null) {
+      ByteData byteData = await widget.asset.getByteData();
+      List<int> imageData = byteData.buffer.asUint8List();
+      uploadTask = storageReference.putData(imageData);
+
+//      return await (await uploadTask.onComplete).ref.getDownloadURL();
+    } else {
+      uploadTask = storageReference.putFile(widget.file);
+    }
     uploadTask.events.listen((event) {
       var _progess = event.snapshot.bytesTransferred.toDouble() /
           event.snapshot.totalByteCount.toDouble();

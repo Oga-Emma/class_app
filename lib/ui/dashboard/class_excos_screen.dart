@@ -1,15 +1,20 @@
 import 'package:class_app/model/event_dto.dart';
 import 'package:class_app/model/exco_dto.dart';
 import 'package:class_app/service/event_dao.dart';
+import 'package:class_app/state/app_state_provider.dart';
+import 'package:class_app/ui/admin/add_edit_exco_screen.dart';
 import 'package:class_app/ui/event/event_details_screen.dart';
 import 'package:class_app/ui/exco/exco_user.dart';
 import 'package:class_app/ui/list_items/event_list_item_user.dart';
 import 'package:class_app/ui/list_items/exco_list_item.dart';
+import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ClassExcoScreen extends StatefulWidget {
   @override
@@ -19,28 +24,43 @@ class ClassExcoScreen extends StatefulWidget {
 class _ClassExcoScreenState extends State<ClassExcoScreen> {
   var selected = 0;
 
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
 
     var selectedDecoration = BoxDecoration(
         color: ColorUtils.primaryColor,
-        borderRadius: BorderRadius.circular(24.0)
-    );
-    var deselectedDecoration = BoxDecoration(
-    );
+        borderRadius: BorderRadius.circular(24.0));
+    var deselectedDecoration = BoxDecoration();
 
-    var selectedInputStyle = Theme.of(context).textTheme.title.copyWith(
-        color: Colors.white, fontSize: 14);
-    var deselectedInputStyle = Theme.of(context).textTheme.subtitle.copyWith(
-        fontSize: 12);
-
+    var selectedInputStyle = Theme.of(context)
+        .textTheme
+        .title
+        .copyWith(color: Colors.white, fontSize: 14);
+    var deselectedInputStyle =
+        Theme.of(context).textTheme.subtitle.copyWith(fontSize: 12);
 
     return Scaffold(
-      appBar: AppBar(
-          title: Text("Class Excos", textAlign: TextAlign.center),
-          elevation: 0.0),
-      body: Container(
-        margin: EdgeInsets.all(24.0),
+        appBar: AppBar(
+            title: Text("Class Excos", textAlign: TextAlign.center),
+            actions: <Widget>[
+              Visibility(
+                visible: appState.user.isSuperAdmin,
+                child: FlatButton(
+                    onPressed: () {
+                      Router.gotoWidget(
+                          AddEditExco(ExcoDTO.withId(Uuid().v1())), context);
+                    },
+                    child: Text(
+                      "New Exco",
+                      style: TextStyle(color: Colors.white),
+                    )),
+              )
+            ],
+            elevation: 0.0),
+        body: Container(
+          margin: EdgeInsets.all(24.0),
           child: Column(
             children: <Widget>[
               gap2x,
@@ -52,40 +72,51 @@ class _ClassExcoScreenState extends State<ClassExcoScreen> {
                   children: <Widget>[
                     Expanded(
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
                             selected = 0;
-                          });},
+                          });
+                        },
                         child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(8.0),
-                            child: Text("COURSE REPS", style: selected == 0 ? selectedInputStyle : deselectedInputStyle, ), decoration: selected == 0 ? selectedDecoration : deselectedDecoration),
+                            child: Text(
+                              "COURSE REPS",
+                              style: selected == 0
+                                  ? selectedInputStyle
+                                  : deselectedInputStyle,
+                            ),
+                            decoration: selected == 0
+                                ? selectedDecoration
+                                : deselectedDecoration),
                       ),
                     ),
                     Expanded(
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
                             selected = 1;
-                          });},
+                          });
+                        },
                         child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(8.0), child: Text("CLASS EXECUTIVE", style: selected == 1 ? selectedInputStyle : deselectedInputStyle),
-                            decoration: selected == 1 ? selectedDecoration : deselectedDecoration),
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("CLASS EXECUTIVE",
+                                style: selected == 1
+                                    ? selectedInputStyle
+                                    : deselectedInputStyle),
+                            decoration: selected == 1
+                                ? selectedDecoration
+                                : deselectedDecoration),
                       ),
                     )
                   ],
                 ),
               ),
-
               gap2x,
-              Expanded(
-                  child: ExcoUserScreen(excoList[selected])
-              )
+              Expanded(child: ExcoUserScreen(excoList[selected]))
             ],
           ),
-
-
 
           /*StreamBuilder<QuerySnapshot>(
             stream: EventDAO.queryEventsByType(eventType),
@@ -119,10 +150,6 @@ class _ClassExcoScreenState extends State<ClassExcoScreen> {
 
                 return Loading();
               })*/
-
-      )
-    );
-
-
+        ));
   }
 }

@@ -1,9 +1,14 @@
+import 'package:class_app/model/post_dto.dart';
 import 'package:class_app/ui/helper_widgets/empty_space.dart';
 import 'package:class_app/ui/info_screen/post_details_screen.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
+import 'package:class_app/ui/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
 
 class PostListItem extends StatelessWidget {
+  PostListItem(this.post);
+  PostDTO post;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,10 +34,11 @@ class PostListItem extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("EXAMS", style: TextStyle(fontSize: 12.0)),
+                          Text("${post.getCategory()}",
+                              style: TextStyle(fontSize: 12.0)),
                           EmptySpace(),
                           Text(
-                            'Update on CS8214 - Postponed to next week due to unforseen circumstances.',
+                            '${post.heading}',
                             style: Theme.of(context).textTheme.subtitle,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -40,7 +46,7 @@ class PostListItem extends StatelessWidget {
                           EmptySpace(),
                           Expanded(
                             child: Text(
-                              'Update on CS8214 - Postponed to next week due to unforseen circumstances.',
+                              '${post.content}',
                               style: TextStyle(fontSize: 12),
                               maxLines: 4,
                               overflow: TextOverflow.ellipsis,
@@ -65,9 +71,8 @@ class PostListItem extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: <Widget>[
-                        CircleAvatar(
-                          backgroundColor: Colors.grey[300],
-                          radius: 20,
+                        ProfileAvatar(
+                          url: post.user.profilePicture,
                         ),
                         EmptySpace(),
                         Expanded(
@@ -75,14 +80,14 @@ class PostListItem extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                'DanieLo',
+                                '${post.user.name}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .body1
                                     .copyWith(fontSize: 12),
                               ),
                               Text(
-                                'Today | 10:40 AM',
+                                '${post.dateModified.toDate()}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption
@@ -112,7 +117,7 @@ class PostListItem extends StatelessWidget {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        '10',
+                        '${post.commentCount}',
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ],

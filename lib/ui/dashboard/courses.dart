@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:class_app/model/course_dto.dart';
 import 'package:class_app/service/course_dao.dart';
 import 'package:class_app/state/app_state_provider.dart';
+import 'package:class_app/ui/admin/add_edit_course_screen.dart';
 import 'package:class_app/ui/course/course_details_screen.dart';
+import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class CoursesScreen extends StatefulWidget {
   @override
@@ -28,7 +31,24 @@ class _CoursesScreenState extends State<CoursesScreen> {
     appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(title: Text("Courses")),
+      appBar: AppBar(
+        title: Text("Courses"),
+        actions: <Widget>[
+          Visibility(
+            visible: appState.isSuperAdmin,
+            child: FlatButton(
+                onPressed: () {
+                  Router.gotoWidget(
+                      AddEditCourse(course: CourseDTO.withId(Uuid().v1())),
+                      context);
+                },
+                child: Text(
+                  "New Course",
+                  style: TextStyle(color: Colors.white),
+                )),
+          )
+        ],
+      ),
       body: StreamBuilder<QuerySnapshot>(
           stream: CourseDAO.fetchAllCourses(appState.appInfo),
           builder: (context, snapshot) {

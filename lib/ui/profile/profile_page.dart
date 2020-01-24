@@ -105,7 +105,7 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
         Visibility(
-          visible: appState.user.isAdmin,
+          visible: appState.isSuperAdmin,
           child: categoryGroup([
             ListTile(
               title: Text("Admin Console"),
