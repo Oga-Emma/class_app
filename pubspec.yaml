@@ -54,6 +54,8 @@ dependencies:
 
   bot_toast: ^2.2.1
 
+  solid_bottom_sheet: ^0.1.9
+
 #  background_fetch: ^0.4.0
 #  flutter_ringtone_player: ^2.0.0
 
