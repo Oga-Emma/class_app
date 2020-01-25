@@ -192,6 +192,7 @@ class _InstitutionDialogState extends State<InstitutionDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
+        width: double.maxFinite,
         height: MediaQuery.of(context).size.height / 2,
         child: StreamBuilder<QuerySnapshot>(
           stream: Observable.fromFuture(appSettingDao.getSchools()),
@@ -257,6 +258,7 @@ class _DepartmentDialogState extends State<DepartmentDialog> {
     return AlertDialog(
       content: Container(
         height: MediaQuery.of(context).size.height / 2,
+        width: double.maxFinite,
         child: StreamBuilder<QuerySnapshot>(
           stream: Observable.fromFuture(
               appSettingDao.getDepartments(widget.schoolId)),

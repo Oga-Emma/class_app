@@ -5,6 +5,7 @@ import 'package:class_app/model/lecture_dto.dart';
 import 'package:class_app/service/lecture_dao.dart';
 import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/admin/select_course_dialog.dart';
+import 'package:class_app/ui/helper_widgets/ca_button.dart';
 import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/fixed_dropdown.dart';
 import 'package:class_app/ui/utils/helper_methods.dart';
@@ -26,8 +27,8 @@ class AddEditLectures extends StatefulWidget {
   _AddEditLecturesState createState() => _AddEditLecturesState();
 }
 
-class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvider {
-
+class _AddEditLecturesState extends State<AddEditLectures>
+    with UISnackBarProvider {
   var _formKey = GlobalKey<FormState>();
   var _scaffoldKey = GlobalKey<ScaffoldState>();
   var startTime = TextEditingController();
@@ -37,13 +38,18 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
   var _day = Days.MONDAY;
   var dayError = false;
 
-  var days = [Days.MONDAY, Days.TUESDAY, Days.WEDNESDAY,
-    Days.THURSDAY, Days.FRIDAY, Days.SATURDAY];
+  var days = [
+    Days.MONDAY,
+    Days.TUESDAY,
+    Days.WEDNESDAY,
+    Days.THURSDAY,
+    Days.FRIDAY,
+    Days.SATURDAY
+  ];
 
   @override
   void initState() {
-
-    if(widget.lecture.course != null) {
+    if (widget.lecture.course != null) {
       _day = getDayLabel(widget.lecture.day);
       courseController.text = widget.lecture.course.code;
       startTime.text = widget.lecture.startTime;
@@ -56,7 +62,6 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
 
   @override
   void dispose() {
-
     courseController.dispose();
     startTime.dispose();
     endTime.dispose();
@@ -69,8 +74,8 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
     appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-          title: Text("Lecture Details", textAlign: TextAlign.center)),
+      appBar:
+          AppBar(title: Text("Lecture Details", textAlign: TextAlign.center)),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -78,22 +83,23 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
           child: ListView(
             children: <Widget>[
               GestureDetector(
-              onTap: () {
-                showCourseChooser();},
-          child: Container(
-            color: Colors.transparent,
-            child: IgnorePointer(
-              child: STextField(
-                label: "COURSE",
-                onSaved: (value) {
-                  widget.lecture.course = selectedCourse;
-                },
-                controller: courseController,
-                textInputType: TextInputType.text,
-                validator: Validators.validateString(),
-              ),
-            ),
-          )),
+                  onTap: () {
+                    showCourseChooser();
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: IgnorePointer(
+                      child: STextField(
+                        label: "COURSE",
+                        onSaved: (value) {
+                          widget.lecture.course = selectedCourse;
+                        },
+                        controller: courseController,
+                        textInputType: TextInputType.text,
+                        validator: Validators.validateString(),
+                      ),
+                    ),
+                  )),
               gap,
               gap,
               Stack(
@@ -127,7 +133,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
                               width: 1.0,
                               style: BorderStyle.solid,
                               color: dayError ? Colors.red : Colors.grey),
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
                         ),
                       ),
                     ),
@@ -152,7 +158,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
                       label: "TIME START",
                       onChanged: (dt) {
                         widget.lecture.startTime = DateFormat("Hm").format(dt);
-                            //"${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+                        //"${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
                       },
                       textInputType: TextInputType.text,
                       validator: Validators.validateString(),
@@ -168,7 +174,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
                         //"${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
                       },
                       textInputType: TextInputType.text,
-                              validator: Validators.validateString(),
+                      validator: Validators.validateString(),
                     ),
                   ),
                 ],
@@ -178,11 +184,11 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
               STextField(
                 initialValue: widget.lecture.venue,
                 label: "VENUE",
-                onSaved: (value){
+                onSaved: (value) {
                   widget.lecture.venue = value;
                 },
-                validator: (value){
-                  if(value.isEmpty){
+                validator: (value) {
+                  if (value.isEmpty) {
                     return "Please enter lecture venue";
                   }
                   return null;
@@ -190,7 +196,7 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
               ),
               gap,
               gap,
-              SButton(labelText: "SAVE CHANGES", onTap: saveChanges),
+              CAButton(title: "SAVE CHANGES", onPressed: saveChanges),
             ],
           ),
         ),
@@ -202,41 +208,43 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return SelectCourse(onCourseSelected: (course){
-            selectedCourse = course;
-            courseController.text = selectedCourse.code;
-            Navigator.pop(context);
-          },);
+          return SelectCourse(
+            onCourseSelected: (course) {
+              selectedCourse = course;
+              courseController.text = selectedCourse.code;
+              Navigator.pop(context);
+            },
+          );
         });
   }
 
   saveChanges() {
-    if( startTime.text.isEmpty || endTime.text.isEmpty){
+    if (startTime.text.isEmpty || endTime.text.isEmpty) {
       showInSnackBar("Select lecture start time and end time");
       return;
-    }else{
+    } else {
       widget.lecture.startTime = startTime.text;
       widget.lecture.endTime = endTime.text;
       widget.lecture.day = getDay(_day);
     }
 
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
       showLoadingSnackBar();
-      LectureDAO.saveLecture(appState.appInfo, widget.lecture, selectedCourse, (success){
-        if(success){
+      LectureDAO.saveLecture(appState.appInfo, widget.lecture, selectedCourse,
+          (success) {
+        if (success) {
           showInSnackBar("Changes saved");
-          if(mounted) {
+          if (mounted) {
             Future.delayed(Duration(seconds: 2), () => Navigator.pop(context));
           }
-
-        }else{
-          showInSnackBar("Error saving changes, please check your network and try again");
+        } else {
+          showInSnackBar(
+              "Error saving changes, please check your network and try again");
         }
       });
-
-    }else{
+    } else {
       showInSnackBar("Please review the errors in red");
     }
   }
@@ -245,12 +253,12 @@ class _AddEditLecturesState extends State<AddEditLectures>  with UISnackBarProvi
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 }
 
-class DayOfWeek{
+class DayOfWeek {
   String label;
   int day;
 }
 
-class Days{
+class Days {
   static const MONDAY = "Monday";
   static const TUESDAY = "Tuesday";
   static const WEDNESDAY = "Wednesday";

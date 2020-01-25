@@ -2,6 +2,7 @@ import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/dashboard/courses.dart';
 import 'package:class_app/ui/dashboard/dashboard.dart';
 import 'package:class_app/ui/info_screen/info_screen.dart';
+import 'package:class_app/ui/notification/notification_screen.dart';
 import 'package:class_app/ui/profile/profile_screen.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:flutter/material.dart';
@@ -40,9 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
   var info_selected = SvgPicture.asset("assets/svg/nav_ic_info.svg",
       color: ColorUtils.primaryColor, width: selectedSize, height: selectedSize);
 
-  var courses = SvgPicture.asset("assets/svg/nav_ic_course.svg",
+  var notification = SvgPicture.asset("assets/svg/nav_ic_notification.svg",
       color: unselectedColor, width: size, height: size);
-  var courses_selected = SvgPicture.asset("assets/svg/nav_ic_course.svg",
+  var notification_selected = SvgPicture.asset("assets/svg/nav_ic_notification.svg",
      color: ColorUtils.primaryColor,  width: selectedSize, height: selectedSize);
 
   var user = SvgPicture.asset("assets/svg/nav_ic_profile.svg",
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }),
         InfoScreen(),
-        CoursesScreen(),
+        NotificationScreen(),
         ProfileScreen()
       ];
     }
@@ -95,9 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomNavigationBarItem(
                   icon: info, activeIcon: info_selected, title: Text("Info")),
               BottomNavigationBarItem(
-                  icon: courses,
-                  activeIcon: courses_selected,
-                  title: Text("Courses")),
+                  icon: notification,
+                  activeIcon: notification_selected,
+                  title: Text("Notification")),
               BottomNavigationBarItem(
                   icon: user, activeIcon: user_selected, title: Text("Profile"))
             ],

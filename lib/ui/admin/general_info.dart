@@ -1,11 +1,14 @@
+import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/auth/base_auth.dart';
 import 'package:class_app/ui/helper_widgets/ca_button.dart';
 import 'package:class_app/ui/helper_widgets/empty_space.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/error_handler.dart';
+import 'package:class_app/ui/utils/sTextField.dart';
 import 'package:class_app/ui/utils/ui_snackbar.dart';
 import 'package:class_app/ui/utils/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GeneralInfo extends StatefulWidget {
   @override
@@ -17,11 +20,15 @@ class _GeneralInfoState extends State<GeneralInfo>
   var _formKey = GlobalKey<FormState>();
   var _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  var editMode = false;
+
   @override
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
         body: Container(
             child: SingleChildScrollView(
@@ -32,76 +39,120 @@ class _GeneralInfoState extends State<GeneralInfo>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "Faculty"),
+              STextField(
+                initialValue: appState.department.faculty,
+                enabled: false,
+                textInputType: TextInputType.emailAddress,
+                label: "Faculty",
                 onSaved: (value) {
 //                    email = value;
                 },
                 validator: Validators.validateEmail(),
               ),
               EmptySpace(multiple: 2),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "Department Name"),
+              STextField(
+                initialValue: appState.department.name,
+                enabled: false,
+                textInputType: TextInputType.emailAddress,
+                label: "Department Name",
                 onSaved: (value) {
 //                    email = value;
                 },
                 validator: Validators.validateEmail(),
               ),
               EmptySpace(multiple: 2),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "Department Code"),
+              STextField(
+                initialValue: appState.department.departmentCode,
+                enabled: false,
+                textInputType: TextInputType.emailAddress,
+                label: "Department Code",
                 onSaved: (value) {
 //                    email = value;
                 },
                 validator: Validators.validateEmail(),
               ),
               EmptySpace(multiple: 2),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "Entry Year"),
-                onSaved: (value) {
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: STextField(
+                      initialValue: appState.department.entryYear,
+                      enabled: false,
+                      textInputType: TextInputType.datetime,
+                      label: "Entry Year",
+                      onSaved: (value) {
 //                    email = value;
-                },
-                validator: Validators.validateEmail(),
+                      },
+                      validator: Validators.validateEmail(),
+                    ),
+                  ),
+                  EmptySpace(multiple: 2),
+                  Expanded(
+                    child: STextField(
+                      initialValue: "${appState.department.currentLevel}",
+                      enabled: editMode,
+                      textInputType: TextInputType.number,
+                      label: "Current Level",
+                      onSaved: (value) {
+//                    email = value;
+                      },
+                      validator: Validators.validateEmail(),
+                    ),
+                  ),
+                ],
               ),
               EmptySpace(multiple: 2),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "Current Level"),
-                onSaved: (value) {
-//                    email = value;
-                },
-                validator: Validators.validateEmail(),
-              ),
-              EmptySpace(multiple: 2),
-              TextFormField(
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: STextField(
+                        initialValue: appState.department.currentSession,
+                        enabled: editMode,
 //                    controller: passwordController,
-                  decoration: InputDecoration(labelText: "Current Semester"),
+                        label: "Current Session",
+                        textInputType: TextInputType.datetime,
+                        onSaved: (value) {
+//                      password = value;
+                        },
+                        validator: Validators.validateString()),
+                  ),
+                  EmptySpace(multiple: 2),
+                  Expanded(
+                    child: STextField(
+                        initialValue: "${appState.department.currentSemester}",
+                        enabled: editMode,
+                        textInputType: TextInputType.number,
+//                    controller: passwordController,
+                        label: "Semester",
+                        onSaved: (value) {
+//                      password = value;
+                        },
+                        validator: Validators.validateString()),
+                  ),
+                ],
+              ),
+              EmptySpace(multiple: 2),
+              STextField(
+                  initialValue: appState.department.studyDuration,
+                  enabled: false,
+//                    controller: passwordController,
+                  label: "Study Duration",
                   onSaved: (value) {
 //                      password = value;
                   },
-                  validator: Validators.validateSimplePassword()),
+                  validator: Validators.validateString()),
               EmptySpace(multiple: 2),
-              TextFormField(
-//                    controller: passwordController,
-                  decoration: InputDecoration(labelText: "Current Session"),
-                  onSaved: (value) {
-//                      password = value;
-                  },
-                  validator: Validators.validateSimplePassword()),
+              CAButton(
+                  title: editMode ? 'SAVE CHANGED' : "MODIFY INFO",
+                  onPressed: updateInfo),
               EmptySpace(multiple: 2),
-              TextFormField(
-//                    controller: passwordController,
-                  decoration: InputDecoration(labelText: "Study Duration"),
-                  onSaved: (value) {
-//                      password = value;
-                  },
-                  validator: Validators.validateSimplePassword()),
-              EmptySpace(multiple: 2),
-              CAButton(title: "Update Changes", onPressed: updateInfo),
+              Visibility(
+                visible: editMode,
+                child: CAButton(
+                    title: 'MODIFY DISABLED FIELDS',
+                    onPressed: modifyDisabledFields,
+                    outline: true),
+              ),
             ],
           ),
         ),
@@ -109,5 +160,12 @@ class _GeneralInfoState extends State<GeneralInfo>
     )));
   }
 
-  updateInfo() {}
+  updateInfo() {
+    setState(() {
+      editMode = !editMode;
+    });
+  }
+
+  modifyDisabledFields() {
+  }
 }

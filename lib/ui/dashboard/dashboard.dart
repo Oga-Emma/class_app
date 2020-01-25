@@ -83,7 +83,8 @@ class _DashboardState extends State<Dashboard> {
               child: FlatButton(
                   onPressed: () {
                     Router.gotoWidget(
-                        AddEditLectures(LectureDTO.withId(Uuid().v1())), context);
+                        AddEditLectures(LectureDTO.withId(Uuid().v1())),
+                        context);
                   },
                   child: Text(
                     "New Event",
@@ -188,6 +189,7 @@ class _DashboardState extends State<Dashboard> {
                           Icon(icon, color: color, size: 20.0),
                           SizedBox(height: 8.0),
                           Text(title,
+                              textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.subhead)
                         ],
                       ),
@@ -304,22 +306,22 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => Lectures()));
               }),
-              category(
-                  "Others", eventColors[EventType.CLASS], Icons.library_books,
+              category("Assignment\n& Test", eventColors[EventType.ASSIGNEMTCA],
+                  FontAwesomeIcons.twitch,
+                  total: todayEvents
+                      .where((event) => event.type == EventType.ASSIGNEMTCA)
+                      .toList()
+                      .length, onTap: () {
+                navigateToEvent(EventType.ASSIGNEMTCA);
+              }),
+              category("Fixed Class\n& Others", eventColors[EventType.CLASS],
+                  Icons.library_books,
                   total: todayEvents
                       .where((event) => event.type == EventType.CLASS)
                       .toList()
                       .length, onTap: () {
                 navigateToEvent(EventType.CLASS);
               }),
-//              category("Assignment/CA", eventColors[EventType.ASSIGNEMTCA],
-//                  FontAwesomeIcons.twitch,
-//                  total: todayEvents
-//                      .where((event) => event.type == EventType.ASSIGNEMTCA)
-//                      .toList()
-//                      .length, onTap: () {
-//                navigateToEvent(EventType.ASSIGNEMTCA);
-//              }),
 //              category(
 //                  "Test", eventColors[EventType.TEST], FontAwesomeIcons.tasks,
 //                  total: todayEvents
@@ -344,12 +346,11 @@ class _DashboardState extends State<Dashboard> {
 //                      .length, onTap: () {
 //                navigateToEvent(EventType.OTHERS);
 //              }),
-              /*category("Courses", Colors.grey, FontAwesomeIcons.book,
-                  onTap: (){
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => CoursesScreen()));
-                  }
-              ),*/
+              category("Courses", Colors.grey, FontAwesomeIcons.book,
+                  onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => CoursesScreen()));
+              }),
               category("Class excos", Colors.brown, FontAwesomeIcons.users,
                   onTap: () {
                 Navigator.of(context).push(

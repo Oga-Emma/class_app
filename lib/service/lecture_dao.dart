@@ -17,17 +17,15 @@ class LectureDAO {
         .collection("classes")
         .document(lecture.id);
 
-    if (course != appInfo) {
-      var lectureIds = Set.from(course.lectureIds);
-      lectureIds.add(lecture.id);
+    var lectureIds = Set.from(course.lectureIds);
+    lectureIds.add(lecture.id);
 
-      var courseRef = AppInfoDAO.getFullDocumentPath(appInfo)
-          .collection("courses")
-          .document(lecture.course.id);
+    var courseRef = AppInfoDAO.getFullDocumentPath(appInfo)
+        .collection("courses")
+        .document(lecture.course.id);
 
-      lecture.course = course;
-      batch.updateData(courseRef, {"lectureIds": lectureIds.toList()});
-    }
+    lecture.course = course;
+    batch.updateData(courseRef, {"lectureIds": lectureIds.toList()});
 
     batch.setData(lectureRef, lecture.toMap(), merge: true);
 
@@ -39,8 +37,7 @@ class LectureDAO {
     });
   }
 
-  static void deleteLecture(AppInfoDTO appInfo, LectureDTO lecture,
-      CourseDTO course, Function(bool success) callback) {
+  static void deleteLecture(AppInfoDTO appInfo, LectureDTO lecture,{ Function(bool success) callback}) {
     var firestore = Firestore.instance;
     var batch = firestore.batch();
 
@@ -48,18 +45,11 @@ class LectureDAO {
         .collection("classes")
         .document(lecture.id);
 
-    if (course != appInfo) {
-      var lectureIds = Set.from(course.lectureIds);
-      lectureIds.remove(lecture.id);
+    var courseRef = AppInfoDAO.getFullDocumentPath(appInfo)
+        .collection("courses")
+        .document(lecture.course.id);
 
-      var courseRef = AppInfoDAO.getFullDocumentPath(appInfo)
-          .collection("courses")
-          .document(lecture.course.id);
-
-      lecture.course = course;
-      batch.updateData(courseRef, {"lectureIds": lectureIds.toList()});
-    }
-
+    batch.updateData(courseRef,  {"lectureIds": FieldValue.arrayRemove([lecture.id])});
     batch.updateData(lectureRef, {
       "course.isDeleted": true,
       'dateDeleted': FieldValue.serverTimestamp()
@@ -85,29 +75,29 @@ class LectureDAO {
         .collection("classes")
         .snapshots();
   }
-
-  static void deleteLecture(AppInfoDTO appInfo, LectureDTO lecture) {
-    print("deleting");
-    var firestore = Firestore.instance;
-    var batch = firestore.batch();
-
-    var lectureRef = AppInfoDAO.getFullDocumentPath(appInfo)
-        .collection("classes")
-        .document(lecture.id);
-
-    var courseRef = AppInfoDAO.getFullDocumentPath(appInfo)
-        .collection("courses")
-        .document(lecture.course.id);
-
-    batch.updateData(courseRef, {
-      "lectureIds": FieldValue.arrayRemove([lecture.id])
-    });
-    batch.delete(lectureRef);
-
-    batch.commit().then((_) {}).catchError((error) {
-      print(error);
-    });
-  }
+//
+//  static void deleteLecture(AppInfoDTO appInfo, LectureDTO lecture) {
+//    print("deleting");
+//    var firestore = Firestore.instance;
+//    var batch = firestore.batch();
+//
+//    var lectureRef = AppInfoDAO.getFullDocumentPath(appInfo)
+//        .collection("classes")
+//        .document(lecture.id);
+//
+//    var courseRef = AppInfoDAO.getFullDocumentPath(appInfo)
+//        .collection("courses")
+//        .document(lecture.course.id);
+//
+//    batch.updateData(courseRef, {
+//      "lectureIds": FieldValue.arrayRemove([lecture.id])
+//    });
+//    batch.delete(lectureRef);
+//
+//    batch.commit().then((_) {}).catchError((error) {
+//      print(error);
+//    });
+//  }
 
   static Stream<QuerySnapshot> fetchAllCourseLectures(
       AppInfoDTO appInfo, String courseId) {

@@ -1,3 +1,4 @@
+import 'package:class_app/ui/helper_widgets/ca_button.dart';
 import 'package:flutter/material.dart';
 
 import 'color_utils.dart';
@@ -11,6 +12,7 @@ class SButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return CAButton(title: labelText, onPressed: onTap);
     return Container(
       height: 48.0,
       width: double.infinity,

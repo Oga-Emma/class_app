@@ -36,7 +36,6 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("LECTURE")),
       body: Container(
-//                          color: Colors.grey[200],
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

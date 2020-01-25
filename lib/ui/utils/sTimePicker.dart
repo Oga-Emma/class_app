@@ -40,13 +40,13 @@ class STimePicker extends StatelessWidget {
         contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
         focusedErrorBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.circular(8.0)),
+            borderRadius: BorderRadius.circular(4.0)),
         border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8.0)),
+            borderRadius: BorderRadius.circular(4.0)),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: ColorUtils.accentColor),
-            borderRadius: BorderRadius.circular(8.0)),
+            borderRadius: BorderRadius.circular(4.0)),
       ),
 //
 //          decoration: InputDecoration(
