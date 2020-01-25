@@ -23,6 +23,7 @@ class PostDAO {
     var firestore = Firestore.instance;
     return firestore
         .collection('posts')
+        .where('isDeleted', isEqualTo: false)
         .where("group", whereIn: [
           'all',
           '${appInfo.school.code}',
@@ -36,6 +37,7 @@ class PostDAO {
     var firestore = Firestore.instance;
     return firestore
         .collection('posts')
+        .where('isDeleted', isEqualTo: false)
         .where("group", whereIn: [
           'all',
           '${appInfo.school.code}',
@@ -44,5 +46,11 @@ class PostDAO {
         .orderBy("commentCount", descending: true)
         .orderBy("datePublished", descending: true)
         .getDocuments();
+  }
+
+  static deletePost(PostDTO post) async {
+    var firestore = Firestore.instance;
+    return await firestore.collection('posts').document(post.id).updateData(
+        {'isDeleted': true, 'dateDeleted': FieldValue.serverTimestamp()});
   }
 }

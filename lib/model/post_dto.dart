@@ -24,6 +24,7 @@ class PostDTO {
   PostDTO();
 
   PostDTO.fromMap(Map<String, dynamic> data) {
+//    print(data);
     id = data['id'];
     course = data['course'];
     heading = data['heading'];

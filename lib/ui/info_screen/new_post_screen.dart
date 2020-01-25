@@ -14,6 +14,7 @@ import 'package:class_app/ui/helper_widgets/toast_helper.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/error_handler.dart';
 import 'package:class_app/ui/utils/ui_snackbar.dart';
+import 'package:class_app/ui/widgets/profile_avatar.dart';
 import 'package:class_app/ui/widgets/upload_image.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -34,8 +35,8 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
   @override
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 
-  var titleController = TextEditingController();
-  var postController = TextEditingController();
+  TextEditingController titleController;
+  TextEditingController postController;
 
   List<FileOrUrl> filesOrUrls = [];
   PostDTO post;
@@ -52,6 +53,8 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
     } else {
       post = PostDTO();
     }
+    titleController = TextEditingController(text: post.heading);
+    postController = TextEditingController(text: post.content);
 
     super.initState();
   }
@@ -100,8 +103,10 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: Colors.grey[200],
+                    ProfileAvatar(
+                      url: post.user.isNull
+                          ? appState.user.profilePicture
+                          : post.user.profilePicture,
                       radius: 28.0,
                     ),
                     EmptySpace(),
@@ -109,7 +114,7 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Oga Emma"),
+                          Text("${appState.user.fullName}"),
                           EmptySpace(multiple: .5),
                           Row(
                             children: <Widget>[
@@ -252,43 +257,47 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(left: 4.0, right: 2.0),
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      height: 140,
-                      width: 180,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8.0),
-                          border: Border.all(color: Colors.grey[300])),
-                      child: filesOrUrls[index].asset != null
-                          ? AssetThumb(
-                              asset: filesOrUrls[index].asset,
-                              width: 140,
-                              height: 180,
-                            )
-                          : CachedNetworkImage(
-                              imageUrl: filesOrUrls[index].url),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        color: Colors.black26,
-                        child: InkWell(
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 20.0,
-                            ),
-                            onTap: () {
-                              setState(() {
-                                filesOrUrls.removeAt(index);
-                              });
-                            }),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        height: 140,
+                        width: 180,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8.0),
+                            border: Border.all(color: Colors.grey[300])),
+                        child: filesOrUrls[index].asset != null
+                            ? AssetThumb(
+                                asset: filesOrUrls[index].asset,
+                                width: 140,
+                                height: 180,
+                              )
+                            : CachedNetworkImage(
+                                imageUrl: filesOrUrls[index].url,
+                                fit: BoxFit.cover),
                       ),
-                    )
-                  ],
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          color: Colors.black26,
+                          child: InkWell(
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 20.0,
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  filesOrUrls.removeAt(index);
+                                });
+                              }),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               );
             }),
@@ -328,7 +337,7 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
     if (!mounted) return;
 
     setState(() {
-      filesOrUrls.addAll(resultList.map((res) => FileOrUrl()..asset = res));
+      filesOrUrls.addAll(resultList.map((res) => FileOrUrl()..asset = res..type = MediaTypes.IMAGE));
 //      images = resultList;
 //      if (error == null) _error = 'No Error Dectected';
     });
@@ -383,7 +392,7 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
         }
       }
 
-      if (post.user == null) {
+      if (post.user == null || post.user.isNull) {
         post.user = ShortUserInfo.fromUser(appState.user);
       }
 

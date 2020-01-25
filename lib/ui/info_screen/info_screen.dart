@@ -3,10 +3,11 @@ import 'package:class_app/service/post_dao.dart';
 import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/info_screen/new_post_screen.dart';
 import 'package:class_app/ui/info_screen/post_details_screen.dart';
-import 'package:class_app/ui/info_screen/recent_posts.dart';
+import 'package:class_app/ui/info_screen/posts_list.dart';
 import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/decoration_utils.dart';
+import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class _InfoScreenState extends State<InfoScreen> {
           ],
         ),
         body: Container(
-            color: ColorUtils.primaryColor[100],
+            color: Colors.grey[200],
             child: Column(
               children: <Widget>[
                 Material(
@@ -147,7 +148,7 @@ class RecentPosts extends StatelessWidget {
             print(snapshot.error);
             return Center(child: Text("Error fetching data"));
           }
-          return Center(child: CircularProgressIndicator());
+          return Loading();
         });
   }
 }
@@ -168,7 +169,7 @@ class TrendingPosts extends StatelessWidget {
             print(snapshot.error);
             return Center(child: Text("Error fetching data"));
           }
-          return Center(child: CircularProgressIndicator());
+          return Loading();
         });
   }
 }

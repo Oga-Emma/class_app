@@ -29,7 +29,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
     appState = Provider.of<AppStateProvider>(context);
     var selectedDecoration = BoxDecoration(
         color: ColorUtils.primaryColor,
-        borderRadius: BorderRadius.circular(24.0));
+        borderRadius: BorderRadius.circular(8.0));
     var deselectedDecoration = BoxDecoration();
 
     var selectedInputStyle = Theme.of(context)
@@ -83,7 +83,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                         child: Column(
                           children: <Widget>[
                             Material(
-                              borderRadius: BorderRadius.circular(24.0),
+                              borderRadius: BorderRadius.circular(8.0),
                               elevation: 4.0,
                               child: Container(
                                 decoration: BoxDecoration(),

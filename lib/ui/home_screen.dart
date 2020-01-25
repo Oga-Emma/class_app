@@ -23,32 +23,32 @@ class _HomeScreenState extends State<HomeScreen> {
   static var size = 20.0;
   static var selectedSize = 20.0;
 
-  var calendar = SvgPicture.asset("assets/svg/ic_calendar.svg",
+  var calendar = SvgPicture.asset("assets/svg/nav_ic_calendar.svg",
       color: unselectedColor, width: size, height: size);
-  var calendar_selected = SvgPicture.asset("assets/svg/nav_calendar.svg",
-      width: selectedSize, height: selectedSize);
+  var calendar_selected = SvgPicture.asset("assets/svg/nav_ic_calendar.svg",
+      color: ColorUtils.primaryColor, width: selectedSize, height: selectedSize);
 
-  var dashboard = SvgPicture.asset("assets/svg/nav_dashboard.svg",
+  var dashboard = SvgPicture.asset("assets/svg/nav_ic_dashboard.svg",
       color: unselectedColor, width: size, height: size);
   var dashboard_selected = SvgPicture.asset(
-      "assets/svg/nav_dashboard_selected.svg",
+      "assets/svg/nav_ic_dashboard.svg",
       width: selectedSize,
-      height: selectedSize);
+      color: ColorUtils.primaryColor, height: selectedSize);
 
-  var info = SvgPicture.asset("assets/svg/nav_info.svg",
+  var info = SvgPicture.asset("assets/svg/nav_ic_info.svg",
       color: unselectedColor, width: size, height: size);
-  var info_selected = SvgPicture.asset("assets/svg/nav_info_selected.svg",
-      width: selectedSize, height: selectedSize);
+  var info_selected = SvgPicture.asset("assets/svg/nav_ic_info.svg",
+      color: ColorUtils.primaryColor, width: selectedSize, height: selectedSize);
 
-  var courses = SvgPicture.asset("assets/svg/nav_courses.svg",
+  var courses = SvgPicture.asset("assets/svg/nav_ic_course.svg",
       color: unselectedColor, width: size, height: size);
-  var courses_selected = SvgPicture.asset("assets/svg/nav_courses_selected.svg",
-      width: selectedSize, height: selectedSize);
+  var courses_selected = SvgPicture.asset("assets/svg/nav_ic_course.svg",
+     color: ColorUtils.primaryColor,  width: selectedSize, height: selectedSize);
 
-  var user = SvgPicture.asset("assets/svg/ic_user.svg",
+  var user = SvgPicture.asset("assets/svg/nav_ic_profile.svg",
       color: unselectedColor, width: size, height: size);
-  var user_selected = SvgPicture.asset("assets/svg/nav_user.svg",
-      width: selectedSize, height: selectedSize);
+  var user_selected = SvgPicture.asset("assets/svg/nav_ic_profile.svg",
+      color: ColorUtils.primaryColor, width: selectedSize, height: selectedSize);
 
   AppStateProvider appState;
   @override

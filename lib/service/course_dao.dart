@@ -36,6 +36,46 @@ class CourseDAO {
     });
   }
 
+  static void deleteCourse(
+      AppInfoDTO appInfo, CourseDTO course, Function(bool success) callback) {
+    var batch = Firestore.instance.batch();
+
+    course.lectureIds.forEach((id) => batch.updateData(
+            AppInfoDAO.getFullDocumentPath(appInfo)
+                .collection("classes")
+                .document(id),
+            {
+              "course.isDeleted": true,
+              'dateDeleted': FieldValue.serverTimestamp()
+            }));
+
+//    {'isDeleted': true, 'dateDeleted': FieldValue.serverTimestamp()}
+    course.eventIds.forEach((id) => batch.updateData(
+            AppInfoDAO.getFullDocumentPath(appInfo)
+                .collection("events")
+                .document(id),
+            {
+              "course.isDeleted": true,
+              'dateDeleted': FieldValue.serverTimestamp()
+            }));
+
+    batch.updateData(
+        AppInfoDAO.getFullDocumentPath(appInfo)
+            .collection("courses")
+            .document(course.id),
+        {
+          "course.isDeleted": true,
+          'dateDeleted': FieldValue.serverTimestamp()
+        });
+
+    batch.commit().then((_) {
+      callback(true);
+    }).catchError((error) {
+      print(error);
+      callback(false);
+    });
+  }
+
   static Future<QuerySnapshot> getCourse(
       AppInfoDTO appInfo, String courseCode) {
     return AppInfoDAO.getFullDocumentPath(appInfo)
@@ -43,22 +83,6 @@ class CourseDAO {
         .where("code", isEqualTo: courseCode)
         .limit(1)
         .getDocuments();
-  }
-
-  static void deleteCourse(AppInfoDTO appInfo, CourseDTO course, bool delete,
-      Function(bool success) callback) {
-    course.deleted = delete;
-
-    AppInfoDAO.getFullDocumentPath(appInfo)
-        .collection("courses")
-        .document(course.id)
-        .setData(course.toMap())
-        .then((_) {
-      callback(true);
-    }).catchError((error) {
-      print(error);
-      callback(false);
-    });
   }
 
   static Stream<QuerySnapshot> fetchAllCourses(AppInfoDTO appInfo) {
