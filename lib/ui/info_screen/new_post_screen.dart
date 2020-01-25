@@ -114,7 +114,8 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("${appState.user.fullName}"),
+                          Text(
+                              "${post.user.isNull ? appState.user.fullName : post.user.name}"),
                           EmptySpace(multiple: .5),
                           Row(
                             children: <Widget>[
@@ -337,7 +338,9 @@ class _NewEditPostScreenState extends State<NewEditPostScreen>
     if (!mounted) return;
 
     setState(() {
-      filesOrUrls.addAll(resultList.map((res) => FileOrUrl()..asset = res..type = MediaTypes.IMAGE));
+      filesOrUrls.addAll(resultList.map((res) => FileOrUrl()
+        ..asset = res
+        ..type = MediaTypes.IMAGE));
 //      images = resultList;
 //      if (error == null) _error = 'No Error Dectected';
     });

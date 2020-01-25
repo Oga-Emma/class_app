@@ -13,6 +13,7 @@ import 'package:class_app/ui/admin/admin_screen.dart';
 import 'package:class_app/ui/dashboard/lectures.dart';
 import 'package:class_app/ui/dashboard/today.dart';
 import 'package:class_app/ui/event/event_details_screen.dart';
+import 'package:class_app/ui/helper_widgets/ca_button.dart';
 import 'package:class_app/ui/lecture/lecture_details_screen.dart';
 import 'package:class_app/ui/list_items/combined_event_preview_list_item.dart';
 import 'package:class_app/ui/router/router.dart';
@@ -247,7 +248,7 @@ class _DashboardState extends State<Dashboard> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("2ND ",
+                  Text(appState.department.currentSemester == 1 ? "1ST" : "2ND",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Text("Semester",
@@ -258,10 +259,10 @@ class _DashboardState extends State<Dashboard> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("200L",
+                  Text("${appState.department.currentLevel}L",
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  Text("Computer Science.",
+                  Text("${appState.department.name}".toUpperCase(),
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w300))
                 ],
@@ -396,20 +397,31 @@ class _DashboardState extends State<Dashboard> {
                           style: Theme.of(context).textTheme.subhead),
                     ],
                   ),
-                  Expanded(child: SizedBox()),
-                  RaisedButton(
+                  Spacer(),
+                  SizedBox(
+                    width: 100,
+                    height: 36,
+                    child: CAButton(
+                      title: "View All",
                       onPressed: () {
                         widget.calendarScreen();
-//
-                        /* Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return Today(events: combinedList, date: monthYear);
-                            }));*/
                       },
-                      color: Theme.of(context).primaryColor,
-                      shape: RoundedRectangleBorder(borderRadius: borderRadius),
-                      child: Text("View all",
-                          style: TextStyle(color: Colors.white)))
+                      outline: true,
+                    ),
+                  )
+//                  RaisedButton(
+//                      onPressed: () {
+//                        widget.calendarScreen();
+////
+//                        /* Navigator.of(context)
+//                                .push(MaterialPageRoute(builder: (context) {
+//                              return Today(events: combinedList, date: monthYear);
+//                            }));*/
+//                      },
+//                      color: Theme.of(context).primaryColor,
+//                      shape: RoundedRectangleBorder(borderRadius: borderRadius),
+//                      child: Text("View all",
+//                          style: TextStyle(color: Colors.white)))
                 ],
               ),
             ),

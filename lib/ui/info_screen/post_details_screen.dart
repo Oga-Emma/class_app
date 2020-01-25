@@ -1,17 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:class_app/model/comment_dto.dart';
 import 'package:class_app/model/post_dto.dart';
 import 'package:class_app/service/post_dao.dart';
 import 'package:class_app/state/app_state_provider.dart';
 import 'package:class_app/ui/helper_widgets/empty_space.dart';
 import 'package:class_app/ui/helper_widgets/toast_helper.dart';
 import 'package:class_app/ui/info_screen/new_post_screen.dart';
+import 'package:class_app/ui/list_items/comment_list_item.dart';
 import 'package:class_app/ui/router/router.dart';
 import 'package:class_app/ui/utils/color_utils.dart';
 import 'package:class_app/ui/utils/date_helper.dart';
+import 'package:class_app/ui/utils/loading_spinner.dart';
 import 'package:class_app/ui/widgets/profile_avatar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 
 class PostDetailsScreen extends StatelessWidget {
@@ -197,11 +202,14 @@ class PostDetailsScreen extends StatelessWidget {
                 FlatButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text('CANCEL')),
-                FlatButton(onPressed:  () => Navigator.pop(context, true), child: Text('DELETE')) ?? false,
+                FlatButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: Text('DELETE')) ??
+                    false,
               ],
             ));
 
-    if(delete){
+    if (delete) {
       await PostDAO.deletePost(post);
       showSuccessToast('post deleted');
       Navigator.pop(context);
@@ -218,8 +226,25 @@ class PostComments extends StatefulWidget {
 }
 
 class _PostCommentsState extends State<PostComments> {
+  bool sending = false;
+  TextEditingController commentController;
+
+  @override
+  void initState() {
+    commentController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    commentController.dispose();
+    super.dispose();
+  }
+
+  AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppStateProvider>(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -231,73 +256,58 @@ class _PostCommentsState extends State<PostComments> {
           child: Stack(
             children: <Widget>[
               Positioned.fill(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                                'Comments (${widget.post.commentCount})',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .title
-                                    .copyWith(fontSize: 18)),
-                          ),
-                          InkWell(
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Icon(Icons.close),
-                              ),
-                              onTap: () {
-                                Navigator.pop(context);
-                              })
-                        ],
-                      ),
-                    ),
-                    Divider(),
-                    Expanded(
-                        child: ListView.builder(itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ProfileAvatar(radius: 20),
-                            EmptySpace(),
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16.0),
-                                child: Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  color:
-                                      ColorUtils.primaryColor.withOpacity(0.1),
-                                  width: double.maxFinite,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text('Oga Emma',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline
-                                              .copyWith(fontSize: 16)),
-                                      EmptySpace(),
-                                      Text("Hello world" * 20),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text('Comments (${widget.post.commentCount})',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .title
+                                  .copyWith(fontSize: 18)),
                         ),
-                      );
-                    }))
-                  ],
-                ),
-              ),
+                        InkWell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Icon(Icons.close),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                            })
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: Observable.fromFuture(
+                            PostDAO.getComments(widget.post.id)),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Column(
+                              children: <Widget>[
+                                Expanded(
+                                    child: loadCommentList(
+                                        snapshot.data.documents)),
+                                EmptySpace(multiple: 5)
+                              ],
+                            );
+                          }
+
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return Center(child: Text('Error occured'));
+                          }
+
+                          return LoadingSpinner();
+                        }),
+                  )
+                ],
+              )),
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -315,15 +325,22 @@ class _PostCommentsState extends State<PostComments> {
                                   horizontal: 16.0, vertical: 0.0),
                               margin: EdgeInsets.all(4.0),
                               child: TextField(
+                                controller: commentController,
                                 decoration: InputDecoration.collapsed(
                                     hintText: "Say something..."),
                                 minLines: 1,
                                 maxLines: 5,
                               ))),
-                      IconButton(
-                          icon:
-                              Icon(Icons.send, color: ColorUtils.primaryColor),
-                          onPressed: () {})
+                      sending
+                          ? Container(
+                              margin: EdgeInsets.symmetric(horizontal: 12),
+                              height: 24,
+                              width: 24,
+                              child: LoadingSpinner())
+                          : IconButton(
+                              icon: Icon(Icons.send,
+                                  color: ColorUtils.primaryColor),
+                              onPressed: sendComment)
                     ],
                   ),
                   decoration: BoxDecoration(color: Colors.white, boxShadow: [
@@ -340,5 +357,46 @@ class _PostCommentsState extends State<PostComments> {
         ),
       ),
     );
+  }
+
+  Future<void> sendComment() async {
+    String text = commentController.text;
+
+    if (text != null && text.isNotEmpty) {
+      setState(() {
+        sending = true;
+      });
+      var comment = CommentDTO()
+        ..comment = text
+        ..posterId = appState.currentUser.uid;
+      try {
+        await PostDAO.saveComment(widget.post, comment);
+        setState(() {
+          sending = false;
+        });
+        commentController.text = '';
+        widget.post.commentCount++;
+      } catch (err) {
+        print(err);
+        showErrorToast('Error posting comment, try again');
+        setState(() {
+          sending = false;
+        });
+      }
+    }
+  }
+
+  Widget loadCommentList(List<DocumentSnapshot> documents) {
+    if (documents.isEmpty) {
+      return Center(child: Text('No comment yet'));
+    }
+
+    return ListView.builder(
+        reverse: true,
+        itemCount: documents.length,
+        itemBuilder: (context, index) {
+          return CommentListItem(CommentDTO.fromJson(documents[index].data)
+            ..id = documents[index].documentID);
+        });
   }
 }

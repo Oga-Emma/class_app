@@ -281,7 +281,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
           gap,
           Text("No event today", style: Theme.of(context).textTheme.title),
-          Text("Bew events will appear here",
+          Text("New events will appear here",
               style: Theme.of(context).textTheme.caption),
           gap2x
         ],

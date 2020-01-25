@@ -20,6 +20,17 @@ class AppInfoDAO {
     });
   }
 
+  static void updateDepartment(Map<String, dynamic> data, AppInfoDTO appInfo) {
+    var firestore = Firestore.instance;
+    firestore
+        .collection("schools")
+        .document(appInfo.school.id)
+        .collection('departments')
+        .document(
+            "${appInfo.department.departmentCode}-${appInfo.department.entryYear}")
+        .updateData(data);
+  }
+
   static Future<QuerySnapshot> getAllDepartments(String uni) {
     var firestore = Firestore.instance;
     return firestore.collection("uni").getDocuments();
@@ -48,9 +59,7 @@ class AppInfoDAO {
 //    print(
 //        '${appInfo.department.departmentCode}-${appInfo.department.entryYear}');
 
-    return firestore
-        .collection('schools')
-        .document(appInfo.school.id);
+    return firestore.collection('schools').document(appInfo.school.id);
   }
 
   static DocumentReference getFullDocumentPath(AppInfoDTO appInfo) {

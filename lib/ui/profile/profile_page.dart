@@ -109,6 +109,7 @@ class ProfilePage extends StatelessWidget {
           child: categoryGroup([
             ListTile(
               title: Text("Admin Console"),
+              subtitle: Text('App settings accross all users'),
               leading: Icon(Icons.verified_user),
               trailing: Icon(Icons.chevron_right),
               onTap: () {
@@ -119,28 +120,38 @@ class ProfilePage extends StatelessWidget {
         ),
         categoryGroup([
           ListTile(
-            title: Row(
-              children: <Widget>[
-                Text("Notification"),
-                emptySpace(),
-                Visibility(
-                  visible: false,
-                  child: CircleAvatar(
-                    radius: 12.0,
-                    child: Text('1',
-                        style: textStyle.caption.copyWith(color: Colors.white)),
-                  ),
-                )
-              ],
-            ),
-            leading: Icon(Icons.notifications),
+            title: Text("Swap School or Department"),
+            subtitle: Text('Change school or department'),
+            leading: Icon(Icons.swap_horizontal_circle),
             trailing: Icon(Icons.chevron_right),
             onTap: () {
-              Router.gotoNamed(Routes.NOTIFICATION, context);
+              Router.gotoNamed(Routes.SCHOOL_SELECT, context);
             },
           ),
+//          ListTile(
+//            title: Row(
+//              children: <Widget>[
+//                Text("Notification"),
+//                emptySpace(),
+//                Visibility(
+//                  visible: false,
+//                  child: CircleAvatar(
+//                    radius: 12.0,
+//                    child: Text('1',
+//                        style: textStyle.caption.copyWith(color: Colors.white)),
+//                  ),
+//                )
+//              ],
+//            ),
+//            leading: Icon(Icons.notifications),
+//            trailing: Icon(Icons.chevron_right),
+//            onTap: () {
+//              Router.gotoNamed(Routes.NOTIFICATION, context);
+//            },
+//          ),
           ListTile(
             title: Text('Preferences'),
+            subtitle: Text('Personlaize your app settings'),
             leading: Icon(Icons.settings),
             trailing: Icon(Icons.chevron_right),
             onTap: () {
@@ -154,7 +165,16 @@ class ProfilePage extends StatelessWidget {
         ]),
         categoryGroup([
           ListTile(
+            title: Text("Follow Department"),
+            subtitle: Text('Get notification from this department'),
+            leading: Icon(Icons.notifications_active),
+            trailing: FollowDepartmentCheck(),
+          ),
+        ]),
+        categoryGroup([
+          ListTile(
             title: Text("Change Password"),
+            subtitle: Text('Reset your login password'),
             leading: Icon(Icons.lock),
             trailing: Icon(Icons.chevron_right),
             onTap: () {
@@ -162,7 +182,8 @@ class ProfilePage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text("Support"),
+            title: Text("Help and Support"),
+            subtitle: Text('Get help and suggestions'),
             leading: Icon(Icons.help),
             trailing: Icon(Icons.chevron_right),
           ),
@@ -185,4 +206,23 @@ class ProfilePage extends StatelessWidget {
   }
 
   noProfile() {}
+}
+
+class FollowDepartmentCheck extends StatefulWidget {
+  @override
+  _FollowDepartmentCheckState createState() => _FollowDepartmentCheckState();
+}
+
+class _FollowDepartmentCheckState extends State<FollowDepartmentCheck> {
+  var checked = false;
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+        value: checked,
+        onChanged: (value) {
+          setState(() {
+            checked = value;
+          });
+        });
+  }
 }
