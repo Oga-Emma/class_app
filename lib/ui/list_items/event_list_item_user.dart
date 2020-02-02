@@ -16,18 +16,15 @@ class EventListItemUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-      margin: const EdgeInsets.symmetric(
-          vertical: 16.0, horizontal: 16.0),
+      margin: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
       child: Material(
           elevation: 8.0,
           borderRadius: BorderRadius.circular(16.0),
           child: InkWell(
-            onTap: (){
+            onTap: () {
               onTap(event);
-
-              },
+            },
             child: Container(
               padding: const EdgeInsets.all(16.0),
 //              height: 150,
@@ -43,9 +40,8 @@ class EventListItemUser extends StatelessWidget {
                             borderRadius: borderRadius),
                         padding: EdgeInsets.all(8.0),
                         child: Text(event.type,
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.white)),
+                            style:
+                                TextStyle(fontSize: 12.0, color: Colors.white)),
                       ),
                       Expanded(child: SizedBox()),
                     ],
@@ -57,15 +53,14 @@ class EventListItemUser extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
                         .textTheme
-                        .headline.copyWith(fontSize: 18),
+                        .headline
+                        .copyWith(fontSize: 18),
                   ),
-
                   Container(
                     height: 1,
                     color: Colors.grey.withOpacity(0.5),
                     margin: EdgeInsets.symmetric(vertical: 10.0),
                   ),
-
                   Text(
                     "${event.description}",
                     maxLines: 1,
@@ -81,10 +76,9 @@ class EventListItemUser extends StatelessWidget {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        dateFormat.format(DateTime.parse(event.date)),
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption,
+                        dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                            event.timeStamp)),
+                        style: Theme.of(context).textTheme.caption,
                       ),
                       Expanded(child: SizedBox()),
                       Icon(
@@ -94,7 +88,8 @@ class EventListItemUser extends StatelessWidget {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        timeFormat.format(DateTime.parse("2019-02-27 ${event.time}")),
+                        timeFormat
+                            .format(DateTime.parse("2019-02-27 ${event.time}")),
                         style: TextStyle(),
                       ),
                     ],

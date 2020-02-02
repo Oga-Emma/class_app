@@ -7,11 +7,20 @@ import 'package:class_app/ui/utils/decoration_utils.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:class_app/ui/utils/share_utils.dart';
 import 'package:class_app/ui/widgets/profile_avatar.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
-class PostListItem extends StatelessWidget {
+class PostListItem extends StatefulWidget {
   PostListItem(this.post);
   PostDTO post;
+
+  @override
+  _PostListItemState createState() => _PostListItemState();
+}
+
+class _PostListItemState extends State<PostListItem> {
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,47 +30,60 @@ class PostListItem extends StatelessWidget {
 //          shape: RoundedRectangleBorder(borderRadius: borderRadius),
           child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => PostDetailsScreen(post)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PostDetailsScreen(widget.post)));
         },
         child: Container(
           padding: const EdgeInsets.all(16.0),
-          height: 200,
+//          height: 200,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Expanded(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("${post.getCategory()}",
-                              style: TextStyle(fontSize: 12.0)),
-                          EmptySpace(),
-                          Text(
-                            '${post.heading}',
-                            style: Theme.of(context).textTheme.subtitle,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          EmptySpace(),
-                          Expanded(
-                            child: Text(
-                              '${post.content}',
-                              style: TextStyle(fontSize: 12),
-                              maxLines: 4,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("${widget.post.getCategory()}",
+                            style: TextStyle(fontSize: 12.0)),
+                        EmptySpace(),
+                        Text(
+                          '${widget.post.heading}',
+                          style: Theme.of(context).textTheme.subtitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        EmptySpace(),
+                        Text(
+                          '${widget.post.content}' * 10,
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(fontSize: 12),
+                          maxLines: isExpanded ? null : 4,
+                          overflow: isExpanded ? null : TextOverflow.ellipsis,
+                        ),
+                        EmptySpace(),
+                        SizedBox(
+                          height: 24,
+                          width: double.maxFinite,
+                          child: OutlineButton(
+                              onPressed: () {
+                                setState(() {
+                                  isExpanded = !isExpanded;
+                                });
+                              },
+                              child: Text(
+                                isExpanded ? 'Close' : 'Read more...',
+                                style: Theme.of(context).textTheme.caption,
+                              )),
+                        )
+                      ],
                     ),
-                    getImage(post.medias),
-                  ],
-                ),
+                  ),
+                  getImage(widget.post.medias),
+                ],
               ),
 //              SizedBox(height: 10),
               Divider(),
@@ -71,22 +93,23 @@ class PostListItem extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         ProfileAvatar(
-                          url: post.user.profilePicture,
+                          url: widget.post.user.profilePicture,
                         ),
                         EmptySpace(),
                         Expanded(
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                '${post.user.name}',
+                                '${widget.post.user.name}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .body1
                                     .copyWith(fontSize: 12),
                               ),
                               Text(
-                                '${post.dateModified.toDate()}',
+                                '${widget.post.dateModified.toDate()}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption
@@ -101,25 +124,25 @@ class PostListItem extends StatelessWidget {
                   EmptySpace(),
                   IconButton(
                     onPressed: () {
-                      ShareUtils.SharePost(post);
+                      ShareUtils.SharePost(widget.post);
                     },
                     icon: Icon(
                       Icons.share,
-                      size: 16,
+                      size: 20,
                       color: Colors.grey,
                     ),
                   ),
                   Row(
                     children: <Widget>[
                       Icon(
-                        Icons.message,
-                        size: 16,
+                        EvaIcons.messageCircle,
+                        size: 20,
                         color: Colors.grey,
                       ),
                       SizedBox(width: 5),
                       Text(
-                        '${post.commentCount}',
-                        style: Theme.of(context).textTheme.caption,
+                        '${widget.post.commentCount}',
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ],
                   ),
@@ -139,6 +162,7 @@ class PostListItem extends StatelessWidget {
     if (imageMedia.isEmpty) {
       return SizedBox();
     }
+
     return Visibility(
       visible: imageMedia.isNotEmpty,
       child: Container(

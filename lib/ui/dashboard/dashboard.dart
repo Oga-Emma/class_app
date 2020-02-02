@@ -23,6 +23,7 @@ import 'package:class_app/ui/utils/dimen.dart';
 import 'package:class_app/ui/utils/helper_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -180,22 +181,17 @@ class _DashboardState extends State<Dashboard> {
             child: InkWell(
               onTap: onTap,
               child: Container(
-//                              height: 70,
+                width: double.maxFinite,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(icon, color: color, size: 20.0),
-                          SizedBox(height: 8.0),
-                          Text(title,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.subhead)
-                        ],
-                      ),
-                    ),
-                    Container(height: 4, color: color)
+                    SvgPicture.asset(icon, width: 60, height: 60),
+                    SizedBox(height: 8.0),
+                    Text(title,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.caption),
+//                    Container(height: 4, color: color)
                   ],
                 ),
               ),
@@ -302,13 +298,13 @@ class _DashboardState extends State<Dashboard> {
             ),
             delegate: SliverChildListDelegate(<Widget>[
               category("Lectures", eventColors[EventType.LECTURES],
-                  FontAwesomeIcons.chalkboardTeacher,
-                  total: todayLectures.length, onTap: () {
+                  "assets/svg/ic_lecture.svg", total: todayLectures.length,
+                  onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => Lectures()));
               }),
               category("Assignment\n& Test", eventColors[EventType.ASSIGNEMTCA],
-                  FontAwesomeIcons.twitch,
+                  "assets/svg/ic_assignment.svg",
                   total: todayEvents
                       .where((event) => event.type == EventType.ASSIGNEMTCA)
                       .toList()
@@ -316,7 +312,7 @@ class _DashboardState extends State<Dashboard> {
                 navigateToEvent(EventType.ASSIGNEMTCA);
               }),
               category("Fixed Class\n& Others", eventColors[EventType.CLASS],
-                  Icons.library_books,
+                  "assets/svg/ic_fixed_class.svg",
                   total: todayEvents
                       .where((event) => event.type == EventType.CLASS)
                       .toList()
@@ -331,8 +327,8 @@ class _DashboardState extends State<Dashboard> {
 //                      .length, onTap: () {
 //                navigateToEvent(EventType.TEST);
 //              }),
-              category("Exam", eventColors[EventType.EXAM],
-                  FontAwesomeIcons.clipboardList,
+              category(
+                  "Exam", eventColors[EventType.EXAM], "assets/svg/ic_exam.svg",
                   total: todayEvents
                       .where((event) => event.type == EventType.EXAM)
                       .toList()
@@ -347,12 +343,12 @@ class _DashboardState extends State<Dashboard> {
 //                      .length, onTap: () {
 //                navigateToEvent(EventType.OTHERS);
 //              }),
-              category("Courses", Colors.grey, FontAwesomeIcons.book,
+              category("Courses", Colors.grey, "assets/svg/ic_course.svg",
                   onTap: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => CoursesScreen()));
               }),
-              category("Class excos", Colors.brown, FontAwesomeIcons.users,
+              category("Class excos", Colors.brown, "assets/svg/ic_excos.svg",
                   onTap: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => ClassExcoScreen()));

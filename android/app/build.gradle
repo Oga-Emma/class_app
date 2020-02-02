@@ -47,8 +47,8 @@ android {
         applicationId "ng.com.a7apps.classapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5 //flutterVersionCode.toInteger()
-        versionName '1.0.5'//flutterVersionName
+        versionCode 6 //flutterVersionCode.toInteger()
+        versionName '2.0.0'//flutterVersionName
         multiDexEnabled true
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

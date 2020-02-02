@@ -46,7 +46,7 @@ class _ClassExcoScreenState extends State<ClassExcoScreen> {
             title: Text("Class Excos", textAlign: TextAlign.center),
             actions: <Widget>[
               Visibility(
-                visible: appState.user.isSuperAdmin,
+                visible: appState.isSuperAdmin,
                 child: FlatButton(
                     onPressed: () {
                       Router.gotoWidget(

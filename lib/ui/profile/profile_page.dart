@@ -59,75 +59,78 @@ class ProfilePage extends StatelessWidget {
   }
 
   buildBody(BuildContext context, UserDTO user) {
-    return Column(
-      children: <Widget>[
-        Material(
-          color: ColorUtils.primaryColor,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: <Widget>[
-                ProfileAvatar(
-                  radius: 32,
-                  url: appState.user.profilePicture,
-                ),
-                EmptySpace(multiple: 2),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Hello',
-                          style: textStyle.caption
-                              .copyWith(color: Colors.grey[200])),
-                      EmptySpace(multiple: .2),
-                      Text('${user.fullName}',
-                          style: textStyle.headline
-                              .copyWith(fontSize: 18.0, color: Colors.white)),
-                    ],
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Material(
+            color: ColorUtils.primaryColor,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: <Widget>[
+                  ProfileAvatar(
+                    radius: 32,
+                    url: appState.user.profilePicture,
                   ),
-                ),
-                EmptySpace(),
-                SizedBox(
-                  height: 28,
-                  width: 28,
-                  child: CircleAvatar(
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      child: InkWell(
-                          child:
-                              Icon(Icons.edit, color: Colors.white, size: 16),
-                          onTap: () {
-                            Router.gotoWidget(
-                                ProfileSetupPage(user: user), context);
-                          })),
-                )
-              ],
+                  EmptySpace(multiple: 2),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Hello',
+                            style: textStyle.caption
+                                .copyWith(color: Colors.grey[200])),
+                        EmptySpace(multiple: .2),
+                        Text('${user.fullName}',
+                            style: textStyle.headline
+                                .copyWith(fontSize: 18.0, color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                  EmptySpace(),
+                  SizedBox(
+                    height: 28,
+                    width: 28,
+                    child: CircleAvatar(
+                        backgroundColor: Colors.white.withOpacity(0.3),
+                        child: InkWell(
+                            child:
+                                Icon(Icons.edit, color: Colors.white, size: 16),
+                            onTap: () {
+                              Router.gotoWidget(
+                                  ProfileSetupPage(user: user), context);
+                            })),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-        Visibility(
-          visible: appState.isSuperAdmin,
-          child: categoryGroup([
+          Visibility(
+            visible: appState.isSuperAdmin,
+            child: categoryGroup([
+              ListTile(
+                dense: true,
+                title: Text("Admin Console"),
+                subtitle: Text('App settings accross all users'),
+                leading: Icon(Icons.verified_user),
+                trailing: Icon(Icons.chevron_right),
+                onTap: () {
+                  Router.gotoNamed(Routes.ADMIN, context);
+                },
+              )
+            ]),
+          ),
+          categoryGroup([
             ListTile(
-              title: Text("Admin Console"),
-              subtitle: Text('App settings accross all users'),
-              leading: Icon(Icons.verified_user),
+              dense: true,
+              title: Text("Swap School or Department"),
+              subtitle: Text('Change school or department'),
+              leading: Icon(Icons.swap_horizontal_circle),
               trailing: Icon(Icons.chevron_right),
               onTap: () {
-                Router.gotoNamed(Routes.ADMIN, context);
+                Router.gotoNamed(Routes.SCHOOL_SELECT, context);
               },
-            )
-          ]),
-        ),
-        categoryGroup([
-          ListTile(
-            title: Text("Swap School or Department"),
-            subtitle: Text('Change school or department'),
-            leading: Icon(Icons.swap_horizontal_circle),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {
-              Router.gotoNamed(Routes.SCHOOL_SELECT, context);
-            },
-          ),
+            ),
 //          ListTile(
 //            title: Row(
 //              children: <Widget>[
@@ -149,59 +152,64 @@ class ProfilePage extends StatelessWidget {
 //              Router.gotoNamed(Routes.NOTIFICATION, context);
 //            },
 //          ),
-          ListTile(
-            title: Text('Preferences'),
-            subtitle: Text('Personlaize your app settings'),
-            leading: Icon(Icons.settings),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {
-              Router.gotoNamed(Routes.SETTINGS, context);
-            },
-          ),
+            ListTile(
+              dense: true,
+              title: Text('Preferences'),
+              subtitle: Text('Personlaize your app settings'),
+              leading: Icon(Icons.settings),
+              trailing: Icon(Icons.chevron_right),
+              onTap: () {
+                Router.gotoNamed(Routes.SETTINGS, context);
+              },
+            ),
 //          ListTile(
 //            title: Text("Downloads"),
 //            trailing: Icon(Icons.chevron_right),
 //          ),
-        ]),
-        categoryGroup([
-          ListTile(
-            title: Text("Follow Department"),
-            subtitle: Text('Get notification from this department'),
-            leading: Icon(Icons.notifications_active),
-            trailing: FollowDepartmentCheck(),
-          ),
-        ]),
-        categoryGroup([
-          ListTile(
-            title: Text("Change Password"),
-            subtitle: Text('Reset your login password'),
-            leading: Icon(Icons.lock),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {
-              Router.gotoNamed(Routes.PASSWORD_RESET, context);
-            },
-          ),
-          ListTile(
-            title: Text("Help and Support"),
-            subtitle: Text('Get help and suggestions'),
-            leading: Icon(Icons.help),
-            trailing: Icon(Icons.chevron_right),
-          ),
-        ]),
-        categoryGroup([
-          ListTile(
-            onTap: () {
-              Router.gotoNamed(Routes.HOME, context, clearStack: true);
-              appState.logout();
-            },
-            title: Text(
-              "Logout",
-              style: TextStyle(color: Colors.red),
+          ]),
+//          categoryGroup([
+//            ListTile(
+//              title: Text("Follow Department"),
+//              subtitle: Text('Get notification from this department'),
+//              leading: Icon(Icons.notifications_active),
+//              trailing: FollowDepartmentCheck(),
+//            ),
+//          ]),
+          categoryGroup([
+            ListTile(
+              dense: true,
+              title: Text("Change Password"),
+              subtitle: Text('Reset your login password'),
+              leading: Icon(Icons.lock),
+              trailing: Icon(Icons.chevron_right),
+              onTap: () {
+                Router.gotoNamed(Routes.PASSWORD_RESET, context);
+              },
             ),
-            trailing: Icon(Icons.exit_to_app, color: Colors.red),
-          ),
-        ])
-      ],
+            ListTile(
+              dense: true,
+              title: Text("Help and Support"),
+              subtitle: Text('Get help and suggestions'),
+              leading: Icon(Icons.help),
+              trailing: Icon(Icons.chevron_right),
+            ),
+          ]),
+          categoryGroup([
+            ListTile(
+              dense: true,
+              onTap: () {
+                Router.gotoNamed(Routes.HOME, context, clearStack: true);
+                appState.logout();
+              },
+              title: Text(
+                "Logout",
+                style: TextStyle(color: Colors.red),
+              ),
+              trailing: Icon(Icons.exit_to_app, color: Colors.red),
+            ),
+          ])
+        ],
+      ),
     );
   }
 

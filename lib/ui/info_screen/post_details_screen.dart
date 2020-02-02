@@ -38,16 +38,16 @@ class PostDetailsScreen extends StatelessWidget {
           actions: <Widget>[
             IconButton(icon: Icon(Icons.share), onPressed: () {}),
             Visibility(
-                visible:
-                    appState.isSuperAdmin || post.user.id == appState.user.id,
+                visible: appState.user != null &&
+                    (appState.isSuperAdmin || post.user.id == appState.user.id),
                 child: IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
                       Router.gotoWidget(NewEditPostScreen(post: post), context);
                     })),
             Visibility(
-                visible:
-                    appState.isSuperAdmin || post.user.id == appState.user.id,
+                visible: appState.user != null &&
+                    (appState.isSuperAdmin || post.user.id == appState.user.id),
                 child: IconButton(
                     icon: Icon(Icons.delete_forever),
                     onPressed: () {
@@ -293,7 +293,7 @@ class _PostCommentsState extends State<PostComments> {
                                 Expanded(
                                     child: loadCommentList(
                                         snapshot.data.documents)),
-                                EmptySpace(multiple: 5)
+                                EmptySpace(multiple: 10)
                               ],
                             );
                           }
@@ -308,50 +308,59 @@ class _PostCommentsState extends State<PostComments> {
                   )
                 ],
               )),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 0.0),
-                              margin: EdgeInsets.all(4.0),
-                              child: TextField(
-                                controller: commentController,
-                                decoration: InputDecoration.collapsed(
-                                    hintText: "Say something..."),
-                                minLines: 1,
-                                maxLines: 5,
-                              ))),
-                      sending
-                          ? Container(
-                              margin: EdgeInsets.symmetric(horizontal: 12),
-                              height: 24,
-                              width: 24,
-                              child: LoadingSpinner())
-                          : IconButton(
-                              icon: Icon(Icons.send,
-                                  color: ColorUtils.primaryColor),
-                              onPressed: sendComment)
-                    ],
-                  ),
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0, -1),
-                        blurRadius: 10,
-                        spreadRadius: .8),
-                  ]),
-                ),
-              )
+              appState.user == null
+                  ? Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: loginOrSignup(),
+                    )
+                  : Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16.0, vertical: 0.0),
+                                    margin: EdgeInsets.all(4.0),
+                                    child: TextField(
+                                      controller: commentController,
+                                      decoration: InputDecoration.collapsed(
+                                          hintText: "Say something..."),
+                                      minLines: 1,
+                                      maxLines: 5,
+                                    ))),
+                            sending
+                                ? Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 12),
+                                    height: 24,
+                                    width: 24,
+                                    child: LoadingSpinner())
+                                : IconButton(
+                                    icon: Icon(Icons.send,
+                                        color: ColorUtils.primaryColor),
+                                    onPressed: sendComment)
+                          ],
+                        ),
+                        decoration:
+                            BoxDecoration(color: Colors.white, boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(0, -1),
+                              blurRadius: 10,
+                              spreadRadius: .8),
+                        ]),
+                      ),
+                    )
             ],
           ),
         ),
@@ -398,5 +407,42 @@ class _PostCommentsState extends State<PostComments> {
           return CommentListItem(CommentDTO.fromJson(documents[index].data)
             ..id = documents[index].documentID);
         });
+  }
+
+  loginOrSignup() {
+    return SafeArea(
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            EmptySpace(),
+            Text('Have something to say? '),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FlatButton(
+                    onPressed: () {
+                      Router.gotoNamed(Routes.LOGIN, context);
+                    },
+                    child: Text(
+                      "Login",
+                      style: TextStyle(color: ColorUtils.primaryColor),
+                    )),
+                Text('or'),
+                FlatButton(
+                    onPressed: () {
+                      Router.gotoNamed(Routes.SIGNUP, context);
+                    },
+                    child: Text(
+                      "Signup",
+                      style: TextStyle(color: ColorUtils.primaryColor),
+                    )),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

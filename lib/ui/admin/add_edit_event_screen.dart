@@ -38,8 +38,8 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
 
   @override
   void initState() {
-    if(widget.event.type.isNotEmpty){
-    _eventType = widget.event.type;
+    if (widget.event.type.isNotEmpty) {
+      _eventType = widget.event.type;
     }
 //    selectedCourse = widget.event.course;
     courseController.text = widget.event.courseId;
@@ -56,6 +56,7 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
     dateController.dispose();
     super.dispose();
   }
+
   AppStateProvider appState;
   @override
   Widget build(BuildContext context) {
@@ -118,23 +119,24 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
               gap,
               gap,
 //              _eventType == EventType.OTHERS
-                  STextField(
-                    initialValue: widget.event.title,
-                      label: "TITLE",
-                      onSaved: (value) {
-                        widget.event.title = value;
-                      },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Please enter event title";
-                        }
-                        return null;
-                      },
+              STextField(
+                initialValue: widget.event.title,
+                label: "TITLE",
+                onSaved: (value) {
+                  widget.event.title = value;
+                },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return "Please enter event title";
+                  }
+                  return null;
+                },
 //              hint: "Course Code",
-                    ),
-          gap2x,
-          _eventType == EventType.OTHERS ? SizedBox() :
-                   GestureDetector(
+              ),
+              gap2x,
+              _eventType == EventType.OTHERS
+                  ? SizedBox()
+                  : GestureDetector(
                       onTap: () {
                         showCourseChooser();
                       },
@@ -173,16 +175,16 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: STimePicker(
+                    child: SDatePicker(
                       controller: dateController,
                       label: "DATE",
                       onChanged: (dt) {
                         if (dt != null) {
                           selectedDate = dt;
                           widget.event.date =
-                              DateFormat('yyyy-MM-dd').format(dt);
+                              DateFormat('EE, dd-MMM-yyyy').format(dt);
                           widget.event.timeStamp = dt.millisecondsSinceEpoch;
-                          print(dt.millisecondsSinceEpoch);
+//                          print(dt.millisecondsSinceEpoch);
                         }
                       },
                       textInputType: TextInputType.text,
@@ -255,7 +257,8 @@ class _AddEditEventState extends State<AddEditEvent> with UISnackBarProvider {
 //      print(widget.event.toMap());
       showLoadingSnackBar();
 
-      EventDAO.savEvent(appState.appInfo, widget.event, selectedCourse, (success) {
+      EventDAO.savEvent(appState.appInfo, widget.event, selectedCourse,
+          (success) {
         if (success) {
           showInSnackBar("Changes saved");
           Future.delayed(Duration(seconds: 2), () => Navigator.pop(context));

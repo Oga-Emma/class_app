@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InitialSettingsScreen extends StatefulWidget {
   @override
@@ -109,10 +110,18 @@ class _InitialSettingsScreenState extends State<InitialSettingsScreen>
                           ),
                           EmptySpace(multiple: .3),
                           InkWell(
-                              onTap: () {},
+                              onTap: () async {
+                                const url = 'tel:+2347012446202';
+                                if (await canLaunch(url)) {
+                                await launch(url);
+                                } else {
+//                                throw 'Could not launch $url';
+
+                                }
+                              },
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
-                                child: Text("REGISTER HERE",
+                                child: Text("CALL ADMIN",
                                     style: TextStyle(
                                         color: ColorUtils.accentColor,
                                         fontWeight: FontWeight.bold)),
